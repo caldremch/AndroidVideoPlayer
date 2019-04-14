@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.caldremch.ffmpegcore.FFmpegCore;
+import com.caldremch.ffmpegcore.utils.VedioEditUtils;
 import com.caldremch.playercore.player.FullScreenListener;
 import com.caldremch.playercore.player.MyExoPlayerView;
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -27,8 +28,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        String [] s =  {" "};
-        FFmpegCore.invokeTest2(s);
+       VedioEditUtils.mp4TransTs("/storage/emulated/0/DCIM/Camera/VID_20190414_184208.mp4");
+
 //        Player
 
 //        simpleExoPlayer = ExoPlayerFactory.newSimpleInstance(this);

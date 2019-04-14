@@ -20,5 +20,7 @@ public class FFmpegCore {
         System.loadLibrary("avfilter");
     }
 
-    public native static void invokeTest2(String[] cmds);
+    public native static int execCmd(String[] cmds);
+
+
 }

@@ -199,15 +199,15 @@ void show_help_options(const OptionDef *options, const char *msg, int req_flags,
     printf("\n");
 }
 
-void show_help_children(const AVClass *class, int flags)
+void show_help_children(const AVClass *avclass, int flags)
 {
     const AVClass *child = NULL;
-    if (class->option) {
-        av_opt_show2(&class, NULL, flags, 0);
+    if (avclass->option) {
+        av_opt_show2(&avclass, NULL, flags, 0);
         printf("\n");
     }
 
-    while (child = av_opt_child_class_next(class, child))
+    while (child = av_opt_child_class_next(avclass, child))
         show_help_children(child, flags);
 }
 
