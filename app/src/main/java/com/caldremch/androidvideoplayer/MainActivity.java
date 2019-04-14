@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import com.caldremch.ffmpegcore.FFmpegCore;
 import com.caldremch.playercore.player.FullScreenListener;
 import com.caldremch.playercore.player.MyExoPlayerView;
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -25,22 +26,25 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        String [] s =  {" "};
+        FFmpegCore.invokeTest2(s);
 //        Player
 
-        simpleExoPlayer = ExoPlayerFactory.newSimpleInstance(this);
-        playerView = findViewById(R.id.playerView);
-        playerView.setPlayer(simpleExoPlayer);
-
-        DataSource.Factory dataFactory = new DefaultDataSourceFactory(this, "caldremch");
-        MediaSource videoSource = new ExtractorMediaSource.Factory(dataFactory).createMediaSource(Uri.parse(Constant.MP4_TEST_URL));
-        simpleExoPlayer.prepare(videoSource);
-        simpleExoPlayer.setPlayWhenReady(true);
-        playerView.setFullScreenListener(new FullScreenListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d("caldremch", "点击全屏了");
-            }
-        });
+//        simpleExoPlayer = ExoPlayerFactory.newSimpleInstance(this);
+//        playerView = findViewById(R.id.playerView);
+//        playerView.setPlayer(simpleExoPlayer);
+//
+//        DataSource.Factory dataFactory = new DefaultDataSourceFactory(this, "caldremch");
+//        MediaSource videoSource = new ExtractorMediaSource.Factory(dataFactory).createMediaSource(Uri.parse(Constant.MP4_TEST_URL));
+//        simpleExoPlayer.prepare(videoSource);
+//        simpleExoPlayer.setPlayWhenReady(true);
+//        playerView.setFullScreenListener(new FullScreenListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Log.d("caldremch", "点击全屏了");
+//            }
+//        });
 
 //        Intent intent = new Intent();
 //        intent.setAction("android.intent.action.VIEW");
