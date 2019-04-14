@@ -190,7 +190,7 @@ public class PlayerControlView extends FrameLayout {
   /** The default rewind increment, in milliseconds. */
   public static final int DEFAULT_REWIND_MS = 5000;
   /** The default show timeout, in milliseconds. */
-  public static final int DEFAULT_SHOW_TIMEOUT_MS = 5000;
+  public static final int DEFAULT_SHOW_TIMEOUT_MS = 1000;
   /** The default repeat toggle modes. */
   public static final @RepeatModeUtil.RepeatToggleModes int DEFAULT_REPEAT_TOGGLE_MODES =
       RepeatModeUtil.REPEAT_TOGGLE_MODE_NONE;

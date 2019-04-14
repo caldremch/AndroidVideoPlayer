@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         playerView.setPlayer(simpleExoPlayer);
 
         DataSource.Factory dataFactory = new DefaultDataSourceFactory(this, "caldremch");
-        MediaSource videoSource = new ExtractorMediaSource.Factory(dataFactory).createMediaSource(Uri.parse(Constant.MP4_TEST_URL6));
+        MediaSource videoSource = new ExtractorMediaSource.Factory(dataFactory).createMediaSource(Uri.parse(Constant.MP4_TEST_URL));
         simpleExoPlayer.prepare(videoSource);
         simpleExoPlayer.setPlayWhenReady(true);
         playerView.setFullScreenListener(new FullScreenListener() {
