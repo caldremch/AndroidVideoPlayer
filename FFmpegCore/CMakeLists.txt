@@ -19,6 +19,7 @@ add_library( # Sets the name of the library.
         src/main/cpp/ffmpeg/ffmpeg.c
         src/main/cpp/ffmpeg/ffmpeg_filter.c
         src/main/cpp/ffmpeg/ffmpeg_opt.c
+        src/main/cpp/ffmpeg/ffmpeg_hw.c
         src/main/cpp/FFmpegCore.cpp
         )
 
@@ -104,11 +105,11 @@ set_target_properties(
 )
 
 
-set_target_properties(
-        fdk-aac
-        PROPERTIES IMPORTED_LOCATION
-        ${CMAKE_SOURCE_DIR}/src/main/jniLibs/armeabi-v7a/libfdk-aac.so
-)
+#set_target_properties(
+#        fdk-aac
+#        PROPERTIES IMPORTED_LOCATION
+#        ${CMAKE_SOURCE_DIR}/src/main/jniLibs/armeabi-v7a/libfdk-aac.so
+#)
 
 #include_directories(
 #    ${CMAKE_SOURCE_DIR}/ffmpeg-3.2.5/
@@ -138,7 +139,7 @@ find_library( # Sets the name of the path variable.
 
 target_link_libraries( # Specifies the target library.
         FFmpegCore
-        fdk-aac
+        #fdk-aac
         avcodec
         avfilter
         avformat

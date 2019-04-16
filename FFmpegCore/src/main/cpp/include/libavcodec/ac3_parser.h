@@ -1,6 +1,7 @@
 /*
- * MSVC Compatible va_copy macro
- * Copyright (c) 2012 Derek Buitenhuis
+ * AC-3 parser prototypes
+ * Copyright (c) 2003 Fabrice Bellard
+ * Copyright (c) 2003 Michael Niedermayer
  *
  * This file is part of FFmpeg.
  *
@@ -19,16 +20,17 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-#ifndef COMPAT_VA_COPY_H
-#define COMPAT_VA_COPY_H
+#ifndef AVCODEC_AC3_PARSER_H
+#define AVCODEC_AC3_PARSER_H
 
-#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
 
-#if !defined(va_copy) && defined(_MSC_VER)
-#define va_copy(dst, src) ((dst) = (src))
-#endif
-#if !defined(va_copy) && defined(__GNUC__) && __GNUC__ < 3
-#define va_copy(dst, src) __va_copy(dst, src)
-#endif
+/**
+ * Extract the bitstream ID and the frame size from AC-3 data.
+ */
+int av_ac3_parse_header(const uint8_t *buf, size_t size,
+                        uint8_t *bitstream_id, uint16_t *frame_size);
 
-#endif /* COMPAT_VA_COPY_H */
+
+#endif /* AVCODEC_AC3_PARSER_H */

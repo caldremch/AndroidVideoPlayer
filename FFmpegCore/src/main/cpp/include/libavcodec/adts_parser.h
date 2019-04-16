@@ -1,7 +1,4 @@
 /*
- * MSVC Compatible va_copy macro
- * Copyright (c) 2012 Derek Buitenhuis
- *
  * This file is part of FFmpeg.
  *
  * FFmpeg is free software; you can redistribute it and/or
@@ -19,16 +16,22 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-#ifndef COMPAT_VA_COPY_H
-#define COMPAT_VA_COPY_H
+#ifndef AVCODEC_ADTS_PARSER_H
+#define AVCODEC_ADTS_PARSER_H
 
-#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
 
-#if !defined(va_copy) && defined(_MSC_VER)
-#define va_copy(dst, src) ((dst) = (src))
-#endif
-#if !defined(va_copy) && defined(__GNUC__) && __GNUC__ < 3
-#define va_copy(dst, src) __va_copy(dst, src)
-#endif
+#define AV_AAC_ADTS_HEADER_SIZE 7
 
-#endif /* COMPAT_VA_COPY_H */
+/**
+ * Extract the number of samples and frames from AAC data.
+ * @param[in]  buf     pointer to AAC data buffer
+ * @param[out] samples Pointer to where number of samples is written
+ * @param[out] frames  Pointer to where number of frames is written
+ * @return Returns 0 on success, error code on failure.
+ */
+int av_adts_header_parse(const uint8_t *buf, uint32_t *samples,
+                         uint8_t *frames);
+
+#endif /* AVCODEC_ADTS_PARSER_H */

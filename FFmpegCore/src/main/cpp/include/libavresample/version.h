@@ -1,55 +1,45 @@
-
 /*
- * This file is part of FFmpeg.
+ * Version macros.
  *
- * FFmpeg is free software; you can redistribute it and/or
+ * This file is part of libswresample
+ *
+ * libswresample is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
  *
- * FFmpeg is distributed in the hope that it will be useful,
+ * libswresample is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
- * License along with FFmpeg; if not, write to the Free Software
+ * License along with libswresample; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-#ifndef AVRESAMPLE_VERSION_H
-#define AVRESAMPLE_VERSION_H
+#ifndef SWRESAMPLE_VERSION_H
+#define SWRESAMPLE_VERSION_H
 
 /**
  * @file
- * @ingroup lavr
- * Libavresample version macros.
+ * Libswresample version macros
  */
 
-#include "libavutil/version.h"
+#include "libavutil/avutil.h"
 
-#define LIBAVRESAMPLE_VERSION_MAJOR  2
-#define LIBAVRESAMPLE_VERSION_MINOR  1
-#define LIBAVRESAMPLE_VERSION_MICRO  0
+#define LIBSWRESAMPLE_VERSION_MAJOR   3
+#define LIBSWRESAMPLE_VERSION_MINOR   1
+#define LIBSWRESAMPLE_VERSION_MICRO 100
 
-#define LIBAVRESAMPLE_VERSION_INT  AV_VERSION_INT(LIBAVRESAMPLE_VERSION_MAJOR, \
-                                                  LIBAVRESAMPLE_VERSION_MINOR, \
-                                                  LIBAVRESAMPLE_VERSION_MICRO)
-#define LIBAVRESAMPLE_VERSION          AV_VERSION(LIBAVRESAMPLE_VERSION_MAJOR, \
-                                                  LIBAVRESAMPLE_VERSION_MINOR, \
-                                                  LIBAVRESAMPLE_VERSION_MICRO)
-#define LIBAVRESAMPLE_BUILD        LIBAVRESAMPLE_VERSION_INT
+#define LIBSWRESAMPLE_VERSION_INT  AV_VERSION_INT(LIBSWRESAMPLE_VERSION_MAJOR, \
+                                                  LIBSWRESAMPLE_VERSION_MINOR, \
+                                                  LIBSWRESAMPLE_VERSION_MICRO)
+#define LIBSWRESAMPLE_VERSION      AV_VERSION(LIBSWRESAMPLE_VERSION_MAJOR, \
+                                              LIBSWRESAMPLE_VERSION_MINOR, \
+                                              LIBSWRESAMPLE_VERSION_MICRO)
+#define LIBSWRESAMPLE_BUILD        LIBSWRESAMPLE_VERSION_INT
 
-#define LIBAVRESAMPLE_IDENT        "Lavr" AV_STRINGIFY(LIBAVRESAMPLE_VERSION)
+#define LIBSWRESAMPLE_IDENT        "SwR" AV_STRINGIFY(LIBSWRESAMPLE_VERSION)
 
-/**
- * FF_API_* defines may be placed below to indicate public API that will be
- * dropped at a future version bump. The defines themselves are not part of
- * the public API and may change, break or disappear at any time.
- */
-
-#ifndef FF_API_RESAMPLE_CLOSE_OPEN
-#define FF_API_RESAMPLE_CLOSE_OPEN (LIBAVRESAMPLE_VERSION_MAJOR < 3)
-#endif
-
-#endif /* AVRESAMPLE_VERSION_H */
+#endif /* SWRESAMPLE_VERSION_H */

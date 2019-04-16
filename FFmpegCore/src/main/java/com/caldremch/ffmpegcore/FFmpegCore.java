@@ -12,7 +12,7 @@ public class FFmpegCore {
     static {
         System.loadLibrary("FFmpegCore");//需要放在首位， 不然无法识别FFmpegCore的java方法
         System.loadLibrary("avutil");
-        System.loadLibrary("fdk-aac");
+//        System.loadLibrary("fdk-aac");
         System.loadLibrary("avcodec");
         System.loadLibrary("avformat");
         System.loadLibrary("swscale");

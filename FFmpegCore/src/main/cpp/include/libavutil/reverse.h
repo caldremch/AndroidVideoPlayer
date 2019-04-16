@@ -1,6 +1,5 @@
 /*
- * MSVC Compatible va_copy macro
- * Copyright (c) 2012 Derek Buitenhuis
+ * Copyright (c) 2002-2004 Michael Niedermayer <michaelni@gmx.at>
  *
  * This file is part of FFmpeg.
  *
@@ -19,16 +18,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-#ifndef COMPAT_VA_COPY_H
-#define COMPAT_VA_COPY_H
+#ifndef AVUTIL_REVERSE_H
+#define AVUTIL_REVERSE_H
 
-#include <stdarg.h>
+#include <stdint.h>
 
-#if !defined(va_copy) && defined(_MSC_VER)
-#define va_copy(dst, src) ((dst) = (src))
-#endif
-#if !defined(va_copy) && defined(__GNUC__) && __GNUC__ < 3
-#define va_copy(dst, src) __va_copy(dst, src)
-#endif
+extern const uint8_t ff_reverse[256];
 
-#endif /* COMPAT_VA_COPY_H */
+#endif /* AVUTIL_REVERSE_H */

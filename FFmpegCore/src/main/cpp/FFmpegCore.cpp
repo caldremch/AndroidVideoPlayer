@@ -14,7 +14,7 @@ JNIEXPORT jint JNICALL
 Java_com_caldremch_ffmpegcore_FFmpegCore_execCmd(JNIEnv *env, jclass type, jobjectArray cmds) {
 
     log_debug("调用开始");
-
+    av_register_all();
 
     int argc = env->GetArrayLength(cmds);
 
