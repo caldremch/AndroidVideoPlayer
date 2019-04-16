@@ -7,7 +7,7 @@
 #include "android_log.h"
 extern "C"{
 
-    #include "ffmpeg.h"
+    #include "ffmpeg/ffmpeg.h"
 
 
 JNIEXPORT jint JNICALL

@@ -10,10 +10,10 @@
 
 extern "C"
 {
-#include "include/libavcodec/avcodec.h"
-#include "include/libavformat/avformat.h"
-#include "include/libavcodec/avcodec.h"
-#include "include/libavutil/opt.h"
+#include "libavcodec/avcodec.h"
+#include "libavformat/avformat.h"
+#include "libavcodec/avcodec.h"
+#include "libavutil/opt.h"
 }
 
 #include "threadsafe_queue.cpp"
