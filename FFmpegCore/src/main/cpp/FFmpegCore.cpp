@@ -32,3 +32,25 @@ Java_com_caldremch_ffmpegcore_FFmpegCore_execCmd(JNIEnv *env, jclass type, jobje
 }
 
 }
+extern "C"
+JNIEXPORT jstring JNICALL
+Java_com_caldremch_ffmpegcore_FFmpegCore_invokeTest(JNIEnv *env, jclass type) {
+
+
+    char info[40000] = {0};
+    av_register_all();
+    AVInputFormat *if_temp = av_iformat_next(NULL);
+    AVOutputFormat *of_temp = av_oformat_next(NULL);
+    while (if_temp != NULL) {
+        sprintf(info, "%sInput: %s\n", info, if_temp->name);
+        if_temp = if_temp->next;
+    }
+    while (of_temp != NULL) {
+        sprintf(info, "%sOutput: %s\n", info, of_temp->name);
+        of_temp = of_temp->next;
+    }
+
+    //ffmpeg 命令执行
+    return env->NewStringUTF(info);
+
+}

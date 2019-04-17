@@ -1,5 +1,6 @@
 package com.caldremch.androidvideoplayer;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
        VedioEditUtils.mp4TransTs("/storage/emulated/0/DCIM/Camera/VID_20190414_184208.mp4");
-
+//        startActivity(new Intent(this, FFmpegMainActivity.class));
 //        Player
 
 //        simpleExoPlayer = ExoPlayerFactory.newSimpleInstance(this);
