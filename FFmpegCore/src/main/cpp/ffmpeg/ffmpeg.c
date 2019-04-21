@@ -4809,7 +4809,8 @@ int jxRun(int argc, char **argv)
     avdevice_register_all();
 #endif
     avformat_network_init();
-
+//    avfilter_register_all();
+//    av_register_all();
     log_debug( "注册完成编解码器");
     av_log(NULL, AV_LOG_WARNING, " 注册完成编解码器");
     show_banner(argc, argv, options);

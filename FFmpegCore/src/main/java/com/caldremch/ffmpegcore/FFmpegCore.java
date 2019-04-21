@@ -21,6 +21,7 @@ public class FFmpegCore {
     }
 
     public native static int execCmd(String[] cmds);
+    public native static String invokeTest();
 
 
 }
