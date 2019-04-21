@@ -32,6 +32,4 @@ public class FFmpegMainActivity extends AppCompatActivity {
 
     }
 
-
-
 }
