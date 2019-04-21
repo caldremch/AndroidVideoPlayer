@@ -105,7 +105,7 @@
 #include "cmdutils.h"
 
 #include "libavutil/avassert.h"
-#include "../android_log.h"
+#include "../myjnihelper/android_log.h"
 const char program_name[] = "ffmpeg";
 const int program_birth_year = 2000;
 

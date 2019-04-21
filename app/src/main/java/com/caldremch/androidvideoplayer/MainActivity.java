@@ -29,8 +29,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-       VedioEditUtils.mp4TransTs("/storage/emulated/0/DCIM/Camera/VID_20190414_184208.mp4");
-//        startActivity(new Intent(this, FFmpegMainActivity.class));
+//       VedioEditUtils.mp4TransTs("/storage/emulated/0/DCIM/Camera/VID_20190414_184208.mp4");
+
+
+
+        startActivity(new Intent(this, FFmpegMainActivity.class));
 //        Player
 
 //        simpleExoPlayer = ExoPlayerFactory.newSimpleInstance(this);

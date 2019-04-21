@@ -4,7 +4,7 @@
 
 #include "FFmpegCore.h"
 #include <jni.h>
-#include "android_log.h"
+#include "myjnihelper/android_log.h"
 extern "C"{
 
     #include "ffmpeg/ffmpeg.h"
