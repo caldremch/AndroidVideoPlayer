@@ -1,8 +1,10 @@
 package com.caldremch.androidvideoplayer;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import com.caldremch.androidvideoplayer.uitls.DeviceUtils;
 import com.caldremch.ffmpegcore.FFmpegCore;
 
 import androidx.annotation.Nullable;
@@ -26,5 +28,10 @@ public class FFmpegMainActivity extends AppCompatActivity {
 
         textView.setText(FFmpegCore.invokeTest());
 
+        DeviceUtils.getDeviceUUID();
+
     }
+
+
+
 }
