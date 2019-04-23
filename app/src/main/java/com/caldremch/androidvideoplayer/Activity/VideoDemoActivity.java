@@ -19,6 +19,7 @@ import com.caldremch.androidvideoplayer.R;
 import com.caldremch.androidvideoplayer.adapter.VideoListAdapter;
 import com.caldremch.androidvideoplayer.uitls.CLog;
 import com.caldremch.androidvideoplayer.uitls.UriUtils;
+import com.caldremch.ffmpegcore.FFmpegCore;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -62,7 +63,7 @@ public class VideoDemoActivity extends AppCompatActivity {
         mRv.setAdapter(mAdapter);
 
         //获取网络视频的第一帧
-        mIv.setImageBitmap(getFrameFromMediaMetadataRetriever(Constant.MP4_TEST_URL));
+//        mIv.setImageBitmap(getFrameFromMediaMetadataRetriever(Constant.MP4_TEST_URL));
 
     }
 
@@ -84,9 +85,11 @@ public class VideoDemoActivity extends AppCompatActivity {
 
             CLog.d("realPath=" + realPath);
 
-            //获取视频的第一帧
+            //1.获取视频的第一帧 ffmpeg
+            FFmpegCore.getFrameAt(realPath, 0, 0);
 
-            mIv.setImageBitmap(getFrameFromMediaMetadataRetriever(realPath));
+            //2.获取视频的第一帧 android原生
+//            mIv.setImageBitmap(getFrameFromMediaMetadataRetriever(realPath));
         }
 
     }

@@ -22,6 +22,7 @@ public class FFmpegCore {
 
     public native static int execCmd(String[] cmds);
     public native static String invokeTest();
+    public native static byte[] getFrameAt(String path, int timeUnit, int option);
 
 
 }
