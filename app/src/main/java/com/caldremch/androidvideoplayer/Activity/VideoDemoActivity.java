@@ -7,18 +7,22 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.caldremch.androidvideoplayer.Constant;
 import com.caldremch.androidvideoplayer.R;
 import com.caldremch.androidvideoplayer.adapter.VideoListAdapter;
+import com.caldremch.androidvideoplayer.uitls.CLog;
 import com.caldremch.androidvideoplayer.uitls.UriUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 
 /**
@@ -39,10 +43,12 @@ public class VideoDemoActivity extends AppCompatActivity {
     private Button mButton4;
     private RecyclerView mRv;
     private VideoListAdapter mAdapter;
+    private ImageView mIv;
 
     private void assignViews() {
-        mButton4 = (Button) findViewById(R.id.button4);
-        mRv = (RecyclerView) findViewById(R.id.rv);
+        mButton4 = findViewById(R.id.button4);
+        mRv = findViewById(R.id.rv);
+        mIv = findViewById(R.id.iv);
     }
 
     @Override
@@ -54,6 +60,9 @@ public class VideoDemoActivity extends AppCompatActivity {
         mAdapter = new VideoListAdapter(videoFirstFrames);
         mRv.setLayoutManager(new LinearLayoutManager(this));
         mRv.setAdapter(mAdapter);
+
+        //获取网络视频的第一帧
+        mIv.setImageBitmap(getFrameFromMediaMetadataRetriever(Constant.MP4_TEST_URL));
 
     }
 
@@ -70,18 +79,46 @@ public class VideoDemoActivity extends AppCompatActivity {
 
 
         if (requestCode == REQ_MEDIA && resultCode == RESULT_OK) {
+
             String realPath = UriUtils.getPath(this, data.getData());
+
+            CLog.d("realPath=" + realPath);
 
             //获取视频的第一帧
 
-            MediaMetadataRetriever mmr= new MediaMetadataRetriever();
-
-            mmr.setDataSource(realPath, new HashMap<String, String>());
-
-            Bitmap bitmap = mmr.
-
-
+            mIv.setImageBitmap(getFrameFromMediaMetadataRetriever(realPath));
         }
 
     }
+
+    private Bitmap getFrameFromMediaMetadataRetriever(String realPath) {
+        MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+
+        Bitmap bitmap = null;
+        try {
+
+            if (realPath.startsWith("http://")
+                    || realPath.startsWith("https://")
+                    || realPath.startsWith("widevine://")) {
+                mmr.setDataSource(realPath, new Hashtable<String, String>());
+            } else {
+                mmr.setDataSource(realPath);
+
+            }
+
+            bitmap = mmr.getFrameAtTime(1, MediaMetadataRetriever.OPTION_CLOSEST_SYNC);
+
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        } catch (RuntimeException e1) {
+            e1.printStackTrace();
+        }finally {
+            mmr.release();
+        }
+
+
+        return bitmap;
+    }
+
+
 }
