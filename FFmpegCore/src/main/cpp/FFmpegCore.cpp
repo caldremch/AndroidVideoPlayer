@@ -298,10 +298,15 @@ avcodec_send_packet和avcodec_receive_frame调用关系并不一定是一对一�
 
                         //接收解码数据包
                         while (avcodec_receive_frame(codecContext, frame) == 0) {
+
+                            log_debug("接收到视频真");
                             //读取到一帧视频或者音频
                             //处理
-                            frame2image(frame, "/storage/emulated/0/Android/test.png");
+                           int r =  frame2image(frame, "/storage/emulated/0/Android/test.jpg");
+
+                           log_debug("frame2image ---> %d", r);
                         }
+                        log_debug("处理结束");
 
                         break;
 

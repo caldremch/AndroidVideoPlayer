@@ -5,8 +5,10 @@
 #include "ffmpeg_core_utils.h"
 #include "../myjnihelper/android_log.h"
 
-int frame2image(AVFrame *pAvFrame, char *outFileName){
+int frame2image( AVFrame *pAvFrame, char *outFileName){
 
+
+    log_debug("开始转换");
     int width = pAvFrame->width;
     int height = pAvFrame->height;
 
@@ -18,8 +20,12 @@ int frame2image(AVFrame *pAvFrame, char *outFileName){
     //oformat: The output container format
     //av_guess_format : Return the output format in the list of registered output formats
     //which best matches the provided parameters
-    pAVFormatContext->oformat = av_guess_format("png", NULL, NULL);
+    pAVFormatContext->oformat = av_guess_format("mjpeg", NULL, NULL);
 
+    if (pAVFormatContext->oformat == NULL){
+        log_error("执行失败： av_guess_format");
+        return -1;
+    }
     /**
      * pb:I/O context
      *
@@ -44,6 +50,8 @@ int frame2image(AVFrame *pAvFrame, char *outFileName){
     parameters->width = width;
     parameters->height = height;
 
+
+    //采用的解码器AVCodec H.264,MPEG2
     AVCodec *pAVCodec = avcodec_find_encoder(pNewAVStream->codecpar->codec_id);
 
     if (!pAVCodec){
@@ -64,7 +72,58 @@ int frame2image(AVFrame *pAvFrame, char *outFileName){
         return -1;
     }
 
-//    pAVCodecContext->time_base = (AVRational){pAvFrame};
+    pAVCodecContext->time_base = (AVRational){1,25};
+
+    if (avcodec_open2(pAVCodecContext, pAVCodec, NULL) < 0){
+        log_error("avcodec_open2 开打编解码器 失败");
+        return -1;
+    }
+
+    int ret = avformat_write_header(pAVFormatContext, NULL);
+
+    if (ret < 0){
+        log_error("avformat_write_header error");
+        return -1;
+    }
+
+    int y_size = width*height; //像素集合？
+
+    AVPacket pkt;
+
+    //更AVPacket分配足够大的空间
+    av_new_packet(&pkt, y_size*3);
 
 
+    ret = avcodec_send_packet(pAVCodecContext, &pkt);
+
+    if(ret < 0){
+        log_error("avcodec_send_packet error");
+        return -1;
+    }
+
+    ret = avcodec_receive_frame(pAVCodecContext,  pAvFrame);
+
+    if (ret < 0){
+        log_error("avcodec_receive_frame error");
+        return -1;
+    }
+
+
+    if(av_write_frame(pAVFormatContext, &pkt) <0){
+        log_error("av_write_frame error");
+        return -1;
+    }
+
+    av_packet_unref(&pkt);
+
+
+    av_write_trailer(pAVFormatContext);
+
+    avcodec_close(pAVCodecContext);
+    avio_close(pAVFormatContext->pb);
+    avformat_free_context(pAVFormatContext);
+
+    log_debug("转换成功");
+
+    return 0;
 }
