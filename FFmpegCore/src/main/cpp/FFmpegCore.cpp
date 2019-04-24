@@ -10,6 +10,7 @@
 extern "C" {
 
 #include "ffmpeg/ffmpeg.h"
+#include "utils/ffmpeg_core_utils.h"
 
 const AVCodecID TARGET_IMAGE_CODEC = AV_CODEC_ID_PNG;
 const AVPixelFormat TARGET_IMAGE_FORMAT = AV_PIX_FMT_RGBA; //AV_PIX_FMT_RGB24;
@@ -299,8 +300,7 @@ avcodec_send_packet和avcodec_receive_frame调用关系并不一定是一对一�
                         while (avcodec_receive_frame(codecContext, frame) == 0) {
                             //读取到一帧视频或者音频
                             //处理
-
-
+                            frame2image(frame, "/storage/emulated/0/Android/test.png");
                         }
 
                         break;
