@@ -302,7 +302,9 @@ avcodec_send_packet和avcodec_receive_frame调用关系并不一定是一对一�
                             log_debug("接收到视频真");
                             //读取到一帧视频或者音频
                             //处理
-                           int r =  frame2image(frame, "/storage/emulated/0/Android/test.jpg");
+//                           int r =  frame2image(frame, "/storage/emulated/0/Android/test.jpg", avStream->time_base.num, avStream->time_base.den);
+                           int r =  frame2image2(frame,codecContext->width, codecContext->height,  "/storage/emulated/0/Android/test.jpg", avStream->time_base.num, avStream->time_base.den);
+
 
                            log_debug("frame2image ---> %d", r);
                         }
@@ -348,6 +350,8 @@ avcodec_send_packet和avcodec_receive_frame调用关系并不一定是一对一�
 
                 //释放
                 av_frame_free(&frame);
+                avcodec_close(codecContext);
+                avformat_free_context(avFormatContext);
 
                 break;
 

@@ -5,7 +5,7 @@
 #include "ffmpeg_core_utils.h"
 #include "../myjnihelper/android_log.h"
 
-int frame2image( AVFrame *pAvFrame, char *outFileName){
+int frame2image( AVFrame *pAvFrame, char *outFileName, int num , int den){
 
 
     log_debug("开始转换");
@@ -72,11 +72,13 @@ int frame2image( AVFrame *pAvFrame, char *outFileName){
         return -1;
     }
 
-    pAVCodecContext->time_base = (AVRational){1,25};
+    pAVCodecContext->time_base = (AVRational){num,den};
 
     if (avcodec_open2(pAVCodecContext, pAVCodec, NULL) < 0){
         log_error("avcodec_open2 开打编解码器 失败");
         return -1;
+    }else{
+        log_error("avcodec_open2 开打编解码器 成功");
     }
 
     int ret = avformat_write_header(pAVFormatContext, NULL);
@@ -86,6 +88,7 @@ int frame2image( AVFrame *pAvFrame, char *outFileName){
         return -1;
     }
 
+
     int y_size = width*height; //像素集合？
 
     AVPacket pkt;
@@ -93,11 +96,19 @@ int frame2image( AVFrame *pAvFrame, char *outFileName){
     //更AVPacket分配足够大的空间
     av_new_packet(&pkt, y_size*3);
 
+    avcodec_flush_buffers(pAVCodecContext);
+
 
     ret = avcodec_send_packet(pAVCodecContext, &pkt);
 
+
+
     if(ret < 0){
-        log_error("avcodec_send_packet error");
+        log_error("avcodec_send_packet0 error %d", ret);
+        log_error("avcodec_send_packet1 error %d", AVERROR_EOF);
+        log_error("avcodec_send_packet2 error %d", AVERROR(EINVAL));
+        log_error("avcodec_send_packet3 error %d", AVERROR(EAGAIN));
+        log_error("avcodec_send_packet4 error %d", AVERROR(ENOMEM));
         return -1;
     }
 
@@ -124,6 +135,97 @@ int frame2image( AVFrame *pAvFrame, char *outFileName){
     avformat_free_context(pAVFormatContext);
 
     log_debug("转换成功");
+
+    return 0;
+}
+
+int frame2image2( AVFrame *pAvFrame, int width, int height, char *outFileName, int num , int den){
+
+
+
+
+    AVFormatContext*output_ctx = avformat_alloc_context();
+
+    avformat_alloc_output_context2(&output_ctx, NULL, "singlejpeg", outFileName);
+
+    if(avio_open(&output_ctx->pb, outFileName, AVIO_FLAG_READ_WRITE)< 0){
+        log_error("avio_open");
+        return -1;
+    }
+
+
+    AVStream*stream = avformat_new_stream(output_ctx, NULL);
+
+    if(stream== NULL){
+        log_error("avformat_new_stream");
+        return -1;
+    }
+
+    AVCodecContext *codec_ctx = stream->codec;
+
+    codec_ctx->codec_id = output_ctx->oformat->video_codec;
+    codec_ctx->codec_type = AVMEDIA_TYPE_VIDEO;
+    codec_ctx->pix_fmt = AV_PIX_FMT_YUVJ420P;
+    codec_ctx->height = height;
+    codec_ctx->width = width;
+    codec_ctx->time_base.num = 1;
+    codec_ctx->time_base.den = 25;
+
+    //打印输出文件信息
+    av_dump_format(output_ctx, 0, outFileName, 1);
+
+    AVCodec *codec = avcodec_find_encoder(codec_ctx->codec_id);
+
+    if (!codec){
+        log_error("avcodec_find_encoder");
+        return -1;
+    }
+
+    if(avcodec_open2(codec_ctx, codec, NULL)< 0){
+        log_error("avcodec_open2");
+        return -1;
+    }
+
+    if(avcodec_parameters_from_context(stream->codecpar, codec_ctx)< 0){
+        log_error("avcodec_parameters_from_context");
+        return -1;
+    }
+
+    if( avformat_write_header(output_ctx, NULL)< 0){
+        log_error("avformat_write_header");
+        return -1;
+    }
+
+    int size  = codec_ctx->width * codec_ctx->height;
+
+    AVPacket *packet;
+
+    av_new_packet(packet, size*3);
+
+    int got_picture = 0;
+
+    int result = avcodec_encode_video2(codec_ctx, packet, pAvFrame, &got_picture);
+
+    if (result < 0){
+        log_error("avcodec_encode_video2");
+        return -1;
+    }
+
+    log_debug("got picture %d", got_picture);
+
+    if(got_picture == 1){
+        result = av_write_frame(output_ctx, packet);
+    }
+
+
+    av_free_packet(packet);
+    av_write_trailer(output_ctx);
+    if(pAvFrame){
+        av_frame_unref(pAvFrame);
+    }
+
+    avio_close(output_ctx->pb);
+    avformat_free_context(output_ctx);
 
     return 0;
 }

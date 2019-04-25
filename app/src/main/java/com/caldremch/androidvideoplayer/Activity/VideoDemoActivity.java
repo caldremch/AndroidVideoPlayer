@@ -3,6 +3,7 @@ package com.caldremch.androidvideoplayer.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.MediaMetadataRetriever;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
@@ -86,7 +87,9 @@ public class VideoDemoActivity extends AppCompatActivity {
             CLog.d("realPath=" + realPath);
 
             //1.获取视频的第一帧 ffmpeg
-            FFmpegCore.getFrameAt(realPath, 0, 0);
+           FFmpegCore.getFrameAt(realPath, 0, 0);
+
+            mIv.setImageURI(Uri.parse("/storage/emulated/0/Android/test.jpg"));
 
             //2.获取视频的第一帧 android原生
 //            mIv.setImageBitmap(getFrameFromMediaMetadataRetriever(realPath));
