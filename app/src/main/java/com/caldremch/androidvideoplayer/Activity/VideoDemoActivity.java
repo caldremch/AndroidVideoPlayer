@@ -63,6 +63,9 @@ public class VideoDemoActivity extends AppCompatActivity {
         mRv.setLayoutManager(new LinearLayoutManager(this));
         mRv.setAdapter(mAdapter);
 
+        FFmpegCore.getFrameAt(Constant.MP4_TEST_URL, 0, 0);
+
+
         //获取网络视频的第一帧
 //        mIv.setImageBitmap(getFrameFromMediaMetadataRetriever(Constant.MP4_TEST_URL));
 
@@ -73,6 +76,9 @@ public class VideoDemoActivity extends AppCompatActivity {
 //        intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, PICTURE);
         intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, MOVIE);
         startActivityForResult(intent, REQ_MEDIA);
+
+        FFmpegCore.getFrameAt("", 0, 0);
+
     }
 
     @Override
