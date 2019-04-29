@@ -133,4 +133,9 @@ public class VideoDemoActivity extends AppCompatActivity {
     }
 
 
+    public void mediaRecord(View view) {
+
+        startActivity(new Intent(this, MediaRecordActivity.class));
+
+    }
 }
