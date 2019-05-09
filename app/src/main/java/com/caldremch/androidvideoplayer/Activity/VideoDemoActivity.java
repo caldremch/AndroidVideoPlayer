@@ -63,7 +63,7 @@ public class VideoDemoActivity extends AppCompatActivity {
         mRv.setLayoutManager(new LinearLayoutManager(this));
         mRv.setAdapter(mAdapter);
 
-        FFmpegCore.getFrameAt(Constant.MP4_TEST_URL, 0, 0);
+//        FFmpegCore.getFrameAt(Constant.MP4_TEST_URL, 0, 0);
 
 
         //获取网络视频的第一帧
@@ -101,35 +101,6 @@ public class VideoDemoActivity extends AppCompatActivity {
 //            mIv.setImageBitmap(getFrameFromMediaMetadataRetriever(realPath));
         }
 
-    }
-
-    private Bitmap getFrameFromMediaMetadataRetriever(String realPath) {
-        MediaMetadataRetriever mmr = new MediaMetadataRetriever();
-
-        Bitmap bitmap = null;
-        try {
-
-            if (realPath.startsWith("http://")
-                    || realPath.startsWith("https://")
-                    || realPath.startsWith("widevine://")) {
-                mmr.setDataSource(realPath, new Hashtable<String, String>());
-            } else {
-                mmr.setDataSource(realPath);
-
-            }
-
-            bitmap = mmr.getFrameAtTime(1, MediaMetadataRetriever.OPTION_CLOSEST_SYNC);
-
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        } catch (RuntimeException e1) {
-            e1.printStackTrace();
-        }finally {
-            mmr.release();
-        }
-
-
-        return bitmap;
     }
 
 

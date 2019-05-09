@@ -44,4 +44,5 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
     implementation project(':PlayerCore')
     implementation project(':FFmpegCore')
+    implementation 'com.google.android.material:material:1.0.0'
 }
