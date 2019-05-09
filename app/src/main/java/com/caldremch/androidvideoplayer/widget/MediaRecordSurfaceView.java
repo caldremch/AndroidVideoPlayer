@@ -10,10 +10,12 @@ import android.os.Build;
 import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.Toast;
 
 import com.caldremch.androidvideoplayer.uitls.CLog;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author Caldremch
@@ -53,13 +55,26 @@ public class MediaRecordSurfaceView extends SurfaceView implements SurfaceHolder
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
+        //初始化 Camera
+        //this.mCamera = mCameraManager.
+        initCamera();
+
+    }
+
+    private void initCamera() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mCameraManager = (CameraManager) getContext().getSystemService(Context.CAMERA_SERVICE);
 
             try {
 
-                CLog.d("getCameraIdList==>"+ Arrays.toString(mCameraManager.getCameraIdList()));
+                String[]cameraList = mCameraManager.getCameraIdList();
+
+                if (cameraList.length == 0){
+                    Toast.makeText(getContext(), "", Toast.LENGTH_SHORT).show();
+                }
+
+                CLog.d("getCameraIdList==>"+ Arrays.toString(cameraList));
 
                 for (String cameraId: mCameraManager.getCameraIdList()){
 
@@ -71,7 +86,6 @@ public class MediaRecordSurfaceView extends SurfaceView implements SurfaceHolder
                     boolean real = available != null && available;
                     CLog.d("是否支持闪光:"+real);
 
-
                 }
             } catch (CameraAccessException e) {
                 e.printStackTrace();
@@ -80,13 +94,6 @@ public class MediaRecordSurfaceView extends SurfaceView implements SurfaceHolder
         }else{
             //不支持 Camer2Api 的使用
         }
-
-
-
-
-
-        //初始化 Camera
-//        this.mCamera = mCameraManager.
 
     }
 
@@ -97,6 +104,12 @@ public class MediaRecordSurfaceView extends SurfaceView implements SurfaceHolder
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
+        releaseCamera();
+    }
+
+    private void releaseCamera() {
+
+
 
     }
 

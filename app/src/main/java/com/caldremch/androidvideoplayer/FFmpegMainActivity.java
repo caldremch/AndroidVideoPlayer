@@ -26,7 +26,7 @@ public class FFmpegMainActivity extends AppCompatActivity {
 
         TextView textView = findViewById(R.id.sample_text);
 
-        textView.setText(FFmpegCore.invokeTest());
+//        textView.setText(FFmpegCore.invokeTest());
 
         DeviceUtils.getDeviceUUID();
 
