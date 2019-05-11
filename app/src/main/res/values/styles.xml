@@ -8,4 +8,9 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <!-- Base application theme. -->
+    <style name="ComAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+
+    </style>
+
 </resources>
