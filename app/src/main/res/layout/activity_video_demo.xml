@@ -13,10 +13,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="20dp"
-        android:layout_marginEnd="8dp"
-        android:text="打开相册"
-        app:layout_constraintEnd_toEndOf="parent"
         android:onClick="handleAndroidMedia"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        android:text="打开相册"
+        app:layout_constraintEnd_toStartOf="@+id/button5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
