@@ -6,20 +6,22 @@ import android.graphics.ImageFormat
 import android.graphics.SurfaceTexture
 import android.hardware.camera2.*
 import android.hardware.camera2.CameraDevice.TEMPLATE_PREVIEW
+import android.hardware.camera2.params.StreamConfigurationMap
 import android.media.ImageReader
 import android.os.Build
 import android.os.Handler
 import android.os.HandlerThread
 import android.os.Looper
 import android.util.AttributeSet
+import android.util.Size
 import android.view.SurfaceHolder
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 
 import com.caldremch.androidvideoplayer.uitls.CLog
+import com.caldremch.androidvideoplayer.uitls.CompareSizesByArea
 import java.lang.Exception
-
-import java.util.Arrays
+import java.util.*
 
 /**
  * @author Caldremch
@@ -70,15 +72,13 @@ class MediaRecordSurfaceView : AutoFitSurfaceView, SurfaceHolder.Callback, Runna
 
             mainHalder = Handler(Looper.getMainLooper())
             mCameraManager = context.getSystemService(Context.CAMERA_SERVICE) as CameraManager
-            imageReader = ImageReader.newInstance(width, height, ImageFormat.JPEG, 7)
-            imageReader?.setOnImageAvailableListener(onImageAvailableListener, mainHalder)
-
 
             try {
 
+                /**
+                 * 获取相机id
+                 */
                 val cameraList = mCameraManager!!.cameraIdList
-
-
                 if (cameraList.size == 0) {
                     Toast.makeText(context, "", Toast.LENGTH_SHORT).show()
                 }
@@ -91,10 +91,22 @@ class MediaRecordSurfaceView : AutoFitSurfaceView, SurfaceHolder.Callback, Runna
                     val characteristics = mCameraManager!!.getCameraCharacteristics(cameraId)
 
 
-                    val streamConfigurationMap = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)
+                    val streamConfigurationMap: StreamConfigurationMap = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)
+                            ?: continue
 
+                    //获取最大的size, 支持的最大分辨率
                     //获取相机支持的分辨率
-                    val nativeSizes = streamConfigurationMap?.getOutputSizes(SurfaceTexture::class.java)
+                    val nativeSizes = streamConfigurationMap.getOutputSizes(SurfaceTexture::class.java)
+
+                    var largetSize:Size = Collections.max(
+                            Arrays.asList(*streamConfigurationMap.getOutputSizes(ImageFormat.JPEG)),
+                            CompareSizesByArea()
+                    )
+
+
+                    imageReader = ImageReader.newInstance(largetSize.width, largetSize.height, ImageFormat.JPEG, 7)
+                    imageReader?.setOnImageAvailableListener(onImageAvailableListener, mainHalder)
+
 
                     //获取最合适的分辨率
 
@@ -111,7 +123,6 @@ class MediaRecordSurfaceView : AutoFitSurfaceView, SurfaceHolder.Callback, Runna
                         override fun onOpened(camera: CameraDevice) {
                             CLog.d("openCamera onOpened")
                             cameraDevice = camera;
-
 
                             previewBuilder = cameraDevice?.createCaptureRequest(TEMPLATE_PREVIEW);
                             previewBuilder!!.addTarget(surfaceHolder!!.surface)
@@ -234,5 +245,7 @@ class MediaRecordSurfaceView : AutoFitSurfaceView, SurfaceHolder.Callback, Runna
             e.printStackTrace()
         }
     }
+
+
 
 }
