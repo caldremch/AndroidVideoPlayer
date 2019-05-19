@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AndroidCommonTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!--窗口动画-->
+        <item name="android:windowAnimationStyle">@style/ActivityAnimFade</item>
+    </style>
+
+
+    <style name="ActivityAnimFade" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/action_rigth_enter</item>
+        <item name="android:activityOpenExitAnimation">@anim/action_rigth_exit</item>
+        <item name="android:activityCloseEnterAnimation">@anim/action_left_enter</item>
+        <item name="android:activityCloseExitAnimation">@anim/action_left_exit</item>
+    </style>
+</resources>

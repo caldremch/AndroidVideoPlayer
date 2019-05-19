@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--do not modify this name , otherwise, modify the using part-->
+    <item name="android_common_title_view_id" type="id"/>
+
+    <!--布局中没有设置 titleView 的 id 时, 代码自动添加一个 titleView, 默认使用的 id-->
+    <item name="default_android_common_title_view_id" type="id"/>
+
+</resources>

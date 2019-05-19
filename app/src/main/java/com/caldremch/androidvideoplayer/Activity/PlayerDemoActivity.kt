@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.caldremch.androidvideoplayer.Constant
 import com.caldremch.androidvideoplayer.R
+import com.caldremch.common.base.BaseActivity
 import com.caldremch.playercore.player.MyExoPlayerView
 import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.SimpleExoPlayer
@@ -20,24 +21,24 @@ import kotlinx.android.synthetic.main.activity_player_demo.*
  * @email caldremch@163.com
  * @describe
  */
-class PlayerDemoActivity : AppCompatActivity() {
+class PlayerDemoActivity : BaseActivity() {
 
 
     internal var simpleExoPlayer: SimpleExoPlayer? = null
     internal var playerView: MyExoPlayerView? = null
 
-     fun getLayoutId(): Int {
+     override fun getLayoutId(): Int {
         return R.layout.activity_player_demo
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(getLayoutId())
-        initView()
-    }
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+//        setContentView(getLayoutId())
+//        initView()
+//    }
 
 
-     fun initView() {
+     override fun initView() {
 
         simpleExoPlayer = ExoPlayerFactory.newSimpleInstance(this)
         simpleExoPlayer!!.addVideoListener(object : VideoListener {

@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.caldremch.androidvideoplayer.R
 import com.caldremch.androidvideoplayer.uitls.MediaMetadataRetrieverUtils
 import com.caldremch.androidvideoplayer.widget.MediaRecordSurfaceView
+import com.caldremch.common.base.BaseActivity
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 
@@ -24,7 +25,7 @@ import com.google.android.material.chip.ChipGroup
  * @email caldremch@163.com
  * @describe
  */
-class MediaRecordActivity : AppCompatActivity() {
+class MediaRecordActivity : BaseActivity() {
 
 
     private val req_android_self_camera = 1
@@ -52,12 +53,12 @@ class MediaRecordActivity : AppCompatActivity() {
         mIv = findViewById(R.id.iv)
     }
 
+    override fun getLayoutId(): Int {
+        return R.layout.activity_record;
+    }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        requestWindowFeature(Window.FEATURE_NO_TITLE)
-        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
-        setContentView(R.layout.activity_record)
+    override fun initView() {
+
         assignViews()
 
 
@@ -69,8 +70,14 @@ class MediaRecordActivity : AppCompatActivity() {
             }
         }
 
-
     }
+
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+//        requestWindowFeature(Window.FEATURE_NO_TITLE)
+//        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
+//        setContentView(R.layout.activity_record)
+//    }
 
     fun start(view: View) {
         if (mChipGroup!!.checkedChipId == R.id.chipInGroup2_1) {

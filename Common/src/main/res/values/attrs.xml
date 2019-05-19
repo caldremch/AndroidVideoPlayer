@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="TitleBar">
+        <attr name="titleBarTitle" format="string" />
+        <attr name="titleBarTitleColor" format="color" />
+        <attr name="titleBarRightText" format="string" />
+        <attr name="titleBarLeftImage" format="reference" />
+        <attr name="titleBarRightImage" format="reference" />
+        <attr name="titleBarRightTwoImage" format="reference" />
+        <attr name="titleBarBackground" format="reference|color" />
+        <attr name="titleBarRightType" format="enum">
+            <enum name="text" value="0" />
+            <enum name="image" value="1" />
+        </attr>
+        <attr name="isCompatStatusBar" format="boolean" />
+    </declare-styleable>
+
+
+    <declare-styleable name="MultiStateView">
+        <attr name="msv_loadingView" format="reference" />
+        <attr name="msv_emptyView" format="reference" />
+        <attr name="msv_errorView" format="reference" />
+        <attr name="msv_viewState" format="enum">
+            <enum name="content" value="0" />
+            <enum name="error" value="1" />
+            <enum name="empty" value="2" />
+            <enum name="loading" value="3" />
+        </attr>
+        <attr name="msv_animateViewChanges" format="boolean" />
+    </declare-styleable>
+
+</resources>

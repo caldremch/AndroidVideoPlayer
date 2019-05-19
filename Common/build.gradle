@@ -1,38 +1,26 @@
-apply plugin: 'com.android.application'
-
-
-apply plugin: 'kotlin-android'
-
-apply plugin: 'kotlin-android-extensions'
-
-
+apply plugin: 'com.android.library'
+apply plugin: 'maven'
 android {
     compileSdkVersion 28
+
+
     defaultConfig {
-        applicationId "com.caldremch.androidvideoplayer"
         minSdkVersion 18
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
 
-        ndk {
-            abiFilters "armeabi-v7a"
-        }
-    }
-
-    compileOptions {
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-
-    android {
-        lintOptions {
-            abortOnError false
-        }
     }
 
     lintOptions {
         abortOnError false
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
 
     buildTypes {
         release {
@@ -40,63 +28,57 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
 }
 def rxlifecycle = '2.2.2'
 def retrofit = '2.5.0'
 def glide = '4.9.0'
 def leakcanary = '1.6.3'
 dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
-
-    //kotlin
-    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-
-    implementation 'androidx.appcompat:appcompat:1.0.2'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    //exo 播放器
-    implementation 'com.google.android.exoplayer:exoplayer-core:2.9.6'
-    implementation 'com.google.android.exoplayer:exoplayer-ui:2.9.6'
-
-    implementation 'androidx.recyclerview:recyclerview:1.1.0-alpha05'
-    implementation 'com.github.bumptech.glide:glide:4.9.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
-    implementation project(':PlayerCore')
-    implementation project(':FFmpegCore')
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation 'io.reactivex.rxjava2:rxjava:2.2.7'
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
     implementation "com.trello.rxlifecycle2:rxlifecycle:$rxlifecycle"
     implementation "com.trello.rxlifecycle2:rxlifecycle-components:$rxlifecycle"
-
     implementation 'com.squareup.okhttp3:okhttp:3.13.1'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.13.1'
-
     implementation "com.squareup.retrofit2:retrofit:$retrofit"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit"
     implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit"
-
+    implementation "com.github.bumptech.glide:glide:$glide"
     implementation 'com.alibaba:fastjson:1.1.70.android'
     implementation 'org.greenrobot:eventbus:3.1.1'
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.46'
     implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-12'
-
 //    debugImplementation "com.squareup.leakcanary:leakcanary-android:$leakcanary"
 //    releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakcanary"
 //    debugImplementation "com.squareup.leakcanary:leakcanary-support-fragment:$leakcanary}"
-
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'com.gyf.immersionbar:immersionbar:2.3.3-beta15'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    implementation project(path: ':Common')
+    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation 'com.google.android.material:material:1.0.0'
-    /**
-     * material 版本要跟appomcat 版本不一致, 不然又会报错 , 注意版本的依赖问题
-     * Default method desugaring of `com.caldremch.common.base.BaseActivity` failed because it's hierarchy is incomplete. The class `androidx.appcompat.app.AppCompatActivity` is missing and it is the declared super class of
-     */
-
-    //私服库
-//    implementation 'com.caldremch.android:common:1.0.3@aar'
-
-
-    //d8 https://blog.csdn.net/jamin0107/article/details/81123154
 }
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            pom.groupId = 'com.caldremch.android'
+            pom.artifactId = 'common'
+            //最早版本为1.0.0, 每次打包+1
+            pom.version = '1.0.3'
+//            repository(url: localMavenUrl)
+
+            //远程仓库
+//            repository(url: 'http://47.106.156.156:8085/repository/maven-android/') {
+            repository(url: 'http://192.168.0.105:32778/repository/maven-android/') { //家里内网
+//            repository(url: 'http://192.168.40.48:8081/repository/maven-android/') { //公司内容
+                authentication (userName:'admin', password:'admin123')
+            }
+        }
+    }
+}
+
+
