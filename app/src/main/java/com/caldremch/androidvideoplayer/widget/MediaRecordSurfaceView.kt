@@ -98,14 +98,71 @@ class MediaRecordSurfaceView : AutoFitSurfaceView, SurfaceHolder.Callback, Runna
                     //获取相机支持的分辨率
                     val nativeSizes = streamConfigurationMap.getOutputSizes(SurfaceTexture::class.java)
 
+
+                    //
+
+   /*                 [4032x3024,
+                        4000x3000,
+                        4032x2268,
+                        4032x2016,
+                        3840x2160,
+                        2880x2156,
+                        2688x1512,
+                        2592x1940,
+                        2592x1458,
+                        2592x1296,
+                        1920x1440,
+                        1920x1080,
+                        1600x1200,
+                        1280x960,
+                        1280x720,
+                        1280x640,
+                        800x600,
+                        720x480,
+                        640x480,
+                        640x360,
+                        352x288,
+                        320x240,
+                        176x144]
+*/
+                    CLog.d("nativeSizes--->:${Arrays.toString(nativeSizes)}")
+
+
+                    var ratio = height.toDouble()/width.toDouble();
+                    CLog.d("currentRatio--->:$height / $width = $ratio")
+
+                    var bigEng:Size? = null;
+                    //获取足够大的
+                    for (size in nativeSizes){
+                        var thisRatio = size.height.toDouble()/size.width.toDouble()
+                        CLog.d("thisRatio--->:$thisRatio")
+
+                        if(thisRatio == ratio){
+                            bigEng = size;
+                            break
+                        }
+                    }
+
+
+
+                    CLog.d("bigEng--->:${bigEng?.width}---${bigEng?.height}")
+
+
+                    //取出最合适的预览尺寸
+//                    setAspectRatio()
+
                     var largetSize:Size = Collections.max(
                             Arrays.asList(*streamConfigurationMap.getOutputSizes(ImageFormat.JPEG)),
                             CompareSizesByArea()
                     )
 
+                    CLog.d("最大预览:${largetSize.width}---${largetSize.height}")
+
 
                     imageReader = ImageReader.newInstance(largetSize.width, largetSize.height, ImageFormat.JPEG, 7)
                     imageReader?.setOnImageAvailableListener(onImageAvailableListener, mainHalder)
+
+
 
 
                     //获取最合适的分辨率

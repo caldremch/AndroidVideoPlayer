@@ -6,6 +6,8 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
+import android.view.Window
+import android.view.WindowManager
 import android.widget.Button
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
@@ -53,8 +55,13 @@ class MediaRecordActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        requestWindowFeature(Window.FEATURE_NO_TITLE)
+        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
         setContentView(R.layout.activity_record)
         assignViews()
+
+
+        //全品
 
         mChipGroup!!.setOnCheckedChangeListener { chipGroup, i ->
             if (i != R.id.chipInGroup2_1 && i != R.id.chipInGroup2_2 && i != R.id.chipInGroup2_3) {
