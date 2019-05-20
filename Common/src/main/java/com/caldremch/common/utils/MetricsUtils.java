@@ -1,6 +1,9 @@
 package com.caldremch.common.utils;
 
 import android.content.Context;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 
 /**
  * @author Caldremch
@@ -18,4 +21,20 @@ public class MetricsUtils {
         return result;
     }
 
+    public static void compatTitle(Context context, final View view){
+        final  int  statusBarHeight = getStatusBarHeight(context);
+
+        view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                ViewGroup.LayoutParams lp = view.getLayoutParams();
+                if (lp instanceof ViewGroup.MarginLayoutParams){
+                    ViewGroup.MarginLayoutParams  mlp = (ViewGroup.MarginLayoutParams) lp;
+                    mlp.topMargin = statusBarHeight;
+                    view.requestLayout();
+                }
+            }
+        });
+    }
 }

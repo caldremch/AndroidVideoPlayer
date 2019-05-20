@@ -16,6 +16,7 @@ import com.caldremch.androidvideoplayer.R
 import com.caldremch.androidvideoplayer.uitls.MediaMetadataRetrieverUtils
 import com.caldremch.androidvideoplayer.widget.MediaRecordSurfaceView
 import com.caldremch.common.base.BaseActivity
+import com.caldremch.common.utils.MetricsUtils
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 
@@ -61,6 +62,7 @@ class MediaRecordActivity : BaseActivity() {
 
         assignViews()
 
+        MetricsUtils.compatTitle(mContext, mChipGroup)
 
         //全品
 

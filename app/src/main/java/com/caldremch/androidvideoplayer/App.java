@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 
 import com.caldremch.androidvideoplayer.uitls.Utils;
+import com.caldremch.common.base.BaseApp;
 
 /**
  * @author Caldremch
@@ -11,7 +12,7 @@ import com.caldremch.androidvideoplayer.uitls.Utils;
  * @email caldremch@163.com
  * @describe
  **/
-public class App extends Application {
+public class App extends BaseApp {
 
     @Override
     public void onCreate() {
