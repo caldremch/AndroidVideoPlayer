@@ -18,11 +18,11 @@ import android.util.Size
 import android.view.SurfaceHolder
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-
 import com.caldremch.androidvideoplayer.uitls.CLog
 import com.caldremch.androidvideoplayer.uitls.CompareSizesByArea
-import java.lang.Exception
+import com.caldremch.common.utils.DensityUtil
 import java.util.*
+import kotlin.math.abs
 
 /**
  * @author Caldremch
@@ -101,6 +101,7 @@ class MediaRecordSurfaceView : AutoFitSurfaceView, SurfaceHolder.Callback, Runna
                     val nativeSizes = streamConfigurationMap.getOutputSizes(SurfaceTexture::class.java)
 
 
+
                     //
 
    /*                 [4032x3024,
@@ -130,24 +131,30 @@ class MediaRecordSurfaceView : AutoFitSurfaceView, SurfaceHolder.Callback, Runna
                     CLog.d("nativeSizes--->:${Arrays.toString(nativeSizes)}")
 
 
-                    var ratio = height.toDouble()/width.toDouble();
+                    var ratio = width.toDouble()/ height.toDouble();
                     CLog.d("currentRatio--->:$height / $width = $ratio")
+                    CLog.d("当前手机分辨率--->:${DensityUtil.getScreenWidth(context)} / ${DensityUtil.getScreenHeight(context)}")
 
                     var bigEng:Size? = null;
                     //获取足够大的
                     for (size in nativeSizes){
                         var thisRatio = size.height.toDouble()/size.width.toDouble()
-                        CLog.d("thisRatio--->:$thisRatio")
-
+                        CLog.d("thisRatio: ${size.width}/${size.height} --->:$thisRatio")
                         if(thisRatio == ratio){
                             bigEng = size;
                             break
                         }
                     }
 
+                    var bestSize = getBestSize(nativeSizes, width, height);
 
 
+                    //设置预览 view
+                    setAspectRatio(bestSize.width, bestSize.height)
+
+                    CLog.d("bestSize--->:${bestSize?.width}---${bestSize?.height}")
                     CLog.d("bigEng--->:${bigEng?.width}---${bigEng?.height}")
+
 
 
                     //取出最合适的预览尺寸
@@ -257,7 +264,22 @@ class MediaRecordSurfaceView : AutoFitSurfaceView, SurfaceHolder.Callback, Runna
         }
     }
 
+    fun getBestSize(supportSize: Array<Size>, width: Int, height: Int): Size {
 
+        var bestSize = Size(0, 0);
+        var firstSize = supportSize[0];
+        var diff = abs(firstSize.width-width) + abs(firstSize.height-height)
+        for (s in supportSize){
+            var tempDiff = abs(s.width-width) + abs(s.height-height);
+            CLog.d("每次比较--->:$tempDiff")
+            if (tempDiff< diff){
+                diff = tempDiff;
+                bestSize = s;
+            }
+        }
+        return bestSize;
+//        return Collections.min(Arrays.asList(*supportSize), ClosestComp(width, height));
+    }
     /**
      * 关闭相机
      */

@@ -51,14 +51,14 @@ open class AutoFitSurfaceView : SurfaceView {
         if( 0 == mRatioWidth || 0 == mRatioHeight){
             //默认
             setMeasuredDimension(width, height)
+
         }else{
+
+            
 
             //按比例
 //            width/height=  mRatioWidth/mRatioHeight
 //            width*mRatioHeight = mRatioWidth*height
-
-
-
             if (width<(height*mRatioWidth)/mRatioHeight){
                 setMeasuredDimension(width, width*mRatioHeight/mRatioWidth)
             }else{

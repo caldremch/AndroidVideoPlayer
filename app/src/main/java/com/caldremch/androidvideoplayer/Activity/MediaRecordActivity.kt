@@ -5,18 +5,23 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.provider.MediaStore
+import android.util.Size
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.caldremch.androidvideoplayer.R
+import com.caldremch.androidvideoplayer.uitls.ClosestComp
 import com.caldremch.androidvideoplayer.uitls.MediaMetadataRetrieverUtils
 import com.caldremch.androidvideoplayer.widget.MediaRecordSurfaceView
 import com.caldremch.common.base.BaseActivity
 import com.caldremch.common.utils.MetricsUtils
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import java.util.*
+import kotlin.Comparator
+import kotlin.math.abs
 
 /**
  * @author Caldremch
@@ -33,7 +38,7 @@ class MediaRecordActivity : BaseActivity() {
 
     private val CAMERA_REQ = 0x01;
 
-    private var isCameraPermite:Boolean = false;
+    private var isCameraPermite: Boolean = false;
 
     private var mSurfaceView: MediaRecordSurfaceView? = null
     private var mButton3: Button? = null
@@ -65,21 +70,21 @@ class MediaRecordActivity : BaseActivity() {
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
-        if (requestCode == CAMERA_REQ && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+        if (requestCode == CAMERA_REQ && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             isCameraPermite = true;
         }
 
     }
 
-    private fun checkPermission():Boolean{
+    private fun checkPermission(): Boolean {
 
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M){
-            if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), CAMERA_REQ);
-            }else{
+            } else {
                 return true
             }
-        }else{
+        } else {
             return true
         }
 
@@ -105,6 +110,7 @@ class MediaRecordActivity : BaseActivity() {
 //        var uiOption = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION.xor(View.SYSTEM_UI_FLAG_FULLSCREEN);
 //        window.decorView.systemUiVisibility  = uiOption
         mBar.transparentNavigationBar().init()
+
 
     }
 
@@ -149,4 +155,8 @@ class MediaRecordActivity : BaseActivity() {
         }
 
     }
+
+
+
+
 }
