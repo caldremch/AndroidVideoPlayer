@@ -1,17 +1,15 @@
 package com.caldremch.androidvideoplayer.Activity
 
+import android.Manifest
 import android.content.Intent
-import android.database.Cursor
-import android.net.Uri
-import android.os.Bundle
+import android.content.pm.PackageManager
+import android.os.Build
 import android.provider.MediaStore
 import android.view.View
-import android.view.Window
-import android.view.WindowManager
 import android.widget.Button
 import android.widget.ImageView
-import androidx.appcompat.app.AppCompatActivity
-
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.caldremch.androidvideoplayer.R
 import com.caldremch.androidvideoplayer.uitls.MediaMetadataRetrieverUtils
 import com.caldremch.androidvideoplayer.widget.MediaRecordSurfaceView
@@ -32,6 +30,10 @@ class MediaRecordActivity : BaseActivity() {
     private val req_android_self_camera = 1
     private val req_android_media_record = 2
     private val req_ffmpeg_record = 3
+
+    private val CAMERA_REQ = 0x01;
+
+    private var isCameraPermite:Boolean = false;
 
     private var mSurfaceView: MediaRecordSurfaceView? = null
     private var mButton3: Button? = null
@@ -54,16 +56,43 @@ class MediaRecordActivity : BaseActivity() {
         mIv = findViewById(R.id.iv)
     }
 
+    override fun onStart() {
+        super.onStart()
+        isCameraPermite = checkPermission()
+
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if (requestCode == CAMERA_REQ && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+            isCameraPermite = true;
+        }
+
+    }
+
+    private fun checkPermission():Boolean{
+
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M){
+            if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), CAMERA_REQ);
+            }else{
+                return true
+            }
+        }else{
+            return true
+        }
+
+        return false
+    }
+
     override fun getLayoutId(): Int {
         return R.layout.activity_record;
     }
 
     override fun initView() {
-
         assignViews()
-
         MetricsUtils.compatTitle(mContext, mChipGroup)
-
         //全品
 
         mChipGroup!!.setOnCheckedChangeListener { chipGroup, i ->
@@ -71,6 +100,11 @@ class MediaRecordActivity : BaseActivity() {
                 mChipInGroup21!!.isChecked = true
             }
         }
+
+        //隐藏底部导航栏
+//        var uiOption = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION.xor(View.SYSTEM_UI_FLAG_FULLSCREEN);
+//        window.decorView.systemUiVisibility  = uiOption
+        mBar.transparentNavigationBar().init()
 
     }
 

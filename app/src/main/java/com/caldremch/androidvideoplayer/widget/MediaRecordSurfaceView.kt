@@ -1,5 +1,6 @@
 package com.caldremch.androidvideoplayer.widget
 
+import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.content.Context
 import android.graphics.ImageFormat
@@ -66,6 +67,7 @@ class MediaRecordSurfaceView : AutoFitSurfaceView, SurfaceHolder.Callback, Runna
     private var imageReader: ImageReader? = null
     private var mainHalder: Handler? = null
 
+    @SuppressLint("MissingPermission")
     private fun initCamera() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
