@@ -7,10 +7,10 @@
     android:orientation="vertical">
 
 
-    <com.caldremch.androidvideoplayer.widget.MediaRecordSurfaceView
-        android:id="@+id/surface_view"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+    <com.caldremch.androidvideoplayer.widget.CameraView
+        android:id="@+id/cameraView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

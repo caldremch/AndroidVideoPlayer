@@ -37,6 +37,7 @@ class MediaRecordSurfaceView : AutoFitSurfaceView, SurfaceHolder.Callback, Runna
     private var mCameraManager: CameraManager? = null
     private var previewBuilder: CaptureRequest.Builder? = null;
     private var cameraCaptureSession: CameraCaptureSession? = null;
+    var nativeSizes:Array<Size>? = null
 
     constructor(context: Context) : super(context) {
         initView()
@@ -98,7 +99,7 @@ class MediaRecordSurfaceView : AutoFitSurfaceView, SurfaceHolder.Callback, Runna
 
                     //获取最大的size, 支持的最大分辨率
                     //获取相机支持的分辨率
-                    val nativeSizes = streamConfigurationMap.getOutputSizes(SurfaceTexture::class.java)
+                     nativeSizes = streamConfigurationMap.getOutputSizes(SurfaceTexture::class.java)
 
 
 
@@ -137,7 +138,7 @@ class MediaRecordSurfaceView : AutoFitSurfaceView, SurfaceHolder.Callback, Runna
 
                     var bigEng:Size? = null;
                     //获取足够大的
-                    for (size in nativeSizes){
+                    for (size in (nativeSizes as Array<out Size>?)!!){
                         var thisRatio = size.height.toDouble()/size.width.toDouble()
                         CLog.d("thisRatio: ${size.width}/${size.height} --->:$thisRatio")
                         if(thisRatio == ratio){
@@ -146,11 +147,11 @@ class MediaRecordSurfaceView : AutoFitSurfaceView, SurfaceHolder.Callback, Runna
                         }
                     }
 
-                    var bestSize = getBestSize(nativeSizes, width, height);
+                    var bestSize = getBestSize();
 
 
                     //设置预览 view
-                    setAspectRatio(bestSize.width, bestSize.height)
+//                    setAspectRatio(bestSize.width, bestSize.height)
 
                     CLog.d("bestSize--->:${bestSize?.width}---${bestSize?.height}")
                     CLog.d("bigEng--->:${bigEng?.width}---${bigEng?.height}")
@@ -264,13 +265,13 @@ class MediaRecordSurfaceView : AutoFitSurfaceView, SurfaceHolder.Callback, Runna
         }
     }
 
-    fun getBestSize(supportSize: Array<Size>, width: Int, height: Int): Size {
+    fun getBestSize(): Size {
 
         var bestSize = Size(0, 0);
-        var firstSize = supportSize[0];
-        var diff = abs(firstSize.width-width) + abs(firstSize.height-height)
-        for (s in supportSize){
-            var tempDiff = abs(s.width-width) + abs(s.height-height);
+        var firstSize = nativeSizes?.get(0);
+        var diff = abs(firstSize!!.width-width) + abs(firstSize!!.height-height)
+        for (s in nativeSizes!!){
+            var tempDiff = abs(s!!.width-width) + abs(s!!.height-height);
             CLog.d("每次比较--->:$tempDiff")
             if (tempDiff< diff){
                 diff = tempDiff;
@@ -327,6 +328,22 @@ class MediaRecordSurfaceView : AutoFitSurfaceView, SurfaceHolder.Callback, Runna
         }
     }
 
+
+//    fun getSupportSizes(){
+//        //获取相机相关参数
+//        val characteristics = mCameraManager!!.getCameraCharacteristics(cameraId)
+//
+//
+//        val streamConfigurationMap: StreamConfigurationMap = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)
+//                ?: continue
+//
+//        //获取最大的size, 支持的最大分辨率
+//        //获取相机支持的分辨率
+//        val nativeSizes = streamConfigurationMap.getOutputSizes(SurfaceTexture::class.java)
+//
+//
+//
+//    }
 
 
 }

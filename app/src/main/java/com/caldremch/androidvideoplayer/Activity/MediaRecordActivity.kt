@@ -19,6 +19,7 @@ import com.caldremch.common.base.BaseActivity
 import com.caldremch.common.utils.MetricsUtils
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import kotlinx.android.synthetic.main.activity_record.*
 import java.util.*
 import kotlin.Comparator
 import kotlin.math.abs
@@ -40,7 +41,7 @@ class MediaRecordActivity : BaseActivity() {
 
     private var isCameraPermite: Boolean = false;
 
-    private var mSurfaceView: MediaRecordSurfaceView? = null
+    //    private var mSurfaceView: MediaRecordSurfaceView? = null
     private var mButton3: Button? = null
     private var mButton5: Button? = null
     private var mChipInGroup21: Chip? = null
@@ -51,7 +52,7 @@ class MediaRecordActivity : BaseActivity() {
 
 
     private fun assignViews() {
-        mSurfaceView = findViewById(R.id.surface_view)
+//        mSurfaceView = findViewById(R.id.surface_view)
         mButton3 = findViewById(R.id.button3)
         mButton5 = findViewById(R.id.button5)
         mChipInGroup21 = findViewById(R.id.chipInGroup2_1)
@@ -59,6 +60,13 @@ class MediaRecordActivity : BaseActivity() {
         mChipInGroup23 = findViewById(R.id.chipInGroup2_3)
         mChipGroup = findViewById(R.id.chipGroup)
         mIv = findViewById(R.id.iv)
+
+    }
+
+    private fun setCameraView() {
+        var sup: Array<Size>? = cameraView.surfaceView.nativeSizes
+        var bSzie = cameraView.surfaceView.getBestSize()
+        cameraView.setPreview(bSzie)
     }
 
     override fun onStart() {
@@ -131,7 +139,7 @@ class MediaRecordActivity : BaseActivity() {
     }
 
     fun stop(view: View) {
-
+        setCameraView()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -155,8 +163,6 @@ class MediaRecordActivity : BaseActivity() {
         }
 
     }
-
-
 
 
 }
