@@ -5,8 +5,10 @@
 
     <application
         android:name=".DemoCommonApp"
-        android:label="通用框架测试"
+        android:label="通用框架"
         android:supportsRtl="true"
+        android:icon="@mipmap/common_app_icon"
+        android:roundIcon="@mipmap/common_app_icon"
         android:theme="@style/AndroidCommonTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".MainActivity">
