@@ -30,11 +30,6 @@ class MainActivity : BaseActivity() {
     override fun initView() {
         MetricsUtils.compatTitle(mContext, textView)
         win = PopWindowDemo(mContext)
-        win.setOnDismissListener {
-            var lp =  window.attributes
-            lp.alpha = 1f;
-            window.attributes = lp
-        }
     }
 
     fun dropDown(view: View) {

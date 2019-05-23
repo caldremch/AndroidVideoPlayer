@@ -5,7 +5,10 @@ import android.content.Context
 import android.graphics.drawable.BitmapDrawable
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.PopupWindow
+import com.caldremch.common.utils.DensityUtil
+import com.caldremch.common.utils.MetricsUtils
 import com.caldremch.democommom.R
 
 /**
@@ -32,20 +35,24 @@ class PopWindowDemo(context: Context) : PopupWindow(context) {
         this.context = context
         var root = LayoutInflater.from(context).inflate(R.layout.pop_demo, null)
         contentView = root
-        isFocusable = true
+//        isFocusable = true
         isOutsideTouchable = true
 //        setBackgroundDrawable(BitmapDrawable())
 
 
+
+        width = DensityUtil.getScreenWidth(context)
+        height = DensityUtil.getScreenHeight(context)
     }
 
 
     fun show(view: View) {
-        if (context is Activity){
-            var lp = (context as Activity).window?.attributes;
-            lp?.alpha = 0.4f;
-            (context as Activity).window.attributes = lp;
-        }
+        height = DensityUtil.getScreenHeight(context) - view.bottom + MetricsUtils.getStatusBarHeight(context)
+//        if (context is Activity){
+//            var lp = (context as Activity).window?.attributes;
+//            lp?.alpha = 0.4f;
+//            (context as Activity).window.attributes = lp;
+//        }
         showAsDropDown(view)
     }
 

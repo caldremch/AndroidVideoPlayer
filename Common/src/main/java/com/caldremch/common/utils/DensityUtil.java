@@ -27,6 +27,11 @@ public class DensityUtil {
         return (int) (pxValue / scale + 0.5f);
     }
 
+    /**
+     * 该高度, 不包含状态栏高度
+     * @param context
+     * @return
+     */
     public static int getScreenHeight(Context context) {
         int result = 0;
 
