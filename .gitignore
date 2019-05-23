@@ -19,5 +19,6 @@
 /build
 /captures
 .externalNativeBuild
+config.properties
 
 
