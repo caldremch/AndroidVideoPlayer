@@ -8,6 +8,7 @@ import android.view.TextureView
 import android.widget.FrameLayout
 import com.caldremch.androidvideoplayer.uitls.CLog
 import kotlinx.android.synthetic.main.activity_record.view.*
+import kotlin.math.max
 import kotlin.math.min
 
 /**
@@ -27,16 +28,23 @@ class CameraView @JvmOverloads constructor(
 ) : FrameLayout(context, attrs, defStyleAttr) {
 
     val surfaceView = MediaRecordSurfaceView(context)
-    private lateinit var preViewSize: Size
+    private lateinit var preViewSize: PreViewSzie
 
     init {
         addView(surfaceView)
     }
 
+    class PreViewSzie(var width: Int, var height: Int) {
+
+    }
 
     fun setPreview(size: Size) {
+
+        CLog.d("设置的当前最适合的 size: ${size.height} x ${size.width}")
+
         post {
-            preViewSize = size
+            preViewSize = PreViewSzie(size.height, size.width);
+
             requestLayout()
         }
     }
@@ -51,14 +59,18 @@ class CameraView @JvmOverloads constructor(
 
     }
 
-    private fun layoutSurfaceView(preViewSize: Size) {
+    private fun layoutSurfaceView(preViewSize: PreViewSzie) {
 
 //        var supporSize = cameraView.
 
-        val scale = min(this.measuredWidth / preViewSize.width.toFloat(), this.measuredHeight / preViewSize.height.toFloat())
+        CLog.d("measuredWidth = $measuredWidth, measuredHeight=$measuredHeight")
+
+        val scale = max(this.measuredWidth / preViewSize.width.toFloat(), this.measuredHeight / preViewSize.height.toFloat())
 
         CLog.d("scale = $scale")
+
         val w = (preViewSize.width * scale).toInt()
+
         val h = (preViewSize.height * scale).toInt()
 
         CLog.d("w = $w && $h")

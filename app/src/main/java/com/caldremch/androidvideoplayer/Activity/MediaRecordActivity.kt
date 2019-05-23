@@ -117,7 +117,7 @@ class MediaRecordActivity : BaseActivity() {
         //隐藏底部导航栏
 //        var uiOption = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION.xor(View.SYSTEM_UI_FLAG_FULLSCREEN);
 //        window.decorView.systemUiVisibility  = uiOption
-        mBar.transparentNavigationBar().init()
+        mBar.transparentNavigationBar().init();
 
 
     }
