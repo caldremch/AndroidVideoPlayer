@@ -8,15 +8,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.caldremch.androidvideoplayer.Activity.PlayerDemoActivity;
 import com.caldremch.androidvideoplayer.Activity.VideoDemoActivity;
+import com.caldremch.common.base.BaseActivity;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
+    public int getLayoutId() {
+        return R.layout.activity_main;
     }
 
     public void handleVideo(View view) {

@@ -1,15 +1,12 @@
-package com.caldremch.androidvideoplayer.widget
+package com.caldremch.androidvideoplayer.widget.camera
 
 import android.content.Context
 import android.graphics.Rect
 import android.util.AttributeSet
 import android.util.Size
-import android.view.TextureView
 import android.widget.FrameLayout
 import com.caldremch.androidvideoplayer.uitls.CLog
-import kotlinx.android.synthetic.main.activity_record.view.*
 import kotlin.math.max
-import kotlin.math.min
 
 /**
  *

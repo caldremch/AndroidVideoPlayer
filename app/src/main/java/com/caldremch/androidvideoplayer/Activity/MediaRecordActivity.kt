@@ -12,17 +12,12 @@ import android.widget.ImageView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.caldremch.androidvideoplayer.R
-import com.caldremch.androidvideoplayer.uitls.ClosestComp
 import com.caldremch.androidvideoplayer.uitls.MediaMetadataRetrieverUtils
-import com.caldremch.androidvideoplayer.widget.MediaRecordSurfaceView
 import com.caldremch.common.base.BaseActivity
 import com.caldremch.common.utils.MetricsUtils
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import kotlinx.android.synthetic.main.activity_record.*
-import java.util.*
-import kotlin.Comparator
-import kotlin.math.abs
 
 /**
  * @author Caldremch

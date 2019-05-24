@@ -1,4 +1,4 @@
-package com.caldremch.androidvideoplayer.widget
+package com.caldremch.androidvideoplayer.widget.camera
 
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
