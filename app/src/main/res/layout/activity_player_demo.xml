@@ -8,6 +8,7 @@
 
     <com.caldremch.playercore.player.MyExoPlayerView
         android:id="@+id/playerView"
+        android:background="#000"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:controller_layout_id="@layout/user_control" />

@@ -20,5 +20,6 @@
 /captures
 .externalNativeBuild
 config.properties
+*.mp4
 
 
