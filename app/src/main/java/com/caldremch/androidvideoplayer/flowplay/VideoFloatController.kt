@@ -37,7 +37,7 @@ class VideoFloatController private constructor() {
 
     var mVideoRatio = Video_Ratio.MOBILE
     private var mIsShow: Boolean = false
-    private var mStatus = MainViewStatus.NORMAL
+    var mStatus = MainViewStatus.NORMAL
 
     enum class Video_Ratio {
         MOBILE,
@@ -89,8 +89,9 @@ class VideoFloatController private constructor() {
 
         mMainView?.setOnClickListener {
             if (mClickListener != null) {
-                CLog.d("点击到了吗?")
-                mClickListener?.onClick(it)
+                if (mStatus != MainViewStatus.NORMAL){
+                    mClickListener?.onClick(it)
+                }
             }
         }
 
