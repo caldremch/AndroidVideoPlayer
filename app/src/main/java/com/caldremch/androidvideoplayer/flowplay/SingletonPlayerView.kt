@@ -26,7 +26,14 @@ import kotlinx.android.synthetic.main.single_playerview.view.*
  * @describe
  *
  **/
-class SingletonPlayerView : FrameLayout, ILifeCycle {
+class SingletonPlayerView : FrameLayout, ILifeCycle{
+    override fun onState(status: MainViewStatus) {
+        if (status == MainViewStatus.NORMAL){
+            mPlayerView?.showController()
+        }else{
+            mPlayerView?.hideController()
+        }
+    }
 
     private lateinit var mRootView: View
     private var mPlayerView: MyExoPlayerView? = null
@@ -69,6 +76,7 @@ class SingletonPlayerView : FrameLayout, ILifeCycle {
         if (mPlayerView == null || simpleExoPlayer == null){
 
             mPlayerView = mRootView.findViewById(R.id.playerView)
+
             simpleExoPlayer = ExoPlayerFactory.newSimpleInstance(context)
             simpleExoPlayer!!.addVideoListener(object : VideoListener {
                 override fun onVideoSizeChanged(width: Int, height: Int, unappliedRotationDegrees: Int, pixelWidthHeightRatio: Float) {

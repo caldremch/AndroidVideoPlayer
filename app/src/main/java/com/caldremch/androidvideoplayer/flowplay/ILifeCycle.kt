@@ -15,5 +15,6 @@ interface ILifeCycle {
     fun onStop()
     fun onResume()
     fun onDestroy()
+    fun onState(status: MainViewStatus)
 
 }

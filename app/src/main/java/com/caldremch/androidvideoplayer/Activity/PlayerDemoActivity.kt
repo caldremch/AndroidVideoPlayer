@@ -10,13 +10,14 @@ import android.view.ViewTreeObserver
 import android.view.WindowManager
 import android.widget.FrameLayout
 import com.caldremch.androidvideoplayer.R
+import com.caldremch.androidvideoplayer.flowplay.FloatPermission
+import com.caldremch.androidvideoplayer.flowplay.OpenFloatWindowEvent
 import com.caldremch.androidvideoplayer.flowplay.SingletonPlayerView
 import com.caldremch.androidvideoplayer.flowplay.VideoFloatController
-import com.caldremch.androidvideoplayer.uitls.CLog
 import com.caldremch.androidvideoplayer.uitls.asset.AssetUtils
 import com.caldremch.common.base.BaseActivity
 import com.caldremch.common.utils.DensityUtil
-import com.caldremch.common.utils.MetricsUtils
+import com.caldremch.common.utils.EventManager
 import com.gyf.barlibrary.ImmersionBar
 import kotlinx.android.synthetic.main.activity_player_demo.*
 
@@ -37,10 +38,10 @@ class PlayerDemoActivity : BaseActivity() {
     override fun initView() {
         playerView = VideoFloatController.instance.mMainView!!
 
-        if (playerView.parent != null){
-            if (playerView.parent is ViewGroup){
+        if (playerView.parent != null) {
+            if (playerView.parent is ViewGroup) {
                 (playerView.parent as ViewGroup).removeView(playerView)
-            }else{
+            } else {
                 VideoFloatController.instance.close()
             }
         }
@@ -57,7 +58,10 @@ class PlayerDemoActivity : BaseActivity() {
 
     override fun onStop() {
         super.onStop()
-        playerView.onStop()
+        //开启小窗口 关闭Activity时 不暂停播放器
+        if (finishToReleaseResource) {
+            playerView.onStop()
+        }
     }
 
     override fun onResume() {
@@ -67,7 +71,10 @@ class PlayerDemoActivity : BaseActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        playerView.onDestroy()
+        //开启小窗口 关闭Activity时 不释放播放器
+        if (finishToReleaseResource) {
+            playerView.onDestroy()
+        }
     }
 
     private val visibleRect = Rect()
@@ -110,5 +117,16 @@ class PlayerDemoActivity : BaseActivity() {
         return result
     }
 
-    fun closeToWindow(view: View) {}
+    fun closeToWindow(view: View) {
+        if (!FloatPermission.isFlowViewPermissionGranted(this)) {
+            FloatPermission.toAppDetail()
+            return
+        }
+        EventManager.post(OpenFloatWindowEvent())
+        finishToReleaseResource = false
+        finish()
+    }
+
+    private var finishToReleaseResource: Boolean = true
+
 }

@@ -5,10 +5,7 @@ import android.graphics.Color
 import android.graphics.PixelFormat
 import android.graphics.Point
 import android.os.Build
-import android.view.Gravity
-import android.view.MotionEvent
-import android.view.View
-import android.view.WindowManager
+import android.view.*
 import com.caldremch.androidvideoplayer.uitls.CLog
 import com.caldremch.androidvideoplayer.uitls.Utils
 
@@ -40,6 +37,7 @@ class VideoFloatController private constructor() {
 
     var mVideoRatio = Video_Ratio.MOBILE
     private var mIsShow: Boolean = false
+    private var mStatus = MainViewStatus.NORMAL
 
     enum class Video_Ratio {
         MOBILE,
@@ -80,15 +78,24 @@ class VideoFloatController private constructor() {
             return
         }
 
+
         handleVideoRatio()
+
         mIsShow = true
+
         mMainView?.setBackgroundColor(Color.BLACK)
+
         mMainView?.setOnTouchListener(mTouchListener)
+
         mMainView?.setOnClickListener {
             if (mClickListener != null) {
                 mClickListener?.onClick(it)
             }
         }
+
+        mStatus = MainViewStatus.WINDOW
+        mMainView?.onState(mStatus)
+
         mParams = WindowManager.LayoutParams()
         //设置布局宽高
         mParams?.width = mWidth
@@ -107,6 +114,11 @@ class VideoFloatController private constructor() {
         }
         mParams?.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
         mParams?.format = PixelFormat.RGBA_8888
+
+        if (null != mMainView?.parent && mMainView?.parent is ViewGroup) {
+            (mMainView?.parent as ViewGroup).removeView(mMainView)
+        }
+
         //初始化拉流播放器, 点播播放器
         mWm.addView(mMainView, mParams)
     }

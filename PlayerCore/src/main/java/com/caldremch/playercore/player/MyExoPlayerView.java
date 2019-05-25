@@ -1115,12 +1115,12 @@ public class MyExoPlayerView extends FrameLayout implements AdsLoader.AdViewProv
         }
         return performClick();
     }
-
-    @Override
-    public boolean performClick() {
-        super.performClick();
-        return toggleControllerVisibility();
-    }
+//
+//    @Override
+//    public boolean performClick() {
+//        super.performClick();
+//        return toggleControllerVisibility();
+//    }
 
     @Override
     public boolean onTrackballEvent(MotionEvent ev) {
