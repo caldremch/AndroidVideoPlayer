@@ -72,7 +72,6 @@ class SingletonPlayerView : FrameLayout, ILifeCycle {
 
 
     override fun onStop() {
-        CLog.d("in here $mPlayerView")
         mPlayerView?.controller!!.findViewById<View>(R.id.exo_pause).performClick()
     }
 

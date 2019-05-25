@@ -6,6 +6,7 @@ import com.caldremch.androidvideoplayer.flowplay.SingletonPlayerView
 import com.caldremch.androidvideoplayer.uitls.CLog
 import com.caldremch.androidvideoplayer.uitls.asset.AssetUtils
 import com.caldremch.common.base.BaseActivity
+import kotlinx.android.synthetic.main.activity_player_demo.*
 
 /**
  * @author Caldremch
@@ -15,32 +16,28 @@ import com.caldremch.common.base.BaseActivity
  */
 class PlayerDemoActivity : BaseActivity() {
 
-    private var playerView: SingletonPlayerView? = null
-
     override fun getLayoutId(): Int {
         return R.layout.activity_player_demo
     }
 
     override fun initView() {
-        playerView = findViewById(R.id.playerView)
         var file = AssetUtils.getAssetFile(context = mContext, fileName = "test.mp4")
         var uri = Uri.fromFile(file)
-        playerView?.startPlay(uri)
+        playerView.startPlay(uri)
     }
 
     override fun onStop() {
         super.onStop()
-        CLog.d("onStop")
-        playerView?.onStop()
+        playerView.onStop()
     }
 
     override fun onResume() {
         super.onResume()
-        playerView?.onResume()
+        playerView.onResume()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        playerView?.onDestroy()
+        playerView.onDestroy()
     }
 }
