@@ -1,6 +1,5 @@
 package com.caldremch.androidvideoplayer.flowplay
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
 import android.util.AttributeSet
