@@ -3,29 +3,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.caldremch.androidvideoplayer">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
-    <uses-feature android:name="android.hardware.Camera"/>
-    <uses-feature android:name="android.hardware.camera2"/>
+    <uses-feature android:name="android.hardware.Camera" />
+    <uses-feature android:name="android.hardware.camera2" />
 
 
     <application
+        android:name=".App"
         android:allowBackup="true"
         android:icon="@mipmap/app_icon"
-        android:roundIcon="@mipmap/app_icon"
         android:label="视频操作"
 
+        android:roundIcon="@mipmap/app_icon"
         android:supportsRtl="true"
         android:theme="@style/AndroidCommonTheme"
-        android:name=".App"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".MainActivity"
+            android:launchMode="singleTask">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,9 +39,11 @@
         <activity android:name=".FFmpegMainActivity" />
         <activity android:name=".Activity.PlayerDemoActivity" />
         <activity android:name=".Activity.VideoDemoActivity" />
-        <activity android:name=".Activity.MediaRecordActivity" >
+        <activity android:name=".Activity.MediaRecordActivity">
 
         </activity>
+
+        <service android:name=".flowplay.VideoFloatService" />
     </application>
 
 </manifest>

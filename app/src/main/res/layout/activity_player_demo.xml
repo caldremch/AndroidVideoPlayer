@@ -1,28 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.caldremch.androidvideoplayer.flowplay.SingletonPlayerView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/playerView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <com.caldremch.playercore.player.MyExoPlayerView
-        android:id="@+id/playerView"
-        android:background="#000"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:controller_layout_id="@layout/user_control" />
-
-    <androidx.core.widget.ContentLoadingProgressBar
-        android:id="@+id/progress_circular"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        style="?android:attr/progressBarStyleSmall"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    android:orientation="vertical"/>
