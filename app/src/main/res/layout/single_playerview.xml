@@ -19,4 +19,14 @@
         android:layout_gravity="center"
         android:layout_height="40dp"
         style="?android:attr/progressBarStyleSmall" />
+
+    <Button
+        android:id="@+id/btnClose"
+        android:layout_width="wrap_content"
+        android:text="关闭"
+        android:layout_gravity="right"
+        android:textColor="@android:color/white"
+        android:background="@android:color/black"
+        android:layout_height="wrap_content"/>
+
 </FrameLayout>

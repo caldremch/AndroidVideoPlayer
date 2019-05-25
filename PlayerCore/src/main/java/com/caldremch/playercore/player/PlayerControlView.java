@@ -602,15 +602,15 @@ public class PlayerControlView extends FrameLayout {
   }
 
   private void hideAfterTimeout() {
-    removeCallbacks(hideAction);
-    if (showTimeoutMs > 0) {
-      hideAtMs = SystemClock.uptimeMillis() + showTimeoutMs;
-      if (isAttachedToWindow) {
-        postDelayed(hideAction, showTimeoutMs);
-      }
-    } else {
-      hideAtMs = C.TIME_UNSET;
-    }
+//    removeCallbacks(hideAction);
+//    if (showTimeoutMs > 0) {
+//      hideAtMs = SystemClock.uptimeMillis() + showTimeoutMs;
+//      if (isAttachedToWindow) {
+//        postDelayed(hideAction, showTimeoutMs);
+//      }
+//    } else {
+//      hideAtMs = C.TIME_UNSET;
+//    }
   }
 
   private void updateAll() {

@@ -30,7 +30,9 @@ class SingletonPlayerView : FrameLayout, ILifeCycle{
     override fun onState(status: MainViewStatus) {
         if (status == MainViewStatus.NORMAL){
             mPlayerView?.showController()
+            btnClose.visibility = View.GONE
         }else{
+            btnClose.visibility = View.VISIBLE
             mPlayerView?.hideController()
         }
     }
@@ -53,6 +55,11 @@ class SingletonPlayerView : FrameLayout, ILifeCycle{
 
         mPlayerView = mRootView.findViewById(R.id.playerView)
 
+        btnClose.setOnClickListener{
+            onDestroy()
+            VideoFloatController.instance.close()
+        }
+
         simpleExoPlayer = ExoPlayerFactory.newSimpleInstance(context)
         simpleExoPlayer!!.addVideoListener(object : VideoListener {
             override fun onVideoSizeChanged(width: Int, height: Int, unappliedRotationDegrees: Int, pixelWidthHeightRatio: Float) {
@@ -73,6 +80,14 @@ class SingletonPlayerView : FrameLayout, ILifeCycle{
 
     fun startPlay(uri: Uri) {
 
+        /**
+         * 1.这个SingletonPlayerView 就是个壳, Service已创建就一直存在,
+         * 里面的 播放器(资源载体),  会有生命周期的变化
+         * 比如:
+         * 1.view被销毁, 播放器关闭之类的
+         *
+         * 所以在进入开始播放的时候, 需要判断是否是一个被销毁了,如果被销毁了,  需要重新初始化
+         */
         if (mPlayerView == null || simpleExoPlayer == null){
 
             mPlayerView = mRootView.findViewById(R.id.playerView)

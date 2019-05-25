@@ -10,10 +10,7 @@ import android.view.ViewTreeObserver
 import android.view.WindowManager
 import android.widget.FrameLayout
 import com.caldremch.androidvideoplayer.R
-import com.caldremch.androidvideoplayer.flowplay.FloatPermission
-import com.caldremch.androidvideoplayer.flowplay.OpenFloatWindowEvent
-import com.caldremch.androidvideoplayer.flowplay.SingletonPlayerView
-import com.caldremch.androidvideoplayer.flowplay.VideoFloatController
+import com.caldremch.androidvideoplayer.flowplay.*
 import com.caldremch.androidvideoplayer.uitls.asset.AssetUtils
 import com.caldremch.common.base.BaseActivity
 import com.caldremch.common.utils.DensityUtil
@@ -36,6 +33,7 @@ class PlayerDemoActivity : BaseActivity() {
     }
 
     override fun initView() {
+
         playerView = VideoFloatController.instance.mMainView!!
 
         if (playerView.parent != null) {
@@ -52,6 +50,7 @@ class PlayerDemoActivity : BaseActivity() {
         val file = AssetUtils.getAssetFile(context = mContext, fileName = "test.mp4")
         val uri = Uri.fromFile(file)
         playerView.startPlay(uri)
+        playerView.onState(MainViewStatus.NORMAL)
 
         handleKeyBord()
     }
