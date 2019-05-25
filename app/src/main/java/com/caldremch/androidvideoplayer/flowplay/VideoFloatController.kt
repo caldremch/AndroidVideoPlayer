@@ -129,6 +129,7 @@ class VideoFloatController private constructor() {
     fun close() {
         if (mMainView != null && mIsShow) {
             mIsShow = false
+            mStatus = MainViewStatus.NORMAL
             removeView()
         }
     }
@@ -148,7 +149,12 @@ class VideoFloatController private constructor() {
     }
 
     private var mTouchListener = object : View.OnTouchListener {
+
         override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+
+            if (mStatus == MainViewStatus.NORMAL){
+                return false
+            }
 
             when (event?.action) {
 
