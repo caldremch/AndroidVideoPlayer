@@ -33,7 +33,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".FFmpegMainActivity" />
-        <activity android:name=".Activity.PlayerDemoActivity" />
+        <activity android:name=".Activity.PlayerDemoActivity" android:windowSoftInputMode="adjustNothing"/>
         <activity android:name=".Activity.VideoDemoActivity" />
         <activity android:name=".Activity.MediaRecordActivity">
 

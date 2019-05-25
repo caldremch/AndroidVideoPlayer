@@ -39,6 +39,7 @@ class SingletonPlayerView : FrameLayout, ILifeCycle {
     }
 
     private fun initView() {
+
         mRootView = LayoutInflater.from(context).inflate(R.layout.single_playerview, null)
 
         addView(mRootView)
@@ -64,6 +65,28 @@ class SingletonPlayerView : FrameLayout, ILifeCycle {
     }
 
     fun startPlay(uri: Uri) {
+
+        if (mPlayerView == null || simpleExoPlayer == null){
+
+            mPlayerView = mRootView.findViewById(R.id.playerView)
+            simpleExoPlayer = ExoPlayerFactory.newSimpleInstance(context)
+            simpleExoPlayer!!.addVideoListener(object : VideoListener {
+                override fun onVideoSizeChanged(width: Int, height: Int, unappliedRotationDegrees: Int, pixelWidthHeightRatio: Float) {
+
+                }
+
+                override fun onSurfaceSizeChanged(width: Int, height: Int) {
+
+                }
+
+                override fun onRenderedFirstFrame() {
+                    progress_circular.hide();
+                }
+            })
+
+            mPlayerView?.player = simpleExoPlayer
+        }
+
         val dataFactory = DefaultDataSourceFactory(context, "caldremch")
         val videoSource = ExtractorMediaSource.Factory(dataFactory).createMediaSource(uri)
         simpleExoPlayer!!.prepare(videoSource)

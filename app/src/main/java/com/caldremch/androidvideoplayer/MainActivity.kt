@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 
 import com.caldremch.androidvideoplayer.Activity.PlayerDemoActivity
 import com.caldremch.androidvideoplayer.Activity.VideoDemoActivity
+import com.caldremch.androidvideoplayer.flowplay.VideoFloatService
 import com.caldremch.androidvideoplayer.uitls.CLog
 import com.caldremch.androidvideoplayer.uitls.FilePermissionDelegate
 import com.caldremch.androidvideoplayer.uitls.asset.AssetUtils
@@ -22,11 +23,16 @@ class MainActivity : BaseActivity() {
         return R.layout.activity_main
     }
 
+    override fun initView() {
+        var intent = Intent(this, VideoFloatService::class.java)
+        startService(intent)
+        //("可以通过通知, 来创建, 而不是直接创建, 创建后发送通知") //To change body of created functions use File | Settings | File Templates.
+    }
 
     override fun initData() {
-      if (!filePermission.hasPermission()){
-          filePermission.requestPermission()
-      }
+        if (!filePermission.hasPermission()) {
+            filePermission.requestPermission()
+        }
 
         Thread(Runnable {
             AssetUtils.copy(context = mContext, fileName = "test.mp4")
@@ -50,5 +56,7 @@ class MainActivity : BaseActivity() {
     override fun onDestroy() {
         super.onDestroy()
         CLog.d("MainActivity onDestroy")
+        var intent = Intent(this, VideoFloatService::class.java)
+        stopService(intent)
     }
 }

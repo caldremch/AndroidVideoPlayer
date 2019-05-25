@@ -1,9 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.caldremch.androidvideoplayer.flowplay.SingletonPlayerView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/playerView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"/>
+    android:orientation="vertical">
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:id="@+id/flContainer"
+        android:layout_height="match_parent"/>
+
+
+    <Button
+        android:layout_width="wrap_content"
+        android:padding="10dp"
+        android:text="关闭"
+        android:onClick="closeToWindow"
+        android:layout_gravity="right"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="50dp"
+        android:textColor="@android:color/white"
+        android:background="@android:color/black"
+        android:layout_height="wrap_content"/>
+
+
+    <EditText
+        android:id="@+id/editText"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:hint="鞋垫啥"
+        android:layout_gravity="bottom" />
+
+</FrameLayout>

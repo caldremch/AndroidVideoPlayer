@@ -16,12 +16,25 @@ import android.os.IBinder
  **/
 class VideoFloatService : Service(){
 
+    val DATA_KEY = "DATA_KEY"
+    val VIDEO_TYPE_KEY = "VIDEO_TYPE_KEY"
+    private lateinit var mController: VideoFloatController
+
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+
+        var data = intent?.getSerializableExtra(DATA_KEY)
+
+        if (data != null){
+            mController.mVideoRatio = VideoFloatController.Video_Ratio.PC
+            mController.open()
+        }
+
         return super.onStartCommand(intent, flags, startId)
     }
 
     override fun onCreate() {
         super.onCreate()
+        mController =  VideoFloatController.instance
     }
 
     override fun onBind(intent: Intent?): IBinder? {
