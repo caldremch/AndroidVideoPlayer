@@ -128,6 +128,7 @@ class VideoFloatController private constructor() {
      */
     fun close() {
         if (mMainView != null && mIsShow) {
+            mIsShow = false
             removeView()
         }
     }
