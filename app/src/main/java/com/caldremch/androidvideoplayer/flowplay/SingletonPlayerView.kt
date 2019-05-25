@@ -27,7 +27,11 @@ import kotlinx.android.synthetic.main.single_playerview.view.*
  *
  **/
 class SingletonPlayerView : FrameLayout, ILifeCycle{
+
+
     override fun onState(status: MainViewStatus) {
+
+
         if (status == MainViewStatus.NORMAL){
             mPlayerView?.showController()
             btnClose.visibility = View.GONE

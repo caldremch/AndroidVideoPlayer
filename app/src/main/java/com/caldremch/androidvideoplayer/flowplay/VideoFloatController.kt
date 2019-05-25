@@ -89,6 +89,7 @@ class VideoFloatController private constructor() {
 
         mMainView?.setOnClickListener {
             if (mClickListener != null) {
+                CLog.d("点击到了吗?")
                 mClickListener?.onClick(it)
             }
         }

@@ -1,8 +1,11 @@
 package com.caldremch.androidvideoplayer.flowplay
 
 import android.app.Service
+import android.content.Context
 import android.content.Intent
 import android.os.IBinder
+import android.view.View
+import com.caldremch.androidvideoplayer.Activity.PlayerDemoActivity
 
 /**
  * @author Caldremch
@@ -22,6 +25,7 @@ class VideoFloatService : Service(){
     val VIDEO_TYPE_KEY = "VIDEO_TYPE_KEY"
     private lateinit var mController: VideoFloatController
     private var mFlat:Int = 0;
+    private lateinit var mContext:Context
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
@@ -30,6 +34,18 @@ class VideoFloatService : Service(){
         if (typeFlat != 0){
             mController.mVideoRatio = VideoFloatController.Video_Ratio.PC
             mController.open()
+            mController.setListener(object : VideoFloatController.onViewClickListener {
+                override fun onClick(v: View) {
+
+                    //需要从WindowManager中removeView , 不然会有绘制错误
+                    mController.close()
+
+                    //播放器实例不销毁,直接复用
+                    val detailIntent = Intent(mContext, PlayerDemoActivity::class.java)
+                    detailIntent.flags =  Intent.FLAG_ACTIVITY_NEW_TASK
+                    mContext.startActivity(detailIntent)
+                }
+            })
         }
 
         return super.onStartCommand(intent, flags, startId)
@@ -37,6 +53,7 @@ class VideoFloatService : Service(){
 
     override fun onCreate() {
         super.onCreate()
+        mContext = this
         mController =  VideoFloatController.instance
     }
 

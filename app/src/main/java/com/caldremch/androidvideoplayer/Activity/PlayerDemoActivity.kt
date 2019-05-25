@@ -1,6 +1,7 @@
 package com.caldremch.androidvideoplayer.Activity
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Rect
 import android.net.Uri
 import android.util.DisplayMetrics
@@ -34,9 +35,14 @@ class PlayerDemoActivity : BaseActivity() {
 
     override fun initView() {
 
+
+
+        //todo 待实现, 这里需要注意的是 , 当从不同的视频播放起来的时候, 这个时候就不能复用 窗口的播放资源了
+
         playerView = VideoFloatController.instance.mMainView!!
 
         if (playerView.parent != null) {
+            //先判断是否有父布局添加
             if (playerView.parent is ViewGroup) {
                 (playerView.parent as ViewGroup).removeView(playerView)
             } else {
@@ -44,12 +50,23 @@ class PlayerDemoActivity : BaseActivity() {
             }
         }
 
+
         val para = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
         playerView.layoutParams = para
         flContainer.addView(playerView)
-        val file = AssetUtils.getAssetFile(context = mContext, fileName = "test.mp4")
-        val uri = Uri.fromFile(file)
-        playerView.startPlay(uri)
+
+
+        /**
+         * 从窗口点击过来
+         */
+        val flag = intent.flags;
+
+        if (flag != Intent.FLAG_ACTIVITY_NEW_TASK){
+            val file = AssetUtils.getAssetFile(context = mContext, fileName = "test.mp4")
+            val uri = Uri.fromFile(file)
+            playerView.startPlay(uri)
+        }
+
         playerView.onState(MainViewStatus.NORMAL)
 
         handleKeyBord()
