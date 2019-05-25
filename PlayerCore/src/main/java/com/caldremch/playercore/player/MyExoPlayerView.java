@@ -330,6 +330,11 @@ public class MyExoPlayerView extends FrameLayout implements AdsLoader.AdViewProv
     private int textureViewRotation;
     private FullScreenListener fullScreenListener;
 
+    @Nullable
+    public PlayerControlView getController() {
+        return controller;
+    }
+
     public void setFullScreenListener(FullScreenListener fullScreenListener) {
         this.fullScreenListener = fullScreenListener;
     }

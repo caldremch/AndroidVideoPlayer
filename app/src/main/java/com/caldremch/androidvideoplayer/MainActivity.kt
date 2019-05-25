@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 
 import com.caldremch.androidvideoplayer.Activity.PlayerDemoActivity
 import com.caldremch.androidvideoplayer.Activity.VideoDemoActivity
+import com.caldremch.androidvideoplayer.uitls.CLog
 import com.caldremch.androidvideoplayer.uitls.FilePermissionDelegate
 import com.caldremch.androidvideoplayer.uitls.asset.AssetUtils
 import com.caldremch.common.base.BaseActivity
@@ -43,5 +44,11 @@ class MainActivity : BaseActivity() {
 
     fun videoPlayer(view: View) {
         startActivity(Intent(this, PlayerDemoActivity::class.java))
+    }
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+        CLog.d("MainActivity onDestroy")
     }
 }

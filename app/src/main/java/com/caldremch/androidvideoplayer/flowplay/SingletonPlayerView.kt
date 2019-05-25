@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
 import com.caldremch.androidvideoplayer.R
+import com.caldremch.androidvideoplayer.uitls.CLog
 import com.caldremch.playercore.player.MyExoPlayerView
 import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.SimpleExoPlayer
@@ -72,11 +73,12 @@ class SingletonPlayerView : FrameLayout, ILifeCycle {
 
 
     override fun onStop() {
-        mPlayerView?.onPause()
+        CLog.d("in here $mPlayerView")
+        mPlayerView?.controller!!.findViewById<View>(R.id.exo_pause).performClick()
     }
 
     override fun onResume() {
-        mPlayerView?.onResume()
+        mPlayerView?.controller!!.findViewById<View>(R.id.exo_play).performClick()
     }
 
     override fun onDestroy() {
