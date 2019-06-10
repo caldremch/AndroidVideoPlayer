@@ -11,10 +11,13 @@ import com.caldremch.androidvideoplayer.uitls.CLog
 import com.caldremch.playercore.player.MyExoPlayerView
 import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.SimpleExoPlayer
+import com.google.android.exoplayer2.analytics.AnalyticsListener
 import com.google.android.exoplayer2.source.ExtractorMediaSource
+import com.google.android.exoplayer2.source.MediaSourceEventListener
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.video.VideoListener
 import kotlinx.android.synthetic.main.single_playerview.view.*
+import java.io.IOException
 
 /**
  * @author Caldremch
@@ -65,6 +68,15 @@ class SingletonPlayerView : FrameLayout, ILifeCycle{
         }
 
         simpleExoPlayer = ExoPlayerFactory.newSimpleInstance(context)
+        simpleExoPlayer!!.addAnalyticsListener(object : AnalyticsListener{
+            override fun onLoadError(eventTime: AnalyticsListener.EventTime?, loadEventInfo: MediaSourceEventListener.LoadEventInfo?, mediaLoadData: MediaSourceEventListener.MediaLoadData?, error: IOException?, wasCanceled: Boolean) {
+                CLog.d("load error?")
+                val dataFactory = DefaultDataSourceFactory(context, "caldremch")
+                val videoSource = ExtractorMediaSource.Factory(dataFactory).createMediaSource(uri)
+                simpleExoPlayer!!.prepare(videoSource)
+                simpleExoPlayer!!.playWhenReady = true
+            }
+        })
         simpleExoPlayer!!.addVideoListener(object : VideoListener {
             override fun onVideoSizeChanged(width: Int, height: Int, unappliedRotationDegrees: Int, pixelWidthHeightRatio: Float) {
 
@@ -82,8 +94,9 @@ class SingletonPlayerView : FrameLayout, ILifeCycle{
         mPlayerView?.player = simpleExoPlayer
     }
 
+    private var uri:Uri?= null
     fun startPlay(uri: Uri) {
-
+        this.uri = uri
         /**
          * 1.这个SingletonPlayerView 就是个壳, Service已创建就一直存在,
          * 里面的 播放器(资源载体),  会有生命周期的变化

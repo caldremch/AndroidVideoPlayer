@@ -24,7 +24,7 @@ import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
  * @Email caldremch@163.com
  * @describe
  **/
-public abstract class AbsActivity extends AppCompatActivity {
+public abstract class AbsActivity extends LifeCycleLogActivity {
     protected Activity mContext;
 
     //沉浸式

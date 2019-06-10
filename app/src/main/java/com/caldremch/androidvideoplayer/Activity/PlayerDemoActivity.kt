@@ -62,9 +62,9 @@ class PlayerDemoActivity : BaseActivity() {
         val flag = intent.flags;
 
         if (flag != Intent.FLAG_ACTIVITY_NEW_TASK){
-            val file = AssetUtils.getAssetFile(context = mContext, fileName = "test.mp4")
-            val uri = Uri.fromFile(file)
-            playerView.startPlay(uri)
+//            val file = AssetUtils.getAssetFile(context = mContext, fileName = "test.mp4")
+//            val uri = Uri.fromFile(file)
+            playerView.startPlay(Uri.parse("http://jdvod3btj0kfg.vod.126.net/jdvod3btj0kfg/82c1cbbd5de14f899ce14f1ee3536ab9_1557475222116_1557481210392_2027250991-00000.mp4"))
         }
 
         playerView.onState(MainViewStatus.NORMAL)
