@@ -1,6 +1,7 @@
 package com.caldremch.democommom
 
 import com.caldremch.common.base.BaseApp
+import com.caldremch.common.utils.crash.CrashHandler
 
 /**
  *
@@ -17,5 +18,6 @@ import com.caldremch.common.base.BaseApp
 class DemoCommonApp :BaseApp() {
     override fun onCreate() {
         super.onCreate()
+        CrashHandler.getInstance().init(this);
     }
 }

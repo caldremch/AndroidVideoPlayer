@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.Toast
 import com.caldremch.common.base.BaseActivity
 import com.caldremch.common.utils.MetricsUtils
+import com.caldremch.common.utils.permission.FilePermissionDelegate
 import com.caldremch.democommom.ui.EmptyActivity
 import com.caldremch.democommom.ui.PopWindowDemo
 import kotlinx.android.synthetic.main.activity_main.*
@@ -26,6 +27,15 @@ import kotlinx.android.synthetic.main.activity_main.*
  **/
 
 class MainActivity : BaseActivity() {
+
+    var filePermission = FilePermissionDelegate(this)
+
+    override fun onStart() {
+        super.onStart()
+        if (!filePermission.hasPermission()) {
+            filePermission.requestPermission()
+        }
+    }
 
     override fun getLayoutId(): Int {
         return R.layout.activity_main;
@@ -54,16 +64,15 @@ class MainActivity : BaseActivity() {
     fun jump(view: View) {
 //        startActivity(Intent(this, EmptyActivity::class.java))
 
-        val intent = Intent()
-        val name = ComponentName(this, "com.caldremch.democommom.ui.EmptyActivity")
-        intent.component = name
-
-        val resolveInfos = packageManager
-                .queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
-        if (resolveInfos != null && resolveInfos.isNotEmpty()) {
-            startActivity(intent)
-        }
-
+//        val intent = Intent()
+//        val name = ComponentName(this, "com.caldremch.democommom.ui.EmptyActivity")
+//        intent.component = name
+//
+//        val resolveInfos = packageManager
+//                .queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
+//        if (resolveInfos != null && resolveInfos.isNotEmpty()) {
+//            startActivity(intent)
+//        }
     }
 
 

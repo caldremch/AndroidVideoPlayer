@@ -1,4 +1,6 @@
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-android'
 apply plugin: 'maven'
 Properties pro = new Properties()
 pro.load(new FileInputStream("config.properties"))
@@ -61,6 +63,8 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation 'com.google.android.material:material:1.0.0'
+    compile "androidx.core:core-ktx:+"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
 uploadArchives {
@@ -83,6 +87,9 @@ uploadArchives {
 
         }
     }
+}
+repositories {
+    mavenCentral()
 }
 
 

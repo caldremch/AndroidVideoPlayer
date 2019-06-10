@@ -33,6 +33,7 @@ import java.util.Map;
 public class CrashHandler implements Thread.UncaughtExceptionHandler {
 
     private static final String TAG = CrashHandler.class.getSimpleName();
+    private static final String FILE_FLAG = "Caldremch";
     /**
      * 系统默认UncaughtExceptionHandler处理类
      */
@@ -66,6 +67,21 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
 
     @Override
     public void uncaughtException(Thread t, Throwable e) {
+
+        if (!handleException(e) && mDefaultHandler != null) {
+            mDefaultHandler.uncaughtException(t, e);
+        } else {
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException exception) {
+
+            }
+
+            //退出app
+            android.os.Process.killProcess(android.os.Process.myPid());
+            System.exit(1);
+        }
+
     }
 
 
@@ -90,7 +106,8 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
 
         //保存到本地
         saveLocal(e);
-        return false;
+
+        return true;
     }
 
     private void saveLocal(Throwable e) {
@@ -116,11 +133,11 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         try {
             long timestamp = System.currentTimeMillis();
             String time = mFormater.format(new Date());
-            String fileName = "jpark" + "-" + time + "-" + timestamp
+            String fileName =  "-" + time + "-" + timestamp
                     + ".log";
             if (Environment.getExternalStorageState().equals(
                     Environment.MEDIA_MOUNTED)) {
-                File logFile = new File(Environment.getExternalStorageDirectory() + File.separator + "zyxr");
+                File logFile = new File(Environment.getExternalStorageDirectory() + File.separator + FILE_FLAG);
                 String path = logFile.getAbsolutePath();
                 File dir = new File(path);
                 if (!dir.exists()) {
@@ -175,7 +192,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
 
     public static void main(String[] args) {
         Field[] fields = Build.class.getDeclaredFields();
-        Map<String, String>  info = new HashMap<>();
+        Map<String, String> info = new HashMap<>();
         for (Field field : fields) {
             try {
                 field.setAccessible(true);
