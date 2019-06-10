@@ -62,10 +62,11 @@ class AssetUtils {
         }
 
 
-        fun getAssetFile(context: Context, fileName: String): File {
+        fun getAssetFile(context: Context, fileName: String): File? {
             var file = File(context.cacheDir, fileName)
             if (!file.exists()) {
-                throw RuntimeException("unCopy to cache Directory")
+//                throw RuntimeException("unCopy to cache Directory")
+                return null;
             }
             return file;
         }

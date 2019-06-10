@@ -35,7 +35,13 @@ class MainActivity : BaseActivity() {
         }
 
         Thread(Runnable {
-            AssetUtils.copy(context = mContext, fileName = "test.mp4")
+            if (AssetUtils.getAssetFile(this, "test.mp4") == null){
+                AssetUtils.copy(context = mContext, fileName = "test.mp4")
+            }
+
+            if (AssetUtils.getAssetFile(this, "test2.mp4") == null){
+                AssetUtils.copy(context = mContext, fileName = "test2.mp4")
+            }
         }).start()
     }
 
