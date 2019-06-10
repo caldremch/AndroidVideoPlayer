@@ -62,6 +62,7 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
     implementation project(':PlayerCore')
     implementation project(':FFmpegCore')
+    implementation project(':Common')
 
     implementation 'io.reactivex.rxjava2:rxjava:2.2.7'
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
@@ -95,7 +96,7 @@ dependencies {
 
     //私服库
 //    implementation 'com.caldremch.android:common:1.0.3@aar'
-    implementation 'com.caldremch.android:common:1.0.3'
+//    implementation 'com.caldremch.android:common:1.0.3'
 
     //d8 https://blog.csdn.net/jamin0107/article/details/81123154
 }

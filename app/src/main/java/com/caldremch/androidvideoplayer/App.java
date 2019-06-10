@@ -5,6 +5,7 @@ import android.content.Context;
 
 import com.caldremch.androidvideoplayer.uitls.Utils;
 import com.caldremch.common.base.BaseApp;
+import com.caldremch.common.utils.crash.CrashHandler;
 
 /**
  * @author Caldremch
@@ -18,6 +19,7 @@ public class App extends BaseApp {
     public void onCreate() {
         super.onCreate();
         Utils.init(this);
+        CrashHandler.getInstance().init(this);
     }
 
 }
