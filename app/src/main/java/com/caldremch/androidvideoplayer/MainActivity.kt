@@ -25,9 +25,12 @@ class MainActivity : BaseActivity() {
     }
 
     override fun initView() {
-//        var intent = Intent(this, VideoFloatService::class.java)
-//        startService(intent)
-        //("可以通过通知, 来创建, 而不是直接创建, 创建后发送通知") //To change body of created functions use File | Settings | File Templates.
+        if (!FloatPermission.isFlowViewPermissionGranted(this)) {
+            FloatPermission.toAppDetail()
+            return
+        }
+        var intent = Intent(this, VideoFloatService::class.java)
+        startService(intent)
     }
 
     override fun initData() {
@@ -36,11 +39,11 @@ class MainActivity : BaseActivity() {
         }
 
         Thread(Runnable {
-            if (AssetUtils.getAssetFile(this, "test.mp4") == null){
+            if (AssetUtils.getAssetFile(this, "test.mp4") == null) {
                 AssetUtils.copy(context = mContext, fileName = "test.mp4")
             }
 
-            if (AssetUtils.getAssetFile(this, "test2.mp4") == null){
+            if (AssetUtils.getAssetFile(this, "test2.mp4") == null) {
                 AssetUtils.copy(context = mContext, fileName = "test2.mp4")
             }
         }).start()
@@ -56,35 +59,34 @@ class MainActivity : BaseActivity() {
     }
 
     fun videoPlayer(view: View) {
-//        if (!FloatPermission.isFlowViewPermissionGranted(this)) {
-//            FloatPermission.toAppDetail()
-//            return
-//        }
-//        startActivity(Intent(this, PlayerDemoActivity::class.java))
+        if (!FloatPermission.isFlowViewPermissionGranted(this)) {
+            FloatPermission.toAppDetail()
+            return
+        }
+        startActivity(Intent(this, PlayerDemoActivity::class.java))
     }
 
 
     override fun onDestroy() {
         super.onDestroy()
-//        CLog.d("MainActivity onDestroy")
-//        var intent = Intent(this, VideoFloatService::class.java)
-//        stopService(intent)
+        var intent = Intent(this, VideoFloatService::class.java)
+        stopService(intent)
     }
-//
-//    override fun isUseEvent(): Boolean {
-//        return true
-//    }
 
-//    @Subscribe(threadMode = ThreadMode.MAIN)
-//    fun openFloatWindowEvent(openFloatWindowEvent: OpenFloatWindowEvent){
-//        val intent = Intent(this, VideoFloatService::class.java)
-//        intent.putExtra(VideoFloatService.DATA_KEY, 1)
-//        startService(intent)
-//    }
+    //
+    override fun isUseEvent(): Boolean {
+        return true
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun openFloatWindowEvent(openFloatWindowEvent: OpenFloatWindowEvent) {
+        val intent = Intent(this, VideoFloatService::class.java)
+        intent.putExtra(VideoFloatService.DATA_KEY, 1)
+        startService(intent)
+    }
 
 
-//    @Subscribe(threadMode = ThreadMode.MAIN)
-//    fun closeFloatWindowEvent(closeFloatWindowEvent: CloseFloatWindowEvent){
-//
-//    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun closeFloatWindowEvent(closeFloatWindowEvent: CloseFloatWindowEvent) {
+    }
 }

@@ -35,10 +35,7 @@ class PlayerDemoActivity : BaseActivity() {
 
     override fun initView() {
 
-
-
         //todo 待实现, 这里需要注意的是 , 当从不同的视频播放起来的时候, 这个时候就不能复用 窗口的播放资源了
-
         playerView = VideoFloatController.instance.mMainView!!
 
         if (playerView.parent != null) {
@@ -62,14 +59,13 @@ class PlayerDemoActivity : BaseActivity() {
         val flag = intent.flags;
 
         if (flag != Intent.FLAG_ACTIVITY_NEW_TASK){
-//            val file = AssetUtils.getAssetFile(context = mContext, fileName = "test.mp4")
-//            val uri = Uri.fromFile(file)
-            playerView.startPlay(Uri.parse("http://jdvod3btj0kfg.vod.126.net/jdvod3btj0kfg/82c1cbbd5de14f899ce14f1ee3536ab9_1557475222116_1557481210392_2027250991-00000.mp4"))
+            val file = AssetUtils.getAssetFile(context = mContext, fileName = "test.mp4")
+            val uri = Uri.fromFile(file)
+            playerView.startPlay(uri = uri)
         }
 
         playerView.onState(MainViewStatus.NORMAL)
 
-        handleKeyBord()
     }
 
     override fun onStop() {
@@ -92,34 +88,6 @@ class PlayerDemoActivity : BaseActivity() {
             playerView.onDestroy()
         }
     }
-
-    private val visibleRect = Rect()
-    private var visibleHeight: Int = 0
-    private fun handleKeyBord() {
-        val vp: ViewGroup = findViewById(android.R.id.content)
-        vp.getViewTreeObserver().addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
-            override fun onGlobalLayout() {
-                vp.getViewTreeObserver().removeOnGlobalLayoutListener(this)
-                vp.getWindowVisibleDisplayFrame(visibleRect)
-                if (visibleHeight == 0) {
-                    visibleHeight = visibleRect.bottom
-                } else if (visibleHeight - visibleRect.bottom > 200) {
-                    visibleHeight = visibleRect.bottom
-                    val lp = editText.getLayoutParams() as ViewGroup.MarginLayoutParams
-                    lp.bottomMargin = getScreenHeight(mContext) - visibleHeight + DensityUtil.dp2px(15f) + ImmersionBar.getNavigationBarHeight(mContext)
-                    editText.requestLayout()
-                } else if (visibleRect.bottom - visibleHeight > 200) {
-                    visibleHeight = visibleRect.bottom
-                    val lp = editText.getLayoutParams() as ViewGroup.MarginLayoutParams
-                    lp.bottomMargin = +ImmersionBar.getNavigationBarHeight(mContext)
-                    editText.requestLayout()
-                }
-                vp.getViewTreeObserver().addOnGlobalLayoutListener(this)
-            }
-        })
-
-    }
-
     fun getScreenHeight(context: Context): Int {
         var result = 0
 

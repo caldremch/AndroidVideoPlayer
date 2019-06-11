@@ -19,6 +19,7 @@ import com.caldremch.androidvideoplayer.R
 import com.caldremch.androidvideoplayer.adapter.VideoListAdapter
 import com.caldremch.androidvideoplayer.uitls.CLog
 import com.caldremch.androidvideoplayer.uitls.CameraPermissionDelegate
+import com.caldremch.androidvideoplayer.uitls.MediaMetadataRetrieverUtils.getFrameFromMediaMetadataRetriever
 import com.caldremch.androidvideoplayer.uitls.UriUtils
 import com.caldremch.ffmpegcore.FFmpegCore
 
@@ -70,8 +71,6 @@ class VideoDemoActivity : AppCompatActivity() {
         intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, MOVIE)
         startActivityForResult(intent, REQ_MEDIA)
 
-        FFmpegCore.getFrameAt("", 0, 0)
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -85,12 +84,12 @@ class VideoDemoActivity : AppCompatActivity() {
             CLog.d("realPath=" + realPath!!)
 
             //1.获取视频的第一帧 ffmpeg
-            FFmpegCore.getFrameAt(realPath, 0, 0)
+//            FFmpegCore.getFrameAt(realPath, 0, 0)
 
-            mIv!!.setImageURI(Uri.parse("/storage/emulated/0/Android/test.jpg"))
+//            mIv!!.setImageURI(Uri.parse("/storage/emulated/0/Android/test.jpg"))
 
             //2.获取视频的第一帧 android原生
-            //  mIv.setImageBitmap(getFrameFromMediaMetadataRetriever(realPath));
+              mIv!!.setImageBitmap(getFrameFromMediaMetadataRetriever(realPath));
         }
 
     }

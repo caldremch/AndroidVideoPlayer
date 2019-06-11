@@ -1,4 +1,4 @@
-package com.caldremch.androidvideoplayer.widget.camera
+package com.caldremch.androidvideoplayer.widget.camera2
 
 import android.content.Context
 import android.graphics.Rect

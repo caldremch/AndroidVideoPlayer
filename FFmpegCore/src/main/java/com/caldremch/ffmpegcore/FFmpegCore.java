@@ -33,6 +33,7 @@ public class FFmpegCore {
     public native static int execCmd(String[] cmds);
     public native static byte[] getFrameAt(String path, int timeUnit, int option);
 
+
     //视频录制功能
     
 

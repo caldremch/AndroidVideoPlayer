@@ -1,9 +1,8 @@
-package com.caldremch.androidvideoplayer.widget.camera
+package com.caldremch.androidvideoplayer.widget.camera2
 
 import android.content.Context
 import android.util.AttributeSet
 import android.view.SurfaceView
-import java.lang.IllegalArgumentException
 
 /**
  * @author Caldremch

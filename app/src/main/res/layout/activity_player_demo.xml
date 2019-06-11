@@ -26,11 +26,4 @@
         android:layout_height="wrap_content"/>
 
 
-    <EditText
-        android:id="@+id/editText"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:hint="鞋垫啥"
-        android:layout_gravity="bottom" />
-
 </FrameLayout>
