@@ -2,6 +2,7 @@ package com.caldremch.androidvideoplayer
 
 import android.content.Intent
 import android.view.View
+import com.caldremch.androidvideoplayer.Activity.CameraActivity
 import com.caldremch.androidvideoplayer.Activity.PlayerDemoActivity
 import com.caldremch.androidvideoplayer.Activity.VideoDemoActivity
 import com.caldremch.androidvideoplayer.flowplay.CloseFloatWindowEvent
@@ -73,7 +74,6 @@ class MainActivity : BaseActivity() {
         stopService(intent)
     }
 
-    //
     override fun isUseEvent(): Boolean {
         return true
     }
@@ -88,5 +88,12 @@ class MainActivity : BaseActivity() {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun closeFloatWindowEvent(closeFloatWindowEvent: CloseFloatWindowEvent) {
+    }
+
+    /**
+     * 视频录制与拍照
+     */
+    fun photoAndMediaRecord(view: View) {
+        startActivity(Intent(this, CameraActivity::class.java))
     }
 }

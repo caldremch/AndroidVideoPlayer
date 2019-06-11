@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
     tools:context=".MainActivity">
 
 
@@ -15,10 +17,7 @@
         android:layout_marginTop="50dp"
         android:layout_marginEnd="8dp"
         android:onClick="handleVideo"
-        android:text="视频操作"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:text="视频操作" />
 
     <Button
         android:id="@+id/button2"
@@ -28,10 +27,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="8dp"
         android:onClick="handleFFmpeg"
-        android:text="FFmpeg测试"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button" />
+        android:text="FFmpeg测试"/>
 
     <Button
         android:id="@+id/button6"
@@ -41,8 +37,15 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="8dp"
         android:onClick="videoPlayer"
-        android:text="视频播放"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button2" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:text="视频播放" />
+
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="8dp"
+        android:onClick="photoAndMediaRecord"
+        android:text="拍照与录制(全屏)" />
+</LinearLayout>

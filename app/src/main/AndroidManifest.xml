@@ -4,18 +4,16 @@
     package="com.caldremch.androidvideoplayer">
 
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
-
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
+
     <uses-feature android:name="android.hardware.Camera" />
     <uses-feature android:name="android.hardware.camera2" />
-
 
     <application
         android:name=".App"
@@ -26,20 +24,20 @@
         android:supportsRtl="true"
         android:theme="@style/AndroidCommonTheme"
         tools:ignore="GoogleAppIndexingWarning">
-
-        <activity
-            android:name=".MainActivity">
+        <activity android:name=".Activity.CameraActivity"></activity>
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".FFmpegMainActivity" />
-        <activity android:name=".Activity.PlayerDemoActivity" android:windowSoftInputMode="adjustNothing"/>
+        <activity
+            android:name=".Activity.PlayerDemoActivity"
+            android:windowSoftInputMode="adjustNothing" />
         <activity android:name=".Activity.VideoDemoActivity" />
-        <activity android:name=".Activity.MediaRecordActivity">
-
-        </activity>
+        <activity android:name=".Activity.MediaRecordActivity"></activity>
 
         <service android:name=".flowplay.VideoFloatService" />
     </application>
