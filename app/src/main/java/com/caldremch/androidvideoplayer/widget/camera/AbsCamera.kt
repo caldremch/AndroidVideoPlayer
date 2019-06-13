@@ -10,7 +10,8 @@ import android.view.SurfaceView
  */
 abstract class AbsCamera : ICamera{
 
-    private lateinit var mSurfaceView: SurfaceView
+    protected lateinit var mSurfaceView: SurfaceView
+
 
     constructor(mSurfaceView: SurfaceView) {
         this.mSurfaceView = mSurfaceView

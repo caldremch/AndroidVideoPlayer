@@ -24,7 +24,6 @@ class CameraManager(surfaceView: SurfaceView) : AbsCamera(surfaceView) {
     }
 
     override fun init() {
-
     }
 
 
@@ -32,7 +31,7 @@ class CameraManager(surfaceView: SurfaceView) : AbsCamera(surfaceView) {
         if (!openCamera(cameraId)) return
         setCameraParameters()
         setPreView()
-        mCamera.setDisplayOrientation(0)
+//        mCamera.setDisplayOrientation(0)
         mCamera.startPreview()
     }
 
@@ -46,7 +45,9 @@ class CameraManager(surfaceView: SurfaceView) : AbsCamera(surfaceView) {
             }
         })
 
-        parameters.setPreviewSize(maxCameraSize.width, maxCameraSize.height)
+//        parameters.setPreviewSize(maxCameraSize.width, maxCameraSize.height)
+        parameters.setPreviewSize(mSurfaceView.width, mSurfaceView.height)
+        parameters.setPictureSize(mSurfaceView.width, mSurfaceView.height)
 
         if (Camera.Parameters.FOCUS_MODE_AUTO in parameters.supportedFocusModes) {
             parameters.focusMode = Camera.Parameters.FOCUS_MODE_AUTO

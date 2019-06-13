@@ -1,15 +1,26 @@
 package com.caldremch.democommom
 
+import android.annotation.SuppressLint
+import android.annotation.TargetApi
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
+import android.graphics.BitmapFactory
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import com.caldremch.common.base.BaseActivity
 import com.caldremch.common.utils.MetricsUtils
 import com.caldremch.common.utils.permission.FilePermissionDelegate
+import com.caldremch.democommom.anim.AnimActivity
 import com.caldremch.democommom.ui.EmptyActivity
 import com.caldremch.democommom.ui.PopWindowDemo
 import kotlinx.android.synthetic.main.activity_main.*
@@ -62,17 +73,7 @@ class MainActivity : BaseActivity() {
     }
 
     fun jump(view: View) {
-//        startActivity(Intent(this, EmptyActivity::class.java))
-
-//        val intent = Intent()
-//        val name = ComponentName(this, "com.caldremch.democommom.ui.EmptyActivity")
-//        intent.component = name
-//
-//        val resolveInfos = packageManager
-//                .queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
-//        if (resolveInfos != null && resolveInfos.isNotEmpty()) {
-//            startActivity(intent)
-//        }
+        startActivity(Intent(this, AnimActivity::class.java))
     }
 
 
