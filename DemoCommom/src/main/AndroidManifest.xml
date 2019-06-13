@@ -36,6 +36,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".anim.AnimActivity" />
+        <activity android:name=".anim.WidgetActivity" />
     </application>
 
 </manifest>
