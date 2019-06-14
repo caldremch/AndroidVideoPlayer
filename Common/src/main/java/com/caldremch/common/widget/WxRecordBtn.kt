@@ -49,25 +49,43 @@ class WxRecordBtn : View {
 
     private var animator: ValueAnimator? = null
     private var animatorBigger: ValueAnimator? = null
+
     private var animatorSweepAngle: ValueAnimator? = null
 
+    private var animatorOutCircle: ValueAnimator? = null
+    private var animatorOutCircleToRaw: ValueAnimator? = null
+
     /**
-     * 原半径
+     * 原半径 (小圆)
      */
     private var rawRadius: Float = 0f;
     /**
-     * 变化半径
+     * 变化半径 (小圆)
      */
     private var varRadius: Float = 0f;
     /**
-     * 最小半径
+     * 最小半径  (小圆)
      */
     private var minRadius: Float = 0f;
 
+
+    /**
+     * 原半径 (大圆)
+     */
+    private var rawBiggerRadius: Float = 0f;
+    /**
+     * 变化半径 (大圆)
+     */
+    private var varBiggerRadius: Float = 0f;
+    /**
+     * 最大半径  (大圆)
+     */
+    private var maxBiggerRadius: Float = 0f;
+
     private lateinit var rectF: RectF
-    private  var sweepAngleEx: Float = 0f
-    private  val circlePainWidth: Float = 0f
-    private  val progressPainWidth: Float = DensityUtil.dp2px(5f).toFloat()
+    private var sweepAngleEx: Float = 0f
+    private val circlePainWidth: Float = 0f
+    private val progressPainWidth: Float = DensityUtil.dp2px(5f).toFloat()
 
     constructor(context: Context?) : this(context, null)
     constructor(context: Context?, attrs: AttributeSet?) : this(context, attrs, 0)
@@ -84,40 +102,71 @@ class WxRecordBtn : View {
     }
 
     override fun onDraw(canvas: Canvas?) {
+
         Log.d(TAG, "[onDraw]")
 
-        rectF.top = progressPainWidth/2;
-        rectF.left = progressPainWidth/2;
-        rectF.bottom = height.toFloat() - progressPainWidth/2;
-        rectF.right = width.toFloat() - progressPainWidth/2;
+        rectF.top = progressPainWidth / 2;
+        rectF.left = progressPainWidth / 2;
+        rectF.bottom = viewMaxHeight - progressPainWidth / 2;
+        rectF.right = viewMaxWidth - progressPainWidth / 2;
+
+
+
+        rawRadius = (viewShowWidth / 2).toFloat() - (viewShowHeight / (2 * 4)).toFloat();
+        minRadius = (rawRadius *2 / 3).toFloat()
+
+        rawBiggerRadius = (viewShowHeight / 2).toFloat()
+        maxBiggerRadius = viewMaxHeight / 2
+
 
         paint.style = Paint.Style.FILL
         paint.color = Color.GRAY
         paint.strokeWidth = circlePainWidth
-        canvas?.drawCircle((width / 2).toFloat(), (height / 2).toFloat(), (width / 2).toFloat(), paint)
-        paint.color = Color.WHITE
-        rawRadius = (width / 2).toFloat() - (height / (2 * 4)).toFloat();
-        minRadius = (rawRadius / 2).toFloat()
         if (isRecord) {
-            canvas?.drawCircle((width / 2).toFloat(), (height / 2).toFloat(), varRadius, paint)
+            canvas?.drawCircle((viewMaxWidth / 2).toFloat(), (viewMaxHeight / 2).toFloat(), varBiggerRadius, paint)
+            paint.color = Color.WHITE
+            canvas?.drawCircle((viewMaxWidth / 2).toFloat(), (viewMaxHeight / 2).toFloat(), varRadius, paint)
             //画进度条
             paint.color = Color.WHITE
             paint.strokeWidth = progressPainWidth
             paint.style = Paint.Style.STROKE
             canvas?.drawArc(rectF, -90f, sweepAngleEx, false, paint)
         } else {
-            canvas?.drawCircle((width / 2).toFloat(), (height / 2).toFloat(), rawRadius, paint)
+            canvas?.drawCircle((viewMaxWidth / 2).toFloat(), (viewMaxWidth / 2).toFloat(), rawBiggerRadius, paint)
+            paint.color = Color.WHITE
+            canvas?.drawCircle((viewMaxWidth / 2).toFloat(), (viewMaxHeight / 2).toFloat(), rawRadius, paint)
         }
 
     }
+
+    private var viewMaxWidth: Float = 0f
+    private var viewMaxHeight: Float = 0f
+
+    private var viewShowWidth: Float = 0f
+    private var viewShowHeight: Float = 0f
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         Log.d(TAG, "[widthMeasureSpec]")
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         var finalWidth: Int = getMeasre(widthMeasureSpec)
         var finalHeight: Int = getMeasre(heightMeasureSpec)
+
+        viewMaxWidth = finalWidth.toFloat()
+        viewMaxHeight = finalHeight.toFloat()
+
+        //保证圆形
+        if (viewMaxHeight != viewMaxWidth) {
+            viewMaxHeight = viewMaxWidth;
+        }
+
+        marginDis = viewMaxWidth * 1 / 3
+        viewShowWidth = viewMaxWidth - marginDis
+        viewShowHeight = viewShowWidth
+
         setMeasuredDimension(finalWidth, finalHeight)
     }
+
+    private var marginDis: Float = 0f;
 
     private fun getMeasre(measureSpec: Int): Int {
 
@@ -148,7 +197,7 @@ class WxRecordBtn : View {
     object : Handler() {
         override fun handleMessage(msg: Message?) {
 
-            if (seconds == RECORD_TIME){
+            if (seconds == RECORD_TIME) {
                 finishOrTakePicRecord();
                 return;
             }
@@ -156,42 +205,74 @@ class WxRecordBtn : View {
             if (seconds >= 500) {
                 isRecord = true
 
-                if (animator == null) {
-                    animator = ObjectAnimator.ofFloat(rawRadius, minRadius)
-                }
+                //小圆动画
+                minCicleAnim()
 
-                if (varRadius != minRadius && !animator?.isRunning!!) {
-                    animator?.interpolator = DecelerateInterpolator()
-                    animator?.duration = DURATION
-                    animator?.repeatCount = 0
-                    animator?.start()
-                    animator?.addUpdateListener {
-                        var value: Float = it.getAnimatedValue() as Float
-                        varRadius = value
-                        postInvalidate()
-                    }
-                }
+                //大圆动画
+                outCicleAnim()
 
-                if (animatorSweepAngle == null) {
-                    animatorSweepAngle = ObjectAnimator.ofFloat(0f, 360f)
-                }
-
-                if (sweepAngleEx != 360f && !animatorSweepAngle?.isRunning!!) {
-                    animatorSweepAngle?.interpolator = LinearInterpolator()
-                    animatorSweepAngle?.duration = RECORD_TIME
-                    animatorSweepAngle?.repeatCount = 0
-                    animatorSweepAngle?.start()
-                    animatorSweepAngle?.addUpdateListener {
-                        var value: Float = it.getAnimatedValue() as Float
-                        sweepAngleEx = value
-                        postInvalidate()
-                    }
-                }
+                //应该等大圆动画结束后, 再进行录制进度动画
+                sweepAngleAim()
 
             }
-            seconds+=100;
+            seconds += 100;
             sendEmptyMessageDelayed(0, 100)
 
+        }
+    }
+
+    private fun minCicleAnim() {
+        if (animator == null) {
+            animator = ObjectAnimator.ofFloat(rawRadius, minRadius)
+        }
+
+        if (varRadius != minRadius && !animator?.isRunning!!) {
+            animator?.interpolator = DecelerateInterpolator()
+            animator?.duration = DURATION
+            animator?.repeatCount = 0
+            animator?.start()
+            animator?.addUpdateListener {
+                var value: Float = it.getAnimatedValue() as Float
+                varRadius = value
+                postInvalidate()
+            }
+        }
+    }
+
+    private fun outCicleAnim() {
+
+        if (animatorOutCircle == null) {
+            animatorOutCircle = ObjectAnimator.ofFloat(rawBiggerRadius, maxBiggerRadius)
+        }
+
+        if (varBiggerRadius != maxBiggerRadius && !animatorOutCircle?.isRunning!!) {
+            animatorOutCircle?.interpolator = DecelerateInterpolator()
+            animatorOutCircle?.duration = DURATION
+            animatorOutCircle?.repeatCount = 0
+            animatorOutCircle?.start()
+            animatorOutCircle?.addUpdateListener {
+                var value: Float = it.getAnimatedValue() as Float
+                varBiggerRadius = value
+                postInvalidate()
+            }
+        }
+    }
+
+    private fun sweepAngleAim() {
+        if (animatorSweepAngle == null) {
+            animatorSweepAngle = ObjectAnimator.ofFloat(0f, 360f)
+        }
+
+        if (sweepAngleEx != 360f && !animatorSweepAngle?.isRunning!! ) {
+            animatorSweepAngle?.interpolator = LinearInterpolator()
+            animatorSweepAngle?.duration = RECORD_TIME
+            animatorSweepAngle?.repeatCount = 0
+            animatorSweepAngle?.start()
+            animatorSweepAngle?.addUpdateListener {
+                var value: Float = it.getAnimatedValue() as Float
+                sweepAngleEx = value
+                postInvalidate()
+            }
         }
     }
 
@@ -219,17 +300,44 @@ class WxRecordBtn : View {
         wxBtnhandler.removeCallbacksAndMessages(null)
         //取消时间录制动画
         sweepAngleEx = 0f;
-        if (isRecord){
+        if (isRecord) {
             Log.d(TAG, "[ACTION_UP] 录制")
             //取消动画
-            if(animatorSweepAngle != null){
+            if (animatorSweepAngle != null && animatorSweepAngle!!.isRunning) {
                 animatorSweepAngle!!.cancel()
             }
+            if (animator != null && animator!!.isRunning) {
+                animator!!.cancel()
+            }
+            if (animatorOutCircle != null && animatorOutCircle!!.isRunning) {
+                animatorOutCircle!!.cancel()
+            }
+
             handlerBiggerAnim()
-        }else{
+            outCircleAnimToRaw()
+        } else {
             isRecord = false
             seconds = 0
             Log.d(TAG, "[ACTION_UP] 拍照")
+        }
+
+    }
+
+    private fun outCircleAnimToRaw() {
+        if (animatorOutCircleToRaw == null) {
+            animatorOutCircleToRaw = ObjectAnimator.ofFloat(maxBiggerRadius, rawBiggerRadius)
+        }
+        if (!animatorOutCircleToRaw?.isRunning!!) {
+            animatorOutCircleToRaw?.interpolator = DecelerateInterpolator()
+            animatorOutCircleToRaw?.duration = DURATION
+            animatorOutCircleToRaw?.repeatCount = 0
+            animatorOutCircleToRaw?.start()
+            animatorOutCircleToRaw?.addUpdateListener {
+                var value: Float = it.getAnimatedValue() as Float
+                varBiggerRadius = value
+                postInvalidate()
+            }
+
         }
 
     }
