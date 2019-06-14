@@ -8,7 +8,7 @@
 
 
     <com.caldremch.common.widget.WxRecordBtn
-        android:layout_width="160dp"
-        android:layout_height="160dp"/>
+        android:layout_width="100dp"
+        android:layout_height="100dp"/>
 
 </LinearLayout>

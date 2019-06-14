@@ -8,6 +8,7 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.RectF
 import android.os.Handler
 import android.os.Message
 import android.util.AttributeSet
@@ -15,6 +16,8 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.animation.DecelerateInterpolator
+import android.view.animation.LinearInterpolator
+import com.caldremch.common.utils.DensityUtil
 
 /**
  *
@@ -30,8 +33,41 @@ import android.view.animation.DecelerateInterpolator
 class WxRecordBtn : View {
 
     private val TAG: String = WxRecordBtn::class.java.simpleName
-
+    private val DURATION: Long = 250
     private lateinit var paint: Paint
+
+
+    private var downTime: Long = 0;
+    private var upTime: Long = 0;
+    private val RECORD_TIME: Long = 10 * 1000;
+    private val perTime: Long = 10 * 1000;
+    /**
+     * 最大录制秒数
+     */
+    private var seconds: Long = 0;
+    private var isRecord: Boolean = false;
+
+    private var animator: ValueAnimator? = null
+    private var animatorBigger: ValueAnimator? = null
+    private var animatorSweepAngle: ValueAnimator? = null
+
+    /**
+     * 原半径
+     */
+    private var rawRadius: Float = 0f;
+    /**
+     * 变化半径
+     */
+    private var varRadius: Float = 0f;
+    /**
+     * 最小半径
+     */
+    private var minRadius: Float = 0f;
+
+    private lateinit var rectF: RectF
+    private  var sweepAngleEx: Float = 0f
+    private  val circlePainWidth: Float = 0f
+    private  val progressPainWidth: Float = DensityUtil.dp2px(5f).toFloat()
 
     constructor(context: Context?) : this(context, null)
     constructor(context: Context?, attrs: AttributeSet?) : this(context, attrs, 0)
@@ -39,25 +75,36 @@ class WxRecordBtn : View {
         init();
     }
 
+
     private fun init() {
         paint = Paint()
         paint.isAntiAlias = true
         paint.color = Color.GRAY
+        rectF = RectF();
     }
 
-
-    private var rawRadius: Float = 0f;
-    private var varRadius: Float = 0f;
-    private var minRadius: Float = 0f;
-
     override fun onDraw(canvas: Canvas?) {
+        Log.d(TAG, "[onDraw]")
+
+        rectF.top = progressPainWidth/2;
+        rectF.left = progressPainWidth/2;
+        rectF.bottom = height.toFloat() - progressPainWidth/2;
+        rectF.right = width.toFloat() - progressPainWidth/2;
+
+        paint.style = Paint.Style.FILL
         paint.color = Color.GRAY
+        paint.strokeWidth = circlePainWidth
         canvas?.drawCircle((width / 2).toFloat(), (height / 2).toFloat(), (width / 2).toFloat(), paint)
         paint.color = Color.WHITE
         rawRadius = (width / 2).toFloat() - (height / (2 * 4)).toFloat();
-        minRadius = (rawRadius/4).toFloat()
+        minRadius = (rawRadius / 2).toFloat()
         if (isRecord) {
             canvas?.drawCircle((width / 2).toFloat(), (height / 2).toFloat(), varRadius, paint)
+            //画进度条
+            paint.color = Color.WHITE
+            paint.strokeWidth = progressPainWidth
+            paint.style = Paint.Style.STROKE
+            canvas?.drawArc(rectF, -90f, sweepAngleEx, false, paint)
         } else {
             canvas?.drawCircle((width / 2).toFloat(), (height / 2).toFloat(), rawRadius, paint)
         }
@@ -65,6 +112,7 @@ class WxRecordBtn : View {
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        Log.d(TAG, "[widthMeasureSpec]")
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         var finalWidth: Int = getMeasre(widthMeasureSpec)
         var finalHeight: Int = getMeasre(heightMeasureSpec)
@@ -96,51 +144,58 @@ class WxRecordBtn : View {
     }
 
 
-    private var downTime: Long = 0;
-    private var upTime: Long = 0;
-    private val recordTime: Long = 10 * 1000;
-    private val perTime: Long = 10 * 1000;
-    private var seconds: Int = 0;
-    private var isRecord: Boolean = false;
-
-    private var animator: ValueAnimator? = null
-    private var animatorBigger: ValueAnimator? = null
     private var wxBtnhandler: Handler = @SuppressLint("HandlerLeak")
     object : Handler() {
         override fun handleMessage(msg: Message?) {
-            seconds++;
-            if (seconds >= 1) {
-                isRecord = true
-//                varRadius = varRadius - (rawRadius-minRadius)/10
-//                Log.d(TAG, "[handleMessage] $varRadius $rawRadius $minRadius ")
 
-                if (animator == null){
-                    animator = ObjectAnimator.ofFloat(rawRadius, (rawRadius-minRadius))
+            if (seconds == RECORD_TIME){
+                finishOrTakePicRecord();
+                return;
+            }
+
+            if (seconds >= 500) {
+                isRecord = true
+
+                if (animator == null) {
+                    animator = ObjectAnimator.ofFloat(rawRadius, minRadius)
                 }
 
-                if (varRadius != (rawRadius-minRadius) && !animator?.isRunning!!){
+                if (varRadius != minRadius && !animator?.isRunning!!) {
                     animator?.interpolator = DecelerateInterpolator()
-                    animator?.duration = 500
+                    animator?.duration = DURATION
                     animator?.repeatCount = 0
                     animator?.start()
                     animator?.addUpdateListener {
-                        var value:Float = it.getAnimatedValue() as Float
+                        var value: Float = it.getAnimatedValue() as Float
                         varRadius = value
                         postInvalidate()
-
                     }
                 }
 
+                if (animatorSweepAngle == null) {
+                    animatorSweepAngle = ObjectAnimator.ofFloat(0f, 360f)
+                }
+
+                if (sweepAngleEx != 360f && !animatorSweepAngle?.isRunning!!) {
+                    animatorSweepAngle?.interpolator = LinearInterpolator()
+                    animatorSweepAngle?.duration = RECORD_TIME
+                    animatorSweepAngle?.repeatCount = 0
+                    animatorSweepAngle?.start()
+                    animatorSweepAngle?.addUpdateListener {
+                        var value: Float = it.getAnimatedValue() as Float
+                        sweepAngleEx = value
+                        postInvalidate()
+                    }
+                }
 
             }
-            sendEmptyMessageDelayed(0, 1000)
+            seconds+=100;
+            sendEmptyMessageDelayed(0, 100)
 
         }
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
-
-//        Log.d(TAG, "[onTouchEvent] ${event?.action}")
 
         when (event?.action) {
             MotionEvent.ACTION_DOWN -> {
@@ -151,57 +206,68 @@ class WxRecordBtn : View {
             }
             MotionEvent.ACTION_UP -> {
                 upTime = System.currentTimeMillis();
-                wxBtnhandler.removeCallbacksAndMessages(null)
                 Log.d(TAG, "[ACTION_UP] $seconds")
-
-                if (upTime - downTime > 1000) {
-                    //录制
-                    Log.d(TAG, "[ACTION_UP] 录制")
-
-                    if (animatorBigger == null){
-                        animatorBigger = ObjectAnimator.ofFloat((rawRadius-minRadius),rawRadius)
-                    }
-
-                    if (!animatorBigger?.isRunning!!){
-                        animatorBigger?.interpolator = DecelerateInterpolator()
-                        animatorBigger?.duration = 500
-                        animatorBigger?.repeatCount = 0
-                        animatorBigger?.start()
-                        animatorBigger?.addUpdateListener {
-                            var value:Float = it.getAnimatedValue() as Float
-                            varRadius = value
-                            postInvalidate()
-                        }
-
-                        animatorBigger?.addListener(object : Animator.AnimatorListener{
-                            override fun onAnimationRepeat(animation: Animator?) {
-                            }
-                            override fun onAnimationEnd(animation: Animator?) {
-                                isRecord = false
-                                seconds = 0
-                                animatorBigger?.cancel()
-                            }
-
-                            override fun onAnimationCancel(animation: Animator?) {
-                            }
-
-                            override fun onAnimationStart(animation: Animator?) {
-                            }
-
-
-                        })
-                    }
-
-
-                } else {
-                    //拍照
-                    Log.d(TAG, "[ACTION_UP] 拍照")
-                }
+                finishOrTakePicRecord()
             }
 
         }
 
         return true
+    }
+
+    private fun finishOrTakePicRecord() {
+        wxBtnhandler.removeCallbacksAndMessages(null)
+        //取消时间录制动画
+        sweepAngleEx = 0f;
+        if (isRecord){
+            Log.d(TAG, "[ACTION_UP] 录制")
+            //取消动画
+            if(animatorSweepAngle != null){
+                animatorSweepAngle!!.cancel()
+            }
+            handlerBiggerAnim()
+        }else{
+            isRecord = false
+            seconds = 0
+            Log.d(TAG, "[ACTION_UP] 拍照")
+        }
+
+    }
+
+    private fun handlerBiggerAnim() {
+        if (animatorBigger == null) {
+            animatorBigger = ObjectAnimator.ofFloat(minRadius, rawRadius)
+        }
+        if (!animatorBigger?.isRunning!!) {
+            animatorBigger?.interpolator = DecelerateInterpolator()
+            animatorBigger?.duration = DURATION
+            animatorBigger?.repeatCount = 0
+            animatorBigger?.start()
+            animatorBigger?.addUpdateListener {
+                var value: Float = it.getAnimatedValue() as Float
+                varRadius = value
+                postInvalidate()
+            }
+
+            animatorBigger?.addListener(object : Animator.AnimatorListener {
+                override fun onAnimationRepeat(animation: Animator?) {
+                }
+
+                override fun onAnimationEnd(animation: Animator?) {
+                    isRecord = false
+                    seconds = 0
+                    animatorBigger?.cancel()
+                }
+
+                override fun onAnimationCancel(animation: Animator?) {
+                }
+
+                override fun onAnimationStart(animation: Animator?) {
+                }
+
+
+            })
+        }
     }
 
 }
