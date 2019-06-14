@@ -99,4 +99,9 @@ dependencies {
 //    implementation 'com.caldremch.android:common:1.0.3'
 
     //d8 https://blog.csdn.net/jamin0107/article/details/81123154
+
+    // CameraX core library
+    implementation "androidx.camera:camera-core:1.0.0-alpha02"
+    // If you want to use Camera2 extensions
+    implementation "androidx.camera:camera-camera2:1.0.0-alpha02"
 }

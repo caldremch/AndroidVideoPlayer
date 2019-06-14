@@ -1,4 +1,4 @@
-package com.caldremch.androidvideoplayer.widget.camera
+package com.caldremch.androidvideoplayer.widget.camera.camera1
 
 import android.hardware.Camera
 import android.view.SurfaceHolder

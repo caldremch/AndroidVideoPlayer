@@ -1,4 +1,4 @@
-package com.caldremch.androidvideoplayer.widget.camera2
+package com.caldremch.androidvideoplayer.widget.camera
 
 import android.content.Context
 import android.graphics.Rect
@@ -6,6 +6,7 @@ import android.util.AttributeSet
 import android.util.Size
 import android.widget.FrameLayout
 import com.caldremch.androidvideoplayer.uitls.CLog
+import com.caldremch.androidvideoplayer.widget.camera.camera2.MediaRecordSurfaceView
 import kotlin.math.max
 
 /**

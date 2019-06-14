@@ -1,4 +1,4 @@
-package com.caldremch.androidvideoplayer.widget.camera2
+package com.caldremch.androidvideoplayer.widget.camera.camera2
 
 import android.content.Context
 import android.util.AttributeSet

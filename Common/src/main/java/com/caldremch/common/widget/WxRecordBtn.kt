@@ -97,7 +97,7 @@ class WxRecordBtn : View {
     private fun init() {
         paint = Paint()
         paint.isAntiAlias = true
-        paint.color = Color.GRAY
+        paint.color = Color.parseColor("#1A000000")
         rectF = RectF();
     }
 
@@ -120,7 +120,7 @@ class WxRecordBtn : View {
 
 
         paint.style = Paint.Style.FILL
-        paint.color = Color.GRAY
+        paint.color = Color.parseColor("#1A000000")
         paint.strokeWidth = circlePainWidth
         if (isRecord) {
             canvas?.drawCircle((viewMaxWidth / 2).toFloat(), (viewMaxHeight / 2).toFloat(), varBiggerRadius, paint)

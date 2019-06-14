@@ -1,10 +1,7 @@
 package com.caldremch.androidvideoplayer.Activity
 
-import android.hardware.Camera
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 import com.caldremch.androidvideoplayer.R
-import com.caldremch.androidvideoplayer.widget.camera.CameraManager
+import com.caldremch.androidvideoplayer.widget.camera.camera1.CameraManager
 import com.caldremch.common.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_camera.*
 
@@ -15,6 +12,6 @@ class CameraActivity : BaseActivity() {
     }
 
     override fun initView() {
-        CameraManager(surfaceView).open(0)
+//        CameraManager(surfaceView).open(0)
     }
 }
