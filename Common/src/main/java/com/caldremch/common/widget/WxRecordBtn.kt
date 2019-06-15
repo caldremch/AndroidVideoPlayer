@@ -113,7 +113,7 @@ class WxRecordBtn : View {
 
 
         rawRadius = (viewShowWidth / 2).toFloat() - (viewShowHeight / (2 * 4)).toFloat();
-        minRadius = (rawRadius *2 / 3).toFloat()
+        minRadius = (rawRadius * 2 / 3).toFloat()
 
         rawBiggerRadius = (viewShowHeight / 2).toFloat()
         maxBiggerRadius = viewMaxHeight / 2
@@ -226,17 +226,21 @@ class WxRecordBtn : View {
             animator = ObjectAnimator.ofFloat(rawRadius, minRadius)
         }
 
-        if (varRadius != minRadius && !animator?.isRunning!!) {
-            animator?.interpolator = DecelerateInterpolator()
-            animator?.duration = DURATION
-            animator?.repeatCount = 0
-            animator?.start()
-            animator?.addUpdateListener {
-                var value: Float = it.getAnimatedValue() as Float
-                varRadius = value
-                postInvalidate()
+        animator?.let {
+            if (varRadius != minRadius && !it.isRunning) {
+                it.interpolator = DecelerateInterpolator()
+                it.duration = DURATION
+                it.repeatCount = 0
+                it.start()
+                it.addUpdateListener {
+                    var value: Float = it.getAnimatedValue() as Float
+                    varRadius = value
+                    postInvalidate()
+                }
             }
         }
+
+
     }
 
     private fun outCicleAnim() {
@@ -245,17 +249,21 @@ class WxRecordBtn : View {
             animatorOutCircle = ObjectAnimator.ofFloat(rawBiggerRadius, maxBiggerRadius)
         }
 
-        if (varBiggerRadius != maxBiggerRadius && !animatorOutCircle?.isRunning!!) {
-            animatorOutCircle?.interpolator = DecelerateInterpolator()
-            animatorOutCircle?.duration = DURATION
-            animatorOutCircle?.repeatCount = 0
-            animatorOutCircle?.start()
-            animatorOutCircle?.addUpdateListener {
-                var value: Float = it.getAnimatedValue() as Float
-                varBiggerRadius = value
-                postInvalidate()
+        with(animatorOutCircle) {
+            if (varBiggerRadius != maxBiggerRadius && !this?.isRunning!!) {
+                interpolator = DecelerateInterpolator()
+                duration = DURATION
+                repeatCount = 0
+                start()
+                addUpdateListener {
+                    var value: Float = it.getAnimatedValue() as Float
+                    varBiggerRadius = value
+                    postInvalidate()
+                }
             }
         }
+
+
     }
 
     private fun sweepAngleAim() {
@@ -263,17 +271,20 @@ class WxRecordBtn : View {
             animatorSweepAngle = ObjectAnimator.ofFloat(0f, 360f)
         }
 
-        if (sweepAngleEx != 360f && !animatorSweepAngle?.isRunning!! ) {
-            animatorSweepAngle?.interpolator = LinearInterpolator()
-            animatorSweepAngle?.duration = RECORD_TIME
-            animatorSweepAngle?.repeatCount = 0
-            animatorSweepAngle?.start()
-            animatorSweepAngle?.addUpdateListener {
-                var value: Float = it.getAnimatedValue() as Float
-                sweepAngleEx = value
-                postInvalidate()
+        animatorSweepAngle?.let {
+            if (sweepAngleEx != 360f && !it.isRunning) {
+                it.interpolator = LinearInterpolator()
+                it.duration = RECORD_TIME
+                it.repeatCount = 0
+                it.start()
+                it.addUpdateListener {
+                    var value: Float = it.getAnimatedValue() as Float
+                    sweepAngleEx = value
+                    postInvalidate()
+                }
             }
         }
+
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
@@ -303,16 +314,9 @@ class WxRecordBtn : View {
         if (isRecord) {
             Log.d(TAG, "[ACTION_UP] 录制")
             //取消动画
-            if (animatorSweepAngle != null && animatorSweepAngle!!.isRunning) {
-                animatorSweepAngle!!.cancel()
-            }
-            if (animator != null && animator!!.isRunning) {
-                animator!!.cancel()
-            }
-            if (animatorOutCircle != null && animatorOutCircle!!.isRunning) {
-                animatorOutCircle!!.cancel()
-            }
-
+            cancelAnim(animatorSweepAngle)
+            cancelAnim(animator)
+            cancelAnim(animatorOutCircle)
             handlerBiggerAnim()
             outCircleAnimToRaw()
         } else {
@@ -323,59 +327,80 @@ class WxRecordBtn : View {
 
     }
 
+    private fun cancelAnim(animator: ValueAnimator?) {
+        animator?.let {
+            if (it.isRunning) {
+                it.cancel()
+            }
+        }
+    }
+
     private fun outCircleAnimToRaw() {
         if (animatorOutCircleToRaw == null) {
             animatorOutCircleToRaw = ObjectAnimator.ofFloat(maxBiggerRadius, rawBiggerRadius)
         }
-        if (!animatorOutCircleToRaw?.isRunning!!) {
-            animatorOutCircleToRaw?.interpolator = DecelerateInterpolator()
-            animatorOutCircleToRaw?.duration = DURATION
-            animatorOutCircleToRaw?.repeatCount = 0
-            animatorOutCircleToRaw?.start()
-            animatorOutCircleToRaw?.addUpdateListener {
-                var value: Float = it.getAnimatedValue() as Float
-                varBiggerRadius = value
-                postInvalidate()
+
+        animatorOutCircleToRaw?.let {
+
+            if (!it.isRunning) {
+                it.interpolator = DecelerateInterpolator()
+                it.duration = DURATION
+                it.repeatCount = 0
+                it.start()
+                it.addUpdateListener {
+                    var value: Float = it.getAnimatedValue() as Float
+                    varBiggerRadius = value
+                    postInvalidate()
+                }
+
             }
 
         }
+
 
     }
 
     private fun handlerBiggerAnim() {
+
         if (animatorBigger == null) {
             animatorBigger = ObjectAnimator.ofFloat(minRadius, rawRadius)
         }
-        if (!animatorBigger?.isRunning!!) {
-            animatorBigger?.interpolator = DecelerateInterpolator()
-            animatorBigger?.duration = DURATION
-            animatorBigger?.repeatCount = 0
-            animatorBigger?.start()
-            animatorBigger?.addUpdateListener {
-                var value: Float = it.getAnimatedValue() as Float
-                varRadius = value
-                postInvalidate()
+
+        animatorBigger?.let {
+
+            if (!it.isRunning) {
+                it.interpolator = DecelerateInterpolator()
+                it.duration = DURATION
+                it.repeatCount = 0
+                it.start()
+                it.addUpdateListener {
+                    var value: Float = it.getAnimatedValue() as Float
+                    varRadius = value
+                    postInvalidate()
+                }
+
+                it.addListener(object : Animator.AnimatorListener {
+                    override fun onAnimationRepeat(animation: Animator?) {
+                    }
+
+                    override fun onAnimationEnd(animation: Animator?) {
+                        isRecord = false
+                        seconds = 0
+                        it.cancel()
+                    }
+
+                    override fun onAnimationCancel(animation: Animator?) {
+                    }
+
+                    override fun onAnimationStart(animation: Animator?) {
+                    }
+
+
+                })
             }
 
-            animatorBigger?.addListener(object : Animator.AnimatorListener {
-                override fun onAnimationRepeat(animation: Animator?) {
-                }
-
-                override fun onAnimationEnd(animation: Animator?) {
-                    isRecord = false
-                    seconds = 0
-                    animatorBigger?.cancel()
-                }
-
-                override fun onAnimationCancel(animation: Animator?) {
-                }
-
-                override fun onAnimationStart(animation: Animator?) {
-                }
-
-
-            })
         }
+
     }
 
 }
