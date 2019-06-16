@@ -13,10 +13,15 @@ import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.LifecycleRegistry;
 
 import com.caldremch.common.utils.MetricsUtils;
 import com.gyf.barlibrary.ImmersionBar;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
+
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Caldremch
@@ -24,7 +29,16 @@ import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
  * @Email caldremch@163.com
  * @describe
  **/
-public abstract class AbsActivity extends LifeCycleLogActivity {
+public abstract class AbsActivity extends LifeCycleLogActivity implements LifecycleOwner {
+
+    LifecycleRegistry lifecycleRegistry = new LifecycleRegistry(this);
+
+    @NotNull
+    @Override
+    public Lifecycle getLifecycle() {
+        return lifecycleRegistry;
+    }
+
     protected Activity mContext;
 
     //沉浸式
