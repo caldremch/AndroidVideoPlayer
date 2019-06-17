@@ -1,0 +1,25 @@
+import org.omg.CORBA.portable.ResponseHandler
+
+ext.deps = [:]
+
+//版本管理
+def versions = [:]
+    versions.appcompat_version = "1.0.0-beta01"
+    versions.recyclerview_version = "1.1.0-alpha06"
+    versions.constraintlayout_version = "1.0.3"
+    versions.fastjson_version = "1.1.70.android"
+
+ext.versions = versions
+
+//依赖管理
+def deps = [:]
+deps.fastjson = "com.alibaba:fastjson:1.1.70.android"
+ext.deps = deps
+
+def addRepos (ResponseHandler handler){
+    handler.google()
+    handler.jcenter()
+    handler.maven { url 'https://jitpack.io' }
+}
+
+ext.addRepos = this.&addRepos

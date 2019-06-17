@@ -38,6 +38,7 @@
             android:windowSoftInputMode="adjustNothing" />
         <activity android:name=".Activity.VideoDemoActivity" />
         <activity android:name=".Activity.MediaRecordActivity"></activity>
+        <activity android:name=".Activity.TempTestActivity" />
 
         <service android:name=".flowplay.VideoFloatService" />
     </application>

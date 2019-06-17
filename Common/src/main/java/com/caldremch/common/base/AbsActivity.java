@@ -29,15 +29,7 @@ import org.jetbrains.annotations.NotNull;
  * @Email caldremch@163.com
  * @describe
  **/
-public abstract class AbsActivity extends LifeCycleLogActivity implements LifecycleOwner {
-
-    LifecycleRegistry lifecycleRegistry = new LifecycleRegistry(this);
-
-    @NotNull
-    @Override
-    public Lifecycle getLifecycle() {
-        return lifecycleRegistry;
-    }
+public abstract class AbsActivity extends LifeCycleLogActivity{
 
     protected Activity mContext;
 

@@ -4,6 +4,7 @@ import android.content.Intent
 import android.view.View
 import com.caldremch.androidvideoplayer.Activity.CameraActivity
 import com.caldremch.androidvideoplayer.Activity.PlayerDemoActivity
+import com.caldremch.androidvideoplayer.Activity.TempTestActivity
 import com.caldremch.androidvideoplayer.Activity.VideoDemoActivity
 import com.caldremch.androidvideoplayer.flowplay.CloseFloatWindowEvent
 import com.caldremch.androidvideoplayer.flowplay.FloatPermission
