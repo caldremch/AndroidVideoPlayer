@@ -27,6 +27,14 @@ class CameraListActivity : BaseTestListActivity() {
             0 -> {
                 startAct(CameraActivity::class.java)
             }
+
+            1 -> {
+                startAct(Camera1Activity::class.java)
+            }
+
+            2 -> {
+                startAct(CameraActivity::class.java)
+            }
         }
     }
 }

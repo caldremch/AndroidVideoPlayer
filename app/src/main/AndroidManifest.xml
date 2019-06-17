@@ -11,7 +11,11 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
+<!--    视频录制-->
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
 
+
+    <uses-feature android:name="android.hardware.camera"/>
     <uses-feature android:name="android.hardware.Camera" />
     <uses-feature android:name="android.hardware.camera2" />
 
@@ -40,6 +44,7 @@
         <activity android:name=".Activity.MediaRecordActivity"></activity>
         <activity android:name=".Activity.TempTestActivity" />
         <activity android:name=".Activity.CameraListActivity" />
+        <activity android:name=".Activity.Camera1Activity" />
 
         <service android:name=".flowplay.VideoFloatService" />
     </application>

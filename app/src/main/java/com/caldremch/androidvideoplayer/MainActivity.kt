@@ -24,6 +24,10 @@ class MainActivity : BaseActivity() {
     }
 
     override fun initView() {
+//        startFloatService()
+    }
+
+    private fun startFloatService() {
         if (!FloatPermission.isFlowViewPermissionGranted(this)) {
             FloatPermission.toAppDetail()
             return
@@ -68,6 +72,10 @@ class MainActivity : BaseActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+//        stopFloatService()
+    }
+
+    private fun stopFloatService() {
         var intent = Intent(this, VideoFloatService::class.java)
         stopService(intent)
     }

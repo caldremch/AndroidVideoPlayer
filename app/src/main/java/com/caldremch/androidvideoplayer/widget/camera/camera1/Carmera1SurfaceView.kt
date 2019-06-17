@@ -1,6 +1,7 @@
 package com.caldremch.androidvideoplayer.widget.camera.camera1
 
 import android.content.Context
+import android.content.res.Configuration
 import android.hardware.Camera
 import android.util.AttributeSet
 import android.view.SurfaceHolder
@@ -18,7 +19,7 @@ import kotlin.Comparator
  * @email caldremch@163.com
  * @describe
  */
-class Carmera1SurfaceView : SurfaceView , SurfaceHolder.Callback {
+class Carmera1SurfaceView : SurfaceView, SurfaceHolder.Callback {
 
     private var surfaceHolder: SurfaceHolder? = null
     private lateinit var mCamera: Camera
@@ -29,7 +30,6 @@ class Carmera1SurfaceView : SurfaceView , SurfaceHolder.Callback {
 
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
         initView()
-
     }
 
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
@@ -39,6 +39,13 @@ class Carmera1SurfaceView : SurfaceView , SurfaceHolder.Callback {
     private fun initView() {
         surfaceHolder = holder
         surfaceHolder!!.addCallback(this)
+
+        try {
+            mCamera = Camera.open()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            CLog.d("开始相机失败")
+        }
     }
 
 
@@ -47,60 +54,91 @@ class Carmera1SurfaceView : SurfaceView , SurfaceHolder.Callback {
     }
 
     override fun surfaceDestroyed(holder: SurfaceHolder?) {
-        mCamera
+        mCamera.release()
     }
 
     override fun surfaceCreated(holder: SurfaceHolder?) {
+        surfaceHolder = holder
+        try {
+            handleRotation()
+            handlePreView()
+            handleFocus()
 
-        val cameraList = Camera.getNumberOfCameras()
-        CLog.d("Camera.getNumberOfCameras = $cameraList")
-        if (cameraList == 0) {
-            Toast.makeText(context, "", Toast.LENGTH_SHORT).show()
-            return
+            mCamera.setPreviewDisplay(holder);
+            mCamera.startPreview();
+        } catch (e: Exception) {
+            e.printStackTrace()
+            CLog.d("surfaceCreated失败")
         }
 
-        for(inx:Int in 0..cameraList){
-            try {
-                mCamera = Camera.open()
-                setCameraParameters()
-                mCamera.startPreview()
-            }catch (e:Exception){
-                e.printStackTrace()
-            }
-
-            return
-        }
     }
 
+    private fun handleFocus() {
+        /* Set Auto focus */
+        val parameters = mCamera.parameters
+        val focusModes = parameters.supportedFocusModes
+        if (focusModes.contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)) {
+            parameters.focusMode = Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE
+        } else if (focusModes.contains(Camera.Parameters.FOCUS_MODE_AUTO)) {
+            parameters.focusMode = Camera.Parameters.FOCUS_MODE_AUTO
+        }
+        mCamera.parameters = parameters
+    }
 
-    private fun setCameraParameters() {
+    private fun handlePreView() {
         var parameters: Camera.Parameters = mCamera.parameters
-
-        //设置最大分辨率
-        var maxCameraSize: Camera.Size = Collections.max(mCamera.parameters.supportedPreviewSizes, object : Comparator<Camera.Size> {
-            override fun compare(o1: Camera.Size?, o2: Camera.Size?): Int {
-                return o1?.width!!.times(o1.height) - o2?.width!!.times(o2.height)
-            }
-        })
-
-        CLog.d("width = $width height = $height")
-        parameters.setPreviewSize(maxCameraSize.width, maxCameraSize.height)
-
-        //分辨率要按照支持的来设置
-//
-//        var maxPicSize: Camera.Size = Collections.max( mCamera.parameters.supportedPictureSizes, object : Comparator<Camera.Size> {
+        val preViewSize = getPropPreviewSize(parameters.supportedPreviewSizes)
+//        var preViewSize: Camera.Size = Collections.max(mCamera.parameters.supportedPreviewSizes, object : Comparator<Camera.Size> {
 //            override fun compare(o1: Camera.Size?, o2: Camera.Size?): Int {
 //                return o1?.width!!.times(o1.height) - o2?.width!!.times(o2.height)
 //            }
 //        })
-//        parameters.setPictureSize(maxPicSize.width, maxPicSize.height)
 
-        if (Camera.Parameters.FOCUS_MODE_AUTO in parameters.supportedFocusModes) {
-            parameters.focusMode = Camera.Parameters.FOCUS_MODE_AUTO
+        CLog.d("preViewSize = ${preViewSize.width} , ${preViewSize.height}")
+        mCamera.parameters.also {
+            it.setPreviewSize(preViewSize.height, preViewSize.width)
         }
 
-        mCamera.parameters = parameters
+//        var maxPicSize: Camera.Size = Collections.max(mCamera.parameters.supportedPictureSizes, object : Comparator<Camera.Size> {
+//            override fun compare(o1: Camera.Size?, o2: Camera.Size?): Int {
+//                return o1?.width!!.times(o1.height) - o2?.width!!.times(o2.height)
+//            }
+//        })
+//        CLog.d("maxPicSize = ${maxPicSize.width} , ${maxPicSize.height}")
+//        mCamera.parameters.also {
+//            it.setPictureSize(maxPicSize.height, maxPicSize.width)
+//        }
+    }
 
+    private fun handleRotation() {
+        if (resources.configuration.orientation != Configuration.ORIENTATION_LANDSCAPE) {
+            mCamera.parameters.also {
+                it.set("orientation", "portrait")
+                mCamera.setDisplayOrientation(90)
+                it.setRotation(90)
+            }
+
+        } else {
+            mCamera.parameters.also {
+                it.set("orientation", "landscape")
+                mCamera.setDisplayOrientation(0)
+                it.setRotation(0)
+            }
+        }
+    }
+
+    private fun getPropPreviewSize(supportedPreviewSizes: List<Camera.Size>): Camera.Size {
+        val ratio = 0.1f
+        val widthHeightRatio = 1080 * 1.0f / 1920
+        var maxWidth = 0
+        var sizeResult: Camera.Size = supportedPreviewSizes[0]
+        for (size in supportedPreviewSizes) {
+            if (Math.abs(widthHeightRatio - size.width * 1.0f / size.height) < ratio && size.width > maxWidth) {
+                sizeResult = size
+                maxWidth = size.width
+            }
+        }
+        return sizeResult
     }
 
 
