@@ -3,29 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:id="@+id/rootCl"
     android:layout_height="match_parent"
     tools:context=".Activity.CameraActivity">
-
-    <FrameLayout
-        android:id="@+id/flContainer"
-        android:visibility="gone"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
 
     <TextureView
         android:id="@+id/textureView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-
-
-    <com.caldremch.common.widget.WxRecordBtn
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginBottom="30dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

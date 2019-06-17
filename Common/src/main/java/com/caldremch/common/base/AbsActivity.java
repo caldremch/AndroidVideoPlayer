@@ -40,6 +40,8 @@ public abstract class AbsActivity extends LifeCycleLogActivity{
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = this;
+        mBar = ImmersionBar.with(this);
+        mBar.init();
         compatStatusBar(true);
         if (isAlwaysPortrait()) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -66,7 +68,6 @@ public abstract class AbsActivity extends LifeCycleLogActivity{
     }
 
     public void compatStatusBar(boolean isDarkFont, String color) {
-        mBar = ImmersionBar.with(this);
         if (ImmersionBar.isSupportStatusBarDarkFont()) {
             mBar.statusBarColor(color);
         } else {

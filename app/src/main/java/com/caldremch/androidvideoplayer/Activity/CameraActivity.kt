@@ -10,12 +10,15 @@ import android.util.Rational
 import android.view.TextureView
 import android.view.View
 import androidx.camera.core.*
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.LifecycleOwner
 import com.caldremch.androidvideoplayer.R
 import com.caldremch.androidvideoplayer.uitls.AutoFitPreviewBuilder
 import com.caldremch.androidvideoplayer.uitls.CLog
 import com.caldremch.androidvideoplayer.uitls.LuminosityAnalyzer
 import com.caldremch.common.base.BaseActivity
+import com.caldremch.common.widget.WxRecordBtn
+import com.gyf.barlibrary.ImmersionBar
 import kotlinx.android.synthetic.main.activity_camera.*
 
 class CameraActivity : BaseActivity() {
@@ -31,6 +34,9 @@ class CameraActivity : BaseActivity() {
 
     private lateinit var displayManager: DisplayManager
 
+    override fun compatStatusBar(isDarkFont: Boolean) {
+        mBar.transparentNavigationBar().init()
+    }
 
     private val displayListener = object : DisplayManager.DisplayListener {
         override fun onDisplayAdded(displayId: Int) = Unit
@@ -55,8 +61,35 @@ class CameraActivity : BaseActivity() {
         displayManager.registerDisplayListener(displayListener, null)
 
         viewFinder.post {
+            setCameraControl()
             bindCamera()
         }
+
+    }
+
+    private fun setCameraControl() {
+        val controller = View.inflate(this, R.layout.camera_control, rootCl)
+
+       val startBtn =  controller.findViewById<WxRecordBtn>(R.id.startBtn)
+
+        if (ImmersionBar.hasNavigationBar(this)){
+           val layoutPara:ConstraintLayout.LayoutParams = startBtn.layoutParams as ConstraintLayout.LayoutParams
+            layoutPara.bottomMargin += ImmersionBar.getNavigationBarHeight(this)
+            startBtn.layoutParams = layoutPara
+        }
+
+        startBtn.setListener(object : WxRecordBtn.OnClick{
+            override fun takePic() {
+                CLog.d("[takePic]")
+            }
+
+            override fun recordVideo() {
+                CLog.d("[recordVideo]")
+            }
+
+        })
+
+
     }
 
     override fun initEvent() {
@@ -79,7 +112,7 @@ class CameraActivity : BaseActivity() {
         val screenAspectRatio = Rational(metrics.widthPixels, metrics.heightPixels)
 
         val textureViewConfigy = PreviewConfig.Builder().apply {
-            setLensFacing(CameraX.LensFacing.BACK)
+            setLensFacing(lensFacing)
             setTargetAspectRatio(screenAspectRatio)
             setTargetRotation(viewFinder.display.rotation)
         }.build()
@@ -87,7 +120,7 @@ class CameraActivity : BaseActivity() {
         preView = AutoFitPreviewBuilder.build(textureViewConfigy, textureView)
 
         val imageCaptureConfig = ImageCaptureConfig.Builder().apply {
-            setLensFacing(CameraX.LensFacing.BACK)
+            setLensFacing(lensFacing)
             setCaptureMode(ImageCapture.CaptureMode.MIN_LATENCY)
             setTargetAspectRatio(screenAspectRatio)
             setTargetRotation(viewFinder.display.rotation)
@@ -95,7 +128,7 @@ class CameraActivity : BaseActivity() {
         imageCapture = ImageCapture(imageCaptureConfig)
 
         val analysisConfig = ImageAnalysisConfig.Builder().apply {
-            setLensFacing(CameraX.LensFacing.BACK)
+            setLensFacing(lensFacing)
             val analyzerThread = HandlerThread("MyAnalysis").apply { start() }
             setCallbackHandler(Handler(analyzerThread.looper))
             setImageReaderMode(ImageAnalysis.ImageReaderMode.ACQUIRE_LATEST_IMAGE)

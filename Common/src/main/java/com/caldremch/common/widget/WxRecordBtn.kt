@@ -192,6 +192,16 @@ class WxRecordBtn : View {
         return size;
     }
 
+    interface OnClick{
+        fun takePic()
+        fun recordVideo()
+    }
+
+    private var onListener:OnClick? = null
+
+    fun setListener(click:OnClick){
+        this.onListener = click
+    }
 
     private var wxBtnhandler: Handler = @SuppressLint("HandlerLeak")
     object : Handler() {
@@ -319,10 +329,13 @@ class WxRecordBtn : View {
             cancelAnim(animatorOutCircle)
             handlerBiggerAnim()
             outCircleAnimToRaw()
+            onListener?.recordVideo()
+
         } else {
             isRecord = false
             seconds = 0
             Log.d(TAG, "[ACTION_UP] 拍照")
+            onListener?.takePic()
         }
 
     }
