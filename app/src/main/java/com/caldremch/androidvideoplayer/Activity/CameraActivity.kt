@@ -2,6 +2,7 @@ package com.caldremch.androidvideoplayer.Activity
 
 import android.content.Context
 import android.hardware.display.DisplayManager
+import android.media.MediaRecorder
 import android.os.Handler
 import android.os.HandlerThread
 import android.util.DisplayMetrics
@@ -85,6 +86,8 @@ class CameraActivity : BaseActivity() {
 
             override fun recordVideo() {
                 CLog.d("[recordVideo]")
+                val mediaRecord = MediaRecorder()
+                mediaRecord.reset()
             }
 
         })

@@ -2,10 +2,7 @@ package com.caldremch.androidvideoplayer
 
 import android.content.Intent
 import android.view.View
-import com.caldremch.androidvideoplayer.Activity.CameraActivity
-import com.caldremch.androidvideoplayer.Activity.PlayerDemoActivity
-import com.caldremch.androidvideoplayer.Activity.TempTestActivity
-import com.caldremch.androidvideoplayer.Activity.VideoDemoActivity
+import com.caldremch.androidvideoplayer.Activity.*
 import com.caldremch.androidvideoplayer.flowplay.CloseFloatWindowEvent
 import com.caldremch.androidvideoplayer.flowplay.FloatPermission
 import com.caldremch.androidvideoplayer.flowplay.OpenFloatWindowEvent
@@ -95,6 +92,6 @@ class MainActivity : BaseActivity() {
      * 视频录制与拍照
      */
     fun photoAndMediaRecord(view: View) {
-        startActivity(Intent(this, CameraActivity::class.java))
+        startActivity(Intent(this, CameraListActivity::class.java))
     }
 }
