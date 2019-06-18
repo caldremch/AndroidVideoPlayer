@@ -13,4 +13,11 @@ package com.caldremch.androidvideoplayer.widget.camera
  **/
 class CameraSize(var width: Int, var height: Int) {
 
+    fun fixed():CameraSize{
+//        var temp = width
+//        width = height
+//        height = temp
+        return CameraSize(height, width)
+    }
+
 }

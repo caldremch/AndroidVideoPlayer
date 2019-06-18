@@ -1,5 +1,7 @@
 package com.caldremch.androidvideoplayer.Activity
 
+import android.content.Context
+import android.hardware.display.DisplayManager
 import android.media.MediaRecorder
 import android.view.View
 import android.widget.ImageButton
@@ -30,6 +32,18 @@ class Camera1Activity : BaseActivity() {
 
     private var lensFacing = Camera1View.LensFacing.BACK
     private lateinit var cameraManager:CameraManager
+    private lateinit var displayManager: DisplayManager
+    private val displayListener = object : DisplayManager.DisplayListener {
+        override fun onDisplayAdded(displayId: Int) = Unit
+        override fun onDisplayRemoved(displayId: Int) = Unit
+        override fun onDisplayChanged(displayId: Int){
+            val display = displayManager.getDisplay(displayId)
+            CLog.d("[onDisplayChanged] $display")
+
+        }
+
+    }
+
     override fun compatStatusBar(isDarkFont: Boolean) {
         transparentNavigationBar()
     }
@@ -43,6 +57,8 @@ class Camera1Activity : BaseActivity() {
             cameraManager = CameraManager(cameraView)
         }
         handleControllerView()
+        displayManager = getSystemService(Context.DISPLAY_SERVICE) as DisplayManager
+        displayManager.registerDisplayListener(displayListener, null)
     }
 
     private fun handleControllerView() {
@@ -81,8 +97,13 @@ class Camera1Activity : BaseActivity() {
 
     }
 
+    override fun isAlwaysPortrait(): Boolean {
+        return false
+    }
+
     override fun onDestroy() {
         super.onDestroy()
+        displayManager.unregisterDisplayListener(displayListener)
         cameraManager.release()
     }
 

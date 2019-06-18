@@ -3,8 +3,12 @@ package com.caldremch.androidvideoplayer.widget.camera.camera1
 import android.hardware.Camera
 import android.view.SurfaceHolder
 import android.view.SurfaceView
+import android.view.View
+import android.view.ViewGroup
 import com.caldremch.androidvideoplayer.uitls.CLog
+import com.caldremch.androidvideoplayer.widget.camera.CameraContainerView
 import com.caldremch.androidvideoplayer.widget.camera.CameraSize
+import com.caldremch.androidvideoplayer.widget.camera.CameraView
 import java.lang.Exception
 import java.util.*
 import kotlin.Comparator
@@ -22,11 +26,24 @@ class CameraManager(surfaceView: SurfaceView) : AbsCamera(surfaceView) {
     private var mCamera: Camera? = null
     private lateinit var surfaceHolder: SurfaceHolder
     private lateinit var cameraSupportPreSize: MutableList<CameraSize>
+    private lateinit var bestPreViewSize: CameraSize
+
+    private lateinit var autoFitContainer:CameraContainerView
+
 
     init {
+
         surfaceHolder = surfaceView.holder
         surfaceHolder.addCallback(this)
         cameraSupportPreSize = arrayListOf()
+        bestPreViewSize = CameraSize(0,0)
+
+        val parent:ViewGroup = surfaceView.parent as ViewGroup;
+        parent.removeView(surfaceView)
+        autoFitContainer =  CameraContainerView(surfaceView.context)
+        autoFitContainer.addView(surfaceView)
+        val para = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT)
+        parent.addView(autoFitContainer, para)
         surfaceView.post {
             init()
         }
@@ -34,7 +51,10 @@ class CameraManager(surfaceView: SurfaceView) : AbsCamera(surfaceView) {
 
     override fun init() {
         open(getCameraId(Camera1View.LensFacing.BACK))
-
+        //矫正拉伸
+        CLog.d("bestPreViewSize= ${bestPreViewSize.width} ${bestPreViewSize.height}")
+        autoFitContainer.setPreview(bestPreViewSize)
+        mCamera?.startPreview()
     }
 
     fun getCameraId(type:Camera1View.LensFacing): Int{
@@ -83,9 +103,8 @@ class CameraManager(surfaceView: SurfaceView) : AbsCamera(surfaceView) {
             CLog.d("[switchCamera] 开始预览")
             handleFocus(it)
             handleRotation(it, context = mSurfaceView.context)
-            handlePreView(it, cameraSupportPreSize)
+            bestPreViewSize = getAndSetBestPreviewSize(it, cameraSupportPreSize)
             it.setPreviewDisplay(surfaceHolder)
-            it.startPreview()
         }
     }
 

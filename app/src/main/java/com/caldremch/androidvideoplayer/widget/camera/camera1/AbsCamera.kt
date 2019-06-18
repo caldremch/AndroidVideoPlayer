@@ -64,6 +64,32 @@ abstract class AbsCamera : ICamera, SurfaceHolder.Callback {
 
     }
 
+
+    protected fun getAndSetBestPreviewSize(camera:Camera, cameraSupportPreSize:MutableList<CameraSize>):CameraSize {
+        var parameters: Camera.Parameters = camera.parameters
+        if (cameraSupportPreSize.isEmpty()) {
+            CameraUtils.transSize(parameters.supportedPreviewSizes, cameraSupportPreSize)
+            CLog.d("[transSize] succ ${cameraSupportPreSize.size}")
+        }
+        val preViewSize = CameraUtils.getPreViewBestSize(cameraSupportPreSize)
+        CLog.d("preViewSize = ${preViewSize.width} , ${preViewSize.height}")
+        camera.parameters.also {
+            it.setPreviewSize(preViewSize.width, preViewSize.height)
+        }
+
+        var maxPicSize: Camera.Size = Collections.max(camera.parameters.supportedPictureSizes, object : Comparator<Camera.Size> {
+            override fun compare(o1: Camera.Size?, o2: Camera.Size?): Int {
+                return o1?.width!!.times(o1.height) - o2?.width!!.times(o2.height)
+            }
+        })
+        CLog.d("maxPicSize = ${maxPicSize.width} , ${maxPicSize.height}")
+        camera.parameters.also {
+            it.setPictureSize(maxPicSize.height, maxPicSize.width)
+        }
+
+        return preViewSize
+    }
+
     protected fun handleRotation(camera:Camera, context: Context) {
         if (context.resources.configuration.orientation != Configuration.ORIENTATION_LANDSCAPE) {
             camera.parameters.also {

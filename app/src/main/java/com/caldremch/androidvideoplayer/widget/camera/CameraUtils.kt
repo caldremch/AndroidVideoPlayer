@@ -38,7 +38,7 @@ class CameraUtils {
                     }
                 }
             }
-            return bestSize;
+            return bestSize.fixed();
         }
 
 
