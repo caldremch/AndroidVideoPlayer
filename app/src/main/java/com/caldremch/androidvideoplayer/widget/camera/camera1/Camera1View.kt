@@ -6,9 +6,7 @@ import android.util.AttributeSet
 import android.util.Size
 import android.widget.FrameLayout
 import com.caldremch.androidvideoplayer.uitls.CLog
-import com.caldremch.androidvideoplayer.widget.camera.CameraSize
 import com.caldremch.androidvideoplayer.widget.camera.CameraUtils
-import com.caldremch.androidvideoplayer.widget.camera.camera2.MediaRecordSurfaceView
 import kotlin.math.max
 
 /**
@@ -18,6 +16,14 @@ import kotlin.math.max
  * @describe
  */
 class Camera1View : FrameLayout {
+
+    /** The direction the camera faces relative to device screen.  */
+    enum class LensFacing {
+        /** A camera on the device facing the same direction as the device's screen.  */
+        FRONT,
+        /** A camera on the device facing the opposite direction as the device's screen.  */
+        BACK
+    }
 
     val surfaceView = Carmera1SurfaceView(context)
 
@@ -36,7 +42,7 @@ class Camera1View : FrameLayout {
             post {
                 preViewSize = PreViewSzie(bestSize.width, bestSize.height);
                 requestLayout()
-                surfaceView.startPreview()
+//                surfaceView.startPreview()
                 CLog.d("----Camera1View [surfaceView init finish] ${bestSize.width} ${bestSize.height}----")
             }
 
@@ -45,6 +51,10 @@ class Camera1View : FrameLayout {
 
     class PreViewSzie(var width: Int, var height: Int) {
 
+    }
+
+    fun switchCamera(type:LensFacing){
+        surfaceView.switchCamera(type)
     }
 
     fun setPreview(size: Size) {

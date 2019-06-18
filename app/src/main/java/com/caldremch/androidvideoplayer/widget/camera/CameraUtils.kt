@@ -31,7 +31,7 @@ class CameraUtils {
                 var diff = abs(firstSize.width - screenWidth) + abs(firstSize.height - screenHeight)
                 for (s in supportSize) {
                     var tempDiff = abs(s.width - screenWidth) + abs(s.height - screenHeight);
-                    CLog.d("每次比较--->:$tempDiff")
+                    CLog.d("[$screenWidth x $screenHeight]<--->[${s.width} x ${s.height}]每次比较--->:$tempDiff")
                     if (tempDiff < diff) {
                         diff = tempDiff;
                         bestSize = s;

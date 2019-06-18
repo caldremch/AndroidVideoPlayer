@@ -3,6 +3,9 @@ package com.caldremch.androidvideoplayer.widget.camera.camera1
 import android.hardware.Camera
 import android.view.SurfaceHolder
 import android.view.SurfaceView
+import com.caldremch.androidvideoplayer.uitls.CLog
+import com.caldremch.androidvideoplayer.widget.camera.CameraSize
+import java.lang.Exception
 import java.util.*
 import kotlin.Comparator
 
@@ -14,52 +17,76 @@ import kotlin.Comparator
  */
 class CameraManager(surfaceView: SurfaceView) : AbsCamera(surfaceView) {
 
+    private val UNKNOW:Int = -1;
 
-    private lateinit var mCamera: Camera
+    private var mCamera: Camera? = null
     private lateinit var surfaceHolder: SurfaceHolder
-
+    private lateinit var cameraSupportPreSize: MutableList<CameraSize>
 
     init {
         surfaceHolder = surfaceView.holder
+        surfaceHolder.addCallback(this)
+        cameraSupportPreSize = arrayListOf()
+        surfaceView.post {
+            init()
+        }
     }
 
     override fun init() {
+        open(getCameraId(Camera1View.LensFacing.BACK))
+
+    }
+
+    fun getCameraId(type:Camera1View.LensFacing): Int{
+        try {
+            val cameraCount = Camera.getNumberOfCameras()
+            var cameraInfo = Camera.CameraInfo()
+            var cameraFrontIndex = -1;
+            var cameraBackIndex = -1;
+            for (ind in 0 until cameraCount) {
+                Camera.getCameraInfo(ind, cameraInfo)
+                if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+                    cameraFrontIndex = ind
+                } else if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_BACK) {
+                    cameraBackIndex = ind
+                }
+            }
+
+            if (cameraBackIndex == -1 && cameraFrontIndex == -1) {
+                CLog.d("[switchCamera] 没有照相机")
+                return -1
+            }
+
+            if (type == Camera1View.LensFacing.FRONT) {
+               return cameraFrontIndex
+            } else if (type == Camera1View.LensFacing.BACK){
+                return cameraBackIndex
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            CLog.d("[switchCamera] 开始相机失败")
+        }
+
+        return UNKNOW
     }
 
 
     override fun open(cameraId: Int) {
-        if (!openCamera(cameraId)) return
-        setCameraParameters()
-        setPreView()
-//        mCamera.setDisplayOrientation(0)
-        mCamera.startPreview()
-    }
-
-    private fun setCameraParameters() {
-        var parameters: Camera.Parameters = mCamera.parameters
-
-        //设置最大分辨率
-        var maxCameraSize: Camera.Size = Collections.max(mCamera.parameters.supportedPreviewSizes, object : Comparator<Camera.Size> {
-            override fun compare(o1: Camera.Size?, o2: Camera.Size?): Int {
-                return o1?.width!!.times(o1.height) - o2?.width!!.times(o2.height)
-            }
-        })
-
-//        parameters.setPreviewSize(maxCameraSize.width, maxCameraSize.height)
-        parameters.setPreviewSize(mSurfaceView.width, mSurfaceView.height)
-        parameters.setPictureSize(mSurfaceView.width, mSurfaceView.height)
-
-        if (Camera.Parameters.FOCUS_MODE_AUTO in parameters.supportedFocusModes) {
-            parameters.focusMode = Camera.Parameters.FOCUS_MODE_AUTO
+        CLog.d("[open] $cameraId")
+        //先停止预览
+        mCamera?.let {
+            it.stopPreview()
+            it.release()
         }
-
-        mCamera.parameters = parameters
-
-    }
-
-
-    fun setPreView() {
-        mCamera.setPreviewDisplay(surfaceHolder)
+        if (!openCamera(cameraId)) return
+        mCamera?.let {
+            CLog.d("[switchCamera] 开始预览")
+            handleFocus(it)
+            handleRotation(it, context = mSurfaceView.context)
+            handlePreView(it, cameraSupportPreSize)
+            it.setPreviewDisplay(surfaceHolder)
+            it.startPreview()
+        }
     }
 
     /**
@@ -78,5 +105,28 @@ class CameraManager(surfaceView: SurfaceView) : AbsCamera(surfaceView) {
 
 
     override fun takePicture() {
+
+    }
+
+    override fun surfaceChanged(p0: SurfaceHolder?, p1: Int, p2: Int, p3: Int) {
+        CLog.d("----surfaceChanged----")
+
+
+    }
+
+    override fun surfaceDestroyed(p0: SurfaceHolder?) {
+        CLog.d("----surfaceDestroyed----")
+        mCamera?.stopPreview()
+    }
+
+    override fun surfaceCreated(p0: SurfaceHolder?) {
+        CLog.d("----surfaceCreated----")
+//        this.surfaceHolder = p0!!
+        open(getCameraId(Camera1View.LensFacing.BACK))
+
+    }
+
+    fun release() {
+        mCamera?.release()
     }
 }

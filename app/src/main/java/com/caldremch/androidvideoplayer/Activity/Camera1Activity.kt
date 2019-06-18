@@ -7,10 +7,14 @@ import androidx.appcompat.widget.AppCompatImageButton
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.caldremch.androidvideoplayer.R
 import com.caldremch.androidvideoplayer.uitls.CLog
+import com.caldremch.androidvideoplayer.widget.camera.camera1.Camera1View
+import com.caldremch.androidvideoplayer.widget.camera.camera1.CameraManager
 import com.caldremch.common.base.BaseActivity
 import com.caldremch.common.widget.WxRecordBtn
 import com.gyf.barlibrary.ImmersionBar
 import kotlinx.android.synthetic.main.activity_camera.*
+import kotlinx.android.synthetic.main.activity_camera.rootCl
+import kotlinx.android.synthetic.main.activity_camera1.*
 
 /**
  * @author Caldremch
@@ -24,6 +28,8 @@ import kotlinx.android.synthetic.main.activity_camera.*
  **/
 class Camera1Activity : BaseActivity() {
 
+    private var lensFacing = Camera1View.LensFacing.BACK
+    private lateinit var cameraManager:CameraManager
     override fun compatStatusBar(isDarkFont: Boolean) {
         transparentNavigationBar()
     }
@@ -33,15 +39,16 @@ class Camera1Activity : BaseActivity() {
     }
 
     override fun initView() {
+        cameraView.post {
+            cameraManager = CameraManager(cameraView)
+        }
         handleControllerView()
     }
 
     private fun handleControllerView() {
 
         val controller = View.inflate(this, R.layout.camera_control, rootCl)
-
         val startBtn =  controller.findViewById<WxRecordBtn>(R.id.startBtn)
-
         if (ImmersionBar.hasNavigationBar(this)){
             val layoutPara: ConstraintLayout.LayoutParams = startBtn.layoutParams as ConstraintLayout.LayoutParams
             layoutPara.bottomMargin += ImmersionBar.getNavigationBarHeight(this)
@@ -63,9 +70,20 @@ class Camera1Activity : BaseActivity() {
 
         //切换
         controller.findViewById<AppCompatImageButton>(R.id.swicthBtn).setOnClickListener {
-
+            if(lensFacing == Camera1View.LensFacing.FRONT){
+                lensFacing = Camera1View.LensFacing.BACK
+//                cameraView.switchCamera(Camera1View.LensFacing.BACK)
+            }else{
+                lensFacing = Camera1View.LensFacing.FRONT
+//                cameraView.switchCamera(Camera1View.LensFacing.FRONT)
+            }
         }
 
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        cameraManager.release()
     }
 
 }
