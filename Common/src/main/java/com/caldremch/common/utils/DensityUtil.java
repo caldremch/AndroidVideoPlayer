@@ -57,4 +57,32 @@ public class DensityUtil {
 
         return result;
     }
+
+
+
+    public static int getScreenHeight() {
+        int result = 0;
+
+        WindowManager manager = (WindowManager) Utils.getContext().getSystemService(Context.WINDOW_SERVICE);
+        if (manager != null) {
+            DisplayMetrics metrics = new DisplayMetrics();
+            manager.getDefaultDisplay().getMetrics(metrics);
+            result = metrics.heightPixels;
+        }
+
+        return result;
+    }
+
+    public static int getScreenWidth() {
+        int result = 0;
+
+        WindowManager manager = (WindowManager) Utils.getContext().getSystemService(Context.WINDOW_SERVICE);
+        if (manager != null) {
+            DisplayMetrics metrics = new DisplayMetrics();
+            manager.getDefaultDisplay().getMetrics(metrics);
+            result = metrics.widthPixels;
+        }
+
+        return result;
+    }
 }

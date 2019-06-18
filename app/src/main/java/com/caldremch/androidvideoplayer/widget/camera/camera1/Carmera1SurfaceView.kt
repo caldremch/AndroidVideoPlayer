@@ -4,11 +4,14 @@ import android.content.Context
 import android.content.res.Configuration
 import android.hardware.Camera
 import android.util.AttributeSet
+import android.util.Size
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import android.widget.FrameLayout
 import android.widget.Toast
 import com.caldremch.androidvideoplayer.uitls.CLog
+import com.caldremch.androidvideoplayer.widget.camera.CameraSize
+import com.caldremch.androidvideoplayer.widget.camera.CameraUtils
 import java.lang.Exception
 import java.util.*
 import kotlin.Comparator
@@ -23,6 +26,7 @@ class Carmera1SurfaceView : SurfaceView, SurfaceHolder.Callback {
 
     private var surfaceHolder: SurfaceHolder? = null
     private lateinit var mCamera: Camera
+    private lateinit var cameraSupportPreSize:MutableList<CameraSize>
 
     constructor(context: Context) : super(context) {
         initView()
@@ -37,9 +41,9 @@ class Carmera1SurfaceView : SurfaceView, SurfaceHolder.Callback {
     }
 
     private fun initView() {
+        cameraSupportPreSize = arrayListOf()
         surfaceHolder = holder
         surfaceHolder!!.addCallback(this)
-
         try {
             mCamera = Camera.open()
         } catch (e: Exception) {
@@ -48,29 +52,36 @@ class Carmera1SurfaceView : SurfaceView, SurfaceHolder.Callback {
         }
     }
 
-
     override fun surfaceChanged(holder: SurfaceHolder?, format: Int, width: Int, height: Int) {
-
+        CLog.d("----surfaceChanged----")
     }
 
     override fun surfaceDestroyed(holder: SurfaceHolder?) {
+        CLog.d("----surfaceDestroyed----")
         mCamera.release()
     }
 
     override fun surfaceCreated(holder: SurfaceHolder?) {
+        CLog.d("----surfaceCreated----")
         surfaceHolder = holder
         try {
             handleRotation()
             handlePreView()
             handleFocus()
-
             mCamera.setPreviewDisplay(holder);
-            mCamera.startPreview();
         } catch (e: Exception) {
             e.printStackTrace()
             CLog.d("surfaceCreated失败")
         }
 
+    }
+
+    fun startPreview(){
+        mCamera.startPreview();
+    }
+
+    fun getSupportPreViewSize(): MutableList<CameraSize>{
+        return cameraSupportPreSize;
     }
 
     private fun handleFocus() {
@@ -87,6 +98,12 @@ class Carmera1SurfaceView : SurfaceView, SurfaceHolder.Callback {
 
     private fun handlePreView() {
         var parameters: Camera.Parameters = mCamera.parameters
+
+        if (cameraSupportPreSize.isEmpty()){
+            CameraUtils.transSize(parameters.supportedPreviewSizes, cameraSupportPreSize)
+            CLog.d("[transSize] succ ${cameraSupportPreSize.size}")
+        }
+
         val preViewSize = getPropPreviewSize(parameters.supportedPreviewSizes)
 //        var preViewSize: Camera.Size = Collections.max(mCamera.parameters.supportedPreviewSizes, object : Comparator<Camera.Size> {
 //            override fun compare(o1: Camera.Size?, o2: Camera.Size?): Int {

@@ -6,6 +6,8 @@ import android.util.AttributeSet
 import android.util.Size
 import android.widget.FrameLayout
 import com.caldremch.androidvideoplayer.uitls.CLog
+import com.caldremch.androidvideoplayer.widget.camera.CameraSize
+import com.caldremch.androidvideoplayer.widget.camera.CameraUtils
 import com.caldremch.androidvideoplayer.widget.camera.camera2.MediaRecordSurfaceView
 import kotlin.math.max
 
@@ -15,9 +17,10 @@ import kotlin.math.max
  * @email caldremch@163.com
  * @describe
  */
-class Carmera1View : FrameLayout {
+class Camera1View : FrameLayout {
 
     val surfaceView = Carmera1SurfaceView(context)
+
     private lateinit var preViewSize: PreViewSzie
 
     constructor(context: Context) : super(context)
@@ -25,7 +28,19 @@ class Carmera1View : FrameLayout {
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
     init {
+        CLog.d("----Camera1View [init]----")
         addView(surfaceView)
+        surfaceView.post {
+
+            val bestSize = CameraUtils.getPreViewBestSize(surfaceView.getSupportPreViewSize())
+            post {
+                preViewSize = PreViewSzie(bestSize.width, bestSize.height);
+                requestLayout()
+                surfaceView.startPreview()
+                CLog.d("----Camera1View [surfaceView init finish] ${bestSize.width} ${bestSize.height}----")
+            }
+
+        }
     }
 
     class PreViewSzie(var width: Int, var height: Int) {
@@ -38,13 +53,12 @@ class Carmera1View : FrameLayout {
 
         post {
             preViewSize = PreViewSzie(size.height, size.width);
-
             requestLayout()
         }
     }
 
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
-
+        CLog.d("----Camera1View [onLayout]----")
         if (isInEditMode || !::preViewSize.isInitialized) {
             super.onLayout(changed, left, top, right, bottom)
         } else {

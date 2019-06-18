@@ -67,6 +67,10 @@ public abstract class AbsActivity extends LifeCycleLogActivity{
         compatStatusBar(isDarkFont, "#00ffffff");
     }
 
+    final protected void transparentNavigationBar(){
+        mBar.transparentNavigationBar().init();
+    }
+
     public void compatStatusBar(boolean isDarkFont, String color) {
         if (ImmersionBar.isSupportStatusBarDarkFont()) {
             mBar.statusBarColor(color);
