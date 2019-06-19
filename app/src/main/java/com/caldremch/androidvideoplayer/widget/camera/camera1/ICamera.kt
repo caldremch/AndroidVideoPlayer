@@ -13,8 +13,8 @@ package com.caldremch.androidvideoplayer.widget.camera.camera1
  **/
 
 interface ICamera {
-
     fun init();
     fun open(cameraId:Int);
     fun takePicture();
+    fun swithCamera()
 }

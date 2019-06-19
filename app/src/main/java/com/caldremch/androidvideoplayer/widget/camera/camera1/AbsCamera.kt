@@ -21,11 +21,9 @@ abstract class AbsCamera : ICamera, SurfaceHolder.Callback {
 
     protected lateinit var mSurfaceView: SurfaceView
 
-
     constructor(mSurfaceView: SurfaceView) {
         this.mSurfaceView = mSurfaceView
     }
-
 
     protected fun handleFocus(camera:Camera) {
         /* Set Auto focus */
@@ -60,8 +58,6 @@ abstract class AbsCamera : ICamera, SurfaceHolder.Callback {
         camera.parameters.also {
             it.setPictureSize(maxPicSize.height, maxPicSize.width)
         }
-
-
     }
 
 
