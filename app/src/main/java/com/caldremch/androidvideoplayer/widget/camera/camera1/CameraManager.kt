@@ -150,4 +150,8 @@ class CameraManager(surfaceView: SurfaceView) : AbsCamera(surfaceView) {
     fun release() {
         mCamera?.release()
     }
+
+    fun unLock() {
+        mCamera?.unlock()
+    }
 }

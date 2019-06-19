@@ -9,14 +9,17 @@ import androidx.appcompat.widget.AppCompatImageButton
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.caldremch.androidvideoplayer.R
 import com.caldremch.androidvideoplayer.uitls.CLog
+import com.caldremch.androidvideoplayer.widget.camera.CameraSize
 import com.caldremch.androidvideoplayer.widget.camera.camera1.Camera1View
 import com.caldremch.androidvideoplayer.widget.camera.camera1.CameraManager
 import com.caldremch.common.base.BaseActivity
+import com.caldremch.common.utils.DensityUtil
 import com.caldremch.common.widget.WxRecordBtn
 import com.gyf.barlibrary.ImmersionBar
 import kotlinx.android.synthetic.main.activity_camera.*
 import kotlinx.android.synthetic.main.activity_camera.rootCl
 import kotlinx.android.synthetic.main.activity_camera1.*
+import java.lang.Exception
 
 /**
  * @author Caldremch
@@ -29,6 +32,9 @@ import kotlinx.android.synthetic.main.activity_camera1.*
  *
  **/
 class Camera1Activity : BaseActivity() {
+
+    //视频录制相关
+    private var mediaRecorder: MediaRecorder? = null
 
     private var lensFacing = Camera1View.LensFacing.BACK
     private lateinit var cameraManager: CameraManager
@@ -77,14 +83,49 @@ class Camera1Activity : BaseActivity() {
         }
 
         startBtn.setListener(object : WxRecordBtn.OnClick {
-            override fun takePic() {
-                CLog.d("[takePic]")
+            override fun onRecordStart() {
+
+                try {
+                    mediaRecorder = MediaRecorder().apply {
+
+                        cameraManager.unLock()
+
+                        setVideoSource(MediaRecorder.VideoSource.CAMERA)
+                        setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
+                        setVideoEncoder(MediaRecorder.VideoEncoder.H264)
+
+                        setVideoFrameRate(30)
+                        setVideoEncodingBitRate(3 * 1024 * 1024)
+                        val size = cameraManager.getCloseSupportVideoSize()
+                        CLog.d("[onRecordStart] = ${size?.width} ${size?.height}")
+                        size?.let {
+                            setVideoSize(size.height, size.width)
+                        }
+                        setPreviewDisplay(cameraManager.getSurface())
+                        setOutputFile("/storage/emulated/0/Android/my.mp4")
+                        prepare()
+                        start()
+                    }
+                } catch (ex: Exception) {
+                    ex.printStackTrace()
+                }
+
+
             }
 
-            override fun recordVideo() {
-                CLog.d("[recordVideo]")
-                val mediaRecord = MediaRecorder()
-                mediaRecord.reset()
+            override fun onRecordEnd() {
+                mediaRecorder?.let {
+                    it.stop()
+                    it.reset()
+                    it.release()
+
+                }
+                mediaRecorder = null
+
+            }
+
+            override fun takePic() {
+                CLog.d("[takePic]")
             }
 
         })
