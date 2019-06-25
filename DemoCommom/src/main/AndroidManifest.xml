@@ -31,12 +31,14 @@
             android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".anim.AnimActivity" />
         <activity android:name=".anim.WidgetActivity" />
+        <activity android:name=".ui.AnnotationActivity">
+
+        </activity>
     </application>
 
 </manifest>

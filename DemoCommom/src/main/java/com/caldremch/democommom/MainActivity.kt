@@ -22,6 +22,7 @@ import com.caldremch.common.utils.MetricsUtils
 import com.caldremch.common.utils.permission.FilePermissionDelegate
 import com.caldremch.democommom.anim.AnimActivity
 import com.caldremch.democommom.anim.WidgetActivity
+import com.caldremch.democommom.ui.AnnotationActivity
 import com.caldremch.democommom.ui.EmptyActivity
 import com.caldremch.democommom.ui.PopWindowDemo
 import kotlinx.android.synthetic.main.activity_main.*
@@ -74,7 +75,8 @@ class MainActivity : BaseActivity() {
     }
 
     fun jump(view: View) {
-        startActivity(Intent(this, WidgetActivity::class.java))
+        startActivity(Intent(this, AnnotationActivity::class.java))
+
     }
 
 
