@@ -33,7 +33,7 @@ import java.util.Map;
 public class CrashHandler implements Thread.UncaughtExceptionHandler {
 
     private static final String TAG = CrashHandler.class.getSimpleName();
-    private static final String FILE_FLAG = "Caldremch";
+    private static final String FILE_FLAG = "logfiles";
     /**
      * 系统默认UncaughtExceptionHandler处理类
      */
@@ -139,15 +139,20 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
                     Environment.MEDIA_MOUNTED)) {
                 File logFile = new File(Environment.getExternalStorageDirectory() + File.separator + FILE_FLAG);
                 String path = logFile.getAbsolutePath();
+                Log.d("tag", "存储路径为 = "+path);
                 File dir = new File(path);
                 if (!dir.exists()) {
+                    Log.d("tag", "不存在?");
                     dir.mkdirs();
                 }
                 FileOutputStream fos = new FileOutputStream(path + fileName);
                 fos.write(sb.toString().getBytes());
+                Log.d("tag", "数据写入完毕:"+sb.toString());
                 fos.close();
             }
         } catch (Exception exception) {
+            Log.d("tag", "写入文件由问题?");
+            exception.printStackTrace();
             Log.e(TAG, "an error occured while writing file...", exception);
         }
 

@@ -39,9 +39,12 @@ class CameraManager(surfaceView: SurfaceView) : AbsCamera(surfaceView) {
         bestPreViewSize = CameraSize(0,0)
 
         val parent:ViewGroup = surfaceView.parent as ViewGroup;
+        val zIndex = surfaceView.z
+        CLog.d("surfaceView.z = ${surfaceView.z}")
         parent.removeView(surfaceView)
         autoFitContainer =  CameraContainerView(surfaceView.context)
         autoFitContainer.addView(surfaceView)
+        autoFitContainer.z = zIndex
         val para = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT)
         parent.addView(autoFitContainer, para)
         surfaceView.post {

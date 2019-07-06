@@ -64,6 +64,11 @@ class Camera1Activity : BaseActivity() {
     private fun handleControllerView() {
 
         val controller = View.inflate(this, R.layout.camera_control, rootCl)
+
+        //解决surfaceView覆盖挡住controllerView问题
+
+        findViewById<ConstraintLayout>(R.id.rootController).elevation = 10f;
+
         val startBtn =  controller.findViewById<WxRecordBtn>(R.id.startBtn)
         if (ImmersionBar.hasNavigationBar(this)){
             val layoutPara: ConstraintLayout.LayoutParams = startBtn.layoutParams as ConstraintLayout.LayoutParams

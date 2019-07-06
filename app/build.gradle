@@ -20,6 +20,11 @@ android {
         }
     }
 
+    //kotlin Parcelable注解
+    androidExtensions {
+        experimental = true
+    }
+
     compileOptions {
         targetCompatibility JavaVersion.VERSION_1_8
     }
