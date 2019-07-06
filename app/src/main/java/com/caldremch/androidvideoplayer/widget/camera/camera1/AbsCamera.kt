@@ -3,6 +3,7 @@ package com.caldremch.androidvideoplayer.widget.camera.camera1
 import android.content.Context
 import android.content.res.Configuration
 import android.hardware.Camera
+import android.view.Surface
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import com.caldremch.androidvideoplayer.uitls.CLog
@@ -21,11 +22,16 @@ abstract class AbsCamera : ICamera, SurfaceHolder.Callback {
 
     protected lateinit var mSurfaceView: SurfaceView
 
+    private var videoSize:CameraSize? = null
+
+
+    fun getCloseSupportVideoSize():CameraSize?{
+        return videoSize;
+    }
 
     constructor(mSurfaceView: SurfaceView) {
         this.mSurfaceView = mSurfaceView
     }
-
 
     protected fun handleFocus(camera:Camera) {
         /* Set Auto focus */
@@ -60,11 +66,14 @@ abstract class AbsCamera : ICamera, SurfaceHolder.Callback {
         camera.parameters.also {
             it.setPictureSize(maxPicSize.height, maxPicSize.width)
         }
-
-
     }
 
-
+    /**
+     * 设置合适的
+     * 1.预览
+     * 2.图片大小
+     * 3.视频支持格式大小
+     */
     protected fun getAndSetBestPreviewSize(camera:Camera, cameraSupportPreSize:MutableList<CameraSize>):CameraSize {
         var parameters: Camera.Parameters = camera.parameters
         if (cameraSupportPreSize.isEmpty()) {
@@ -87,6 +96,9 @@ abstract class AbsCamera : ICamera, SurfaceHolder.Callback {
             it.setPictureSize(maxPicSize.height, maxPicSize.width)
         }
 
+        val videoSize = CameraUtils.getVideoBestSize(camera.parameters.supportedVideoSizes)
+        CLog.d("videoSize = ${videoSize.width} , ${videoSize.height}")
+        this.videoSize = CameraSize(videoSize.height, videoSize.width)
         return preViewSize
     }
 
@@ -119,5 +131,9 @@ abstract class AbsCamera : ICamera, SurfaceHolder.Callback {
             }
         }
         return sizeResult
+    }
+
+     fun getSurface(): Surface?{
+         return mSurfaceView.holder.surface
     }
 }

@@ -102,9 +102,6 @@ class WxRecordBtn : View {
     }
 
     override fun onDraw(canvas: Canvas?) {
-
-        Log.d(TAG, "[onDraw]")
-
         rectF.top = progressPainWidth / 2;
         rectF.left = progressPainWidth / 2;
         rectF.bottom = viewMaxHeight - progressPainWidth / 2;
@@ -146,14 +143,11 @@ class WxRecordBtn : View {
     private var viewShowHeight: Float = 0f
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        Log.d(TAG, "[widthMeasureSpec]")
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         var finalWidth: Int = getMeasre(widthMeasureSpec)
         var finalHeight: Int = getMeasre(heightMeasureSpec)
-
         viewMaxWidth = finalWidth.toFloat()
         viewMaxHeight = finalHeight.toFloat()
-
         //保证圆形
         if (viewMaxHeight != viewMaxWidth) {
             viewMaxHeight = viewMaxWidth;
@@ -194,7 +188,8 @@ class WxRecordBtn : View {
 
     interface OnClick{
         fun takePic()
-        fun recordVideo()
+        fun onRecordStart()
+        fun onRecordEnd()
     }
 
     private var onListener:OnClick? = null
@@ -213,17 +208,16 @@ class WxRecordBtn : View {
             }
 
             if (seconds >= 500) {
+                if (!isRecord){
+                    onListener?.onRecordStart()
+                }
                 isRecord = true
-
                 //小圆动画
                 minCicleAnim()
-
                 //大圆动画
                 outCicleAnim()
-
                 //应该等大圆动画结束后, 再进行录制进度动画
                 sweepAngleAim()
-
             }
             seconds += 100;
             sendEmptyMessageDelayed(0, 100)
@@ -329,7 +323,7 @@ class WxRecordBtn : View {
             cancelAnim(animatorOutCircle)
             handlerBiggerAnim()
             outCircleAnimToRaw()
-            onListener?.recordVideo()
+            onListener?.onRecordEnd()
 
         } else {
             isRecord = false

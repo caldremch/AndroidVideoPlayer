@@ -41,6 +41,28 @@ class CameraUtils {
             return bestSize.fixed();
         }
 
+        fun getVideoBestSize(supportSize: MutableList<Camera.Size>): Camera.Size {
+            //全屏预览
+            val screenWidth = DensityUtil.getScreenWidth()
+            val screenHeight = DensityUtil.getScreenHeight()
+            var bestSize:Camera.Size? = null
+            if (supportSize.isNotEmpty()) {
+                var firstSize = supportSize.get(0);
+                var diff = abs(firstSize.width - screenWidth) + abs(firstSize.height - screenHeight)
+                for (s in supportSize) {
+                    var tempDiff = abs(s.width - screenWidth) + abs(s.height - screenHeight);
+                    CLog.d("[$screenWidth x $screenHeight]<--->[${s.width} x ${s.height}]每次比较--->:$tempDiff")
+                    if (tempDiff < diff) {
+                        diff = tempDiff;
+                        bestSize = s;
+                    }
+                }
+            }
+            return bestSize!!
+        }
+
+
+
 
         fun transSize(source: MutableList<Camera.Size>, dest: MutableList<CameraSize>) {
             for (s in source) {

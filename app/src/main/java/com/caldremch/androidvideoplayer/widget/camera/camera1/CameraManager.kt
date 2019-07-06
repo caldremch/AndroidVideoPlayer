@@ -21,18 +21,25 @@ import kotlin.Comparator
  */
 class CameraManager(surfaceView: SurfaceView) : AbsCamera(surfaceView) {
 
-    private val UNKNOW:Int = -1;
+    private var currentLensFacing:Camera1View.LensFacing = Camera1View.LensFacing.BACK
+    override fun swithCamera() {
+        if (currentLensFacing == Camera1View.LensFacing.BACK ){
+            currentLensFacing = Camera1View.LensFacing.FRONT
+        }else{
+            currentLensFacing = Camera1View.LensFacing.BACK
+        }
+        init()
+    }
 
+
+    private val UNKNOW:Int = -1;
     private var mCamera: Camera? = null
     private lateinit var surfaceHolder: SurfaceHolder
     private lateinit var cameraSupportPreSize: MutableList<CameraSize>
     private lateinit var bestPreViewSize: CameraSize
-
     private lateinit var autoFitContainer:CameraContainerView
 
-
     init {
-
         surfaceHolder = surfaceView.holder
         surfaceHolder.addCallback(this)
         cameraSupportPreSize = arrayListOf()
@@ -53,7 +60,7 @@ class CameraManager(surfaceView: SurfaceView) : AbsCamera(surfaceView) {
     }
 
     override fun init() {
-        open(getCameraId(Camera1View.LensFacing.BACK))
+        open(getCameraId(currentLensFacing))
         //矫正拉伸
         CLog.d("bestPreViewSize= ${bestPreViewSize.width} ${bestPreViewSize.height}")
         autoFitContainer.setPreview(bestPreViewSize)
@@ -125,15 +132,12 @@ class CameraManager(surfaceView: SurfaceView) : AbsCamera(surfaceView) {
         return true;
     }
 
-
     override fun takePicture() {
 
     }
 
     override fun surfaceChanged(p0: SurfaceHolder?, p1: Int, p2: Int, p3: Int) {
         CLog.d("----surfaceChanged----")
-
-
     }
 
     override fun surfaceDestroyed(p0: SurfaceHolder?) {
@@ -143,12 +147,14 @@ class CameraManager(surfaceView: SurfaceView) : AbsCamera(surfaceView) {
 
     override fun surfaceCreated(p0: SurfaceHolder?) {
         CLog.d("----surfaceCreated----")
-//        this.surfaceHolder = p0!!
-        open(getCameraId(Camera1View.LensFacing.BACK))
-
+        open(getCameraId(currentLensFacing))
     }
 
     fun release() {
         mCamera?.release()
+    }
+
+    fun unLock() {
+        mCamera?.unlock()
     }
 }
