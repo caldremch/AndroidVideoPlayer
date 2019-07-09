@@ -39,6 +39,7 @@
         <activity android:name=".ui.AnnotationActivity">
 
         </activity>
+        <activity android:name=".DownLoadActivity" />
     </application>
 
 </manifest>

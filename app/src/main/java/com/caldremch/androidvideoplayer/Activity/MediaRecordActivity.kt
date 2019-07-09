@@ -149,7 +149,7 @@ class MediaRecordActivity : BaseActivity() {
                     //视频路径
                     val filePath = cursor.getString(cursor.getColumnIndex(MediaStore.Video.VideoColumns.DATA))
                     //获取视频缩略图
-                    //                    Bitmap bitmap = ThumbnailUtils.createVideoThumbnail(filePath, MediaStore.Images.Thumbnails.MICRO_KIND);
+                    //                    Bitmap bitmap = ThumbnailUtils.createVideoThumbnail(fileDir, MediaStore.Images.Thumbnails.MICRO_KIND);
                     mIv!!.setImageBitmap(MediaMetadataRetrieverUtils.getFrameFromMediaMetadataRetriever(filePath))
                     cursor.close()
 

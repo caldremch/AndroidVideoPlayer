@@ -137,13 +137,16 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
                     + ".log";
             if (Environment.getExternalStorageState().equals(
                     Environment.MEDIA_MOUNTED)) {
-                File logFile = new File(Environment.getExternalStorageDirectory() + File.separator + FILE_FLAG);
+                File logFile = new File(Environment.getExternalStorageDirectory() + File.pathSeparator + FILE_FLAG);
                 String path = logFile.getAbsolutePath();
                 Log.d("tag", "存储路径为 = "+path);
                 File dir = new File(path);
                 if (!dir.exists()) {
                     Log.d("tag", "不存在?");
-                    dir.mkdirs();
+                   boolean ret =  dir.mkdirs();
+                   if (!ret){
+                       dir.mkdirs();
+                   }
                 }
                 FileOutputStream fos = new FileOutputStream(path + fileName);
                 fos.write(sb.toString().getBytes());

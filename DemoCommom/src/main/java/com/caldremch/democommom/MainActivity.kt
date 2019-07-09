@@ -75,7 +75,7 @@ class MainActivity : BaseActivity() {
     }
 
     fun jump(view: View) {
-        startActivity(Intent(this, AnnotationActivity::class.java))
+        startActivity(Intent(this, DownLoadActivity::class.java))
 
     }
 
