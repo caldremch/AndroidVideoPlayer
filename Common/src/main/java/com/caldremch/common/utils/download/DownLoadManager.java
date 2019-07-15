@@ -8,6 +8,8 @@ import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
 
+import org.w3c.dom.Text;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -94,18 +96,14 @@ public class DownLoadManager implements IDownLoad {
 
     @Override
     public void start() {
-
+        isCancel = false;
         if (!TextUtils.isEmpty(url)) {
-
-            Log.d(TAG, "start: url=" + url);
 
             if (TextUtils.isEmpty(option.fileName)) {
                 //1.先获取链接中的文件名
                 //2.生成一个文件名
                 option.fileName = getFileName(url);
             }
-
-            //分析链接中的文件名
 
             //子线程下载并处理
             apiService.downLoad(url)
@@ -135,7 +133,11 @@ public class DownLoadManager implements IDownLoad {
 
                                     float contentLength = responseBody.contentLength();
                                     float blockSize = contentLength / threadNum;
+
                                     Log.d(TAG, "onNext: blockSize=" + blockSize);
+
+
+                                    
 
 
                                     InputStream inputStream = null;

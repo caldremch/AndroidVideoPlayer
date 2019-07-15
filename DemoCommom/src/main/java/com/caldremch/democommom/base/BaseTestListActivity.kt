@@ -40,7 +40,7 @@ abstract class BaseTestListActivity : BaseActivity() {
         MetricsUtils.compatTitle(this, recyclerView)
         datas = arrayListOf();
         adapter = BaseListTestAdapter(datas)
-        recyclerView.layoutManager = LinearLayoutManager(this)
+//        recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter;
     }
 
