@@ -1,1 +1,1 @@
-include ':app', ':PlayerCore', ':FFmpegCore', ':Common', ':DemoCommom'
+include ':app', ':PlayerCore', ':FFmpegCore', ':Common', ':DemoCommom', ':http'

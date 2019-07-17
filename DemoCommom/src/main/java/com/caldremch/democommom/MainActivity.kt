@@ -25,6 +25,7 @@ import com.caldremch.democommom.anim.WidgetActivity
 import com.caldremch.democommom.ui.AnnotationActivity
 import com.caldremch.democommom.ui.EmptyActivity
 import com.caldremch.democommom.ui.PopWindowDemo
+import com.caldremch.democommom.ui.RoundLayoutActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
 /**
@@ -75,7 +76,7 @@ class MainActivity : BaseActivity() {
     }
 
     fun jump(view: View) {
-        startActivity(Intent(this, AnnotationActivity::class.java))
+        startActivity(Intent(this, RoundLayoutActivity::class.java))
 
     }
 

@@ -81,14 +81,17 @@ class CameraActivity : BaseActivity() {
 
         startBtn.setListener(object : WxRecordBtn.OnClick{
             override fun takePic() {
-                CLog.d("[takePic]")
             }
 
-            override fun recordVideo() {
-                CLog.d("[recordVideo]")
-                val mediaRecord = MediaRecorder()
-                mediaRecord.reset()
+            override fun onRecordStart() {
+
+
             }
+
+            override fun onRecordEnd() {
+            }
+
+
 
         })
 
