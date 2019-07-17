@@ -1,5 +1,6 @@
 package com.caldremch.androidvideoplayer.Activity
 
+import android.app.Activity
 import com.caldremch.democommom.base.BaseTestListActivity
 
 /**
@@ -33,7 +34,10 @@ class CameraListActivity : BaseTestListActivity() {
             }
 
             2 -> {
-                startAct(CameraActivity::class.java)
+//                startAct(CameraActivity::class.java)
+                var x = 1/0;
+
+
             }
         }
     }

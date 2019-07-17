@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="@android:color/black"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <com.caldremch.democommom.widget.LiveThumbView
+        android:id="@+id/likeView"
+        android:layout_width="100dp"
+        android:layout_height="150dp"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:onClick="startLike"
+        android:text="开始点赞"
+        android:layout_height="wrap_content"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:onClick="stopLike"
+        android:text="停止点赞"
+        android:layout_height="wrap_content"/>
+</LinearLayout>

@@ -43,7 +43,9 @@
         <activity android:name=".Activity.VideoDemoActivity" />
         <activity android:name=".Activity.MediaRecordActivity"></activity>
         <activity android:name=".Activity.TempTestActivity" />
-        <activity android:name=".Activity.CameraListActivity" />
+        <activity android:name=".Activity.CameraListActivity" >
+
+        </activity>
         <activity android:name=".Activity.Camera1Activity" />
 
         <service android:name=".flowplay.VideoFloatService" />

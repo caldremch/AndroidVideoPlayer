@@ -1,6 +1,7 @@
 package com.caldremch.androidvideoplayer
 
 import android.content.Intent
+import android.os.Parcelable
 import android.view.View
 import com.caldremch.androidvideoplayer.Activity.*
 import com.caldremch.androidvideoplayer.flowplay.CloseFloatWindowEvent
@@ -15,7 +16,7 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
 
-class MainActivity : BaseActivity() {
+class MainActivity : BaseActivity(){
 
     var filePermission = FilePermissionDelegate(this)
 
@@ -101,5 +102,6 @@ class MainActivity : BaseActivity() {
      */
     fun photoAndMediaRecord(view: View) {
         startActivity(Intent(this, CameraListActivity::class.java))
+
     }
 }
