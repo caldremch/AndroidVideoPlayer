@@ -30,11 +30,42 @@ public class LiveAnimActivity extends BaseActivity {
         liveThumbView = findViewById(R.id.likeView);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (timer != null){
+            timer.start();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (timer != null){
+            timer.cancel();
+        }
+    }
+
+    private long lastLikeTime = 0;
+    //人类一秒钟能点击点赞画面10 次, 因为点击过快, 所以不需要触发条件速度 设置为 5
+    private int speedClick = 0;
     public void startLike(View view){
-        timer = new CountDownTimer(60*60*1000, 1) {
+        if (timer != null){
+            timer.cancel();
+            timer = null;
+        }
+        timer = new CountDownTimer(60*60*1000, 100) {
             @Override
             public void onTick(long millisUntilFinished) {
-                liveThumbView.addThumbImage();
+                long currentTime = System.currentTimeMillis();
+                //1秒内有效点击为 2 次
+                if (currentTime - lastLikeTime > 500 || speedClick == 4){
+                    liveThumbView.addThumbImage();
+                    speedClick = 0;
+                }else {
+                    speedClick++;
+                }
+                lastLikeTime = currentTime;
             }
 
             @Override

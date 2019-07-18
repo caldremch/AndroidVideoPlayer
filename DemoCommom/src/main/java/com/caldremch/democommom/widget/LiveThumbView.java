@@ -5,11 +5,16 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.TypeEvaluator;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.PointF;
+import android.graphics.drawable.BitmapDrawable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -17,6 +22,7 @@ import android.widget.ImageView;
 import com.caldremch.common.utils.DensityUtil;
 import com.caldremch.democommom.R;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -25,30 +31,10 @@ import java.util.Random;
  * @author fxYan
  */
 public final class LiveThumbView extends FrameLayout {
-
-    private int[] images = {
-            R.mipmap.live_ic_thumb_01,
-            R.mipmap.live_ic_thumb_02,
-            R.mipmap.live_ic_thumb_03,
-            R.mipmap.live_ic_thumb_04,
-            R.mipmap.live_ic_thumb_05,
-            R.mipmap.live_ic_thumb_06,
-            R.mipmap.live_ic_thumb_07,
-            R.mipmap.live_ic_thumb_08,
-            R.mipmap.live_ic_thumb_09,
-            R.mipmap.live_ic_thumb_10,
-            R.mipmap.live_ic_thumb_11,
-            R.mipmap.live_ic_thumb_12,
-            R.mipmap.live_ic_thumb_13,
-            R.mipmap.live_ic_thumb_14,
-            R.mipmap.live_ic_thumb_15,
-            R.mipmap.live_ic_thumb_16,
-            R.mipmap.live_ic_thumb_17,
-    };
-
+    private static final String TAG = LiveThumbView.class.getSimpleName();
     private Random random;
     private PointF startPoint;
-
+    private int IMAGES_COUNT = 5;
     private List<Animator> animators = new ArrayList<>();
     private SparseArray<ImageView> imageViews = new SparseArray<>();
 
@@ -58,15 +44,34 @@ public final class LiveThumbView extends FrameLayout {
     }
 
     private void init() {
-
-        imageViews.put("");
-
+        try {
+            for (int i = 0; i < IMAGES_COUNT; i++) {
+                ImageView imageView = new ImageView(getContext());
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inPreferredConfig = Bitmap.Config.RGB_565;
+                Bitmap bitmap  = BitmapFactory.decodeResource(getResources(), getLikeViewResId(i), options);
+                WeakReference<ImageView> weakReference = new WeakReference<ImageView>(imageView);
+                imageView.setImageBitmap(bitmap);
+                imageViews.put(i, weakReference.get());
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         random = new Random();
         startPoint = new PointF();
     }
 
+    private int getLikeViewResId(int i) {
+        i++;
+        return getResources().getIdentifier("live_ic_thumb_0"+i, "mipmap", getContext().getPackageName());
+    }
+
     public void addThumbImage() {
-        ImageView imageView = getThumbView(getRandomResource());
+        ImageView imageView = getThumbView();
+        if (imageView == null)return;
+        if (imageView.getParent()!=null){
+            ((ViewGroup)imageView.getParent()).removeView(imageView);
+        }
         addView(imageView);
         Animator animator = getBezierAnimator(imageView);
         animator.addListener(new EndAnimatorListener(imageView));
@@ -96,9 +101,7 @@ public final class LiveThumbView extends FrameLayout {
         startPoint.x = getWidth() - DensityUtil.dp2px( 45);
         startPoint.y = getHeight() - DensityUtil.dp2px(30);
         ValueAnimator valueAnimator = ValueAnimator.ofObject(new ThumbTypeEvaluator(p1, p2), startPoint, new PointF(random.nextInt(getWidth()), 0));
-
         valueAnimator.setInterpolator(new AccelerateInterpolator());
-
         valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -119,29 +122,35 @@ public final class LiveThumbView extends FrameLayout {
         PointF pointF = new PointF();
         pointF.x = random.nextInt(getWidth());
         pointF.y = random.nextInt(getHeight()) / scale;
-
         return pointF;
     }
 
-    private int getRandomResource() {
-        int index = random.nextInt(images.length);
-        return images[index];
-    }
 
-    private ImageView getThumbView(int resId) {
-        ImageView imageView = new ImageView(getContext());
+    int i = 0;
+    private ImageView getThumbView() {
+        int finalIndex = (i++)%IMAGES_COUNT;
+        if (finalIndex == 0){
+            //一轮走下来, 如果有动画没执行完毕, 则取消
+            cancel();
+        }
+        ImageView imageView = imageViews.get(finalIndex);
+
+        if (imageView == null)return null;
         LayoutParams lp = new LayoutParams(-2, -2);
         lp.gravity = Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL;
         imageView.setLayoutParams(lp);
-        imageView.setImageResource(resId);
+//        Bitmap bitmap = imageViews.get(random.nextInt(IMAGES_COUNT));
+//        if (bitmap != null && !bitmap.isRecycled()){
+//            imageView.setImageBitmap(bitmap);
+//        }
         return imageView;
     }
 
     private class EndAnimatorListener extends AnimatorListenerAdapter {
 
-        private View target;
+        private ImageView target;
 
-        public EndAnimatorListener(View target) {
+        public EndAnimatorListener(ImageView target) {
             this.target = target;
         }
 
@@ -150,10 +159,23 @@ public final class LiveThumbView extends FrameLayout {
             super.onAnimationEnd(animation);
             // 当动画结束的时候移除target
             removeView(target);
-            if (target != null){
-                target.setBackgroundResource(0);
-                target.setBackgroundDrawable(null);
-            }
+//            if (target != null){
+//                target.setBackgroundResource(0);
+//                target.setBackgroundDrawable(null);
+////                if (target.getDrawable() != null){
+////                    BitmapDrawable bitmapDrawable = ((BitmapDrawable) target.getDrawable());
+////                    if (bitmapDrawable.getBitmap() != null){
+////                        Bitmap bitmap = bitmapDrawable.getBitmap();
+////                        if (!bitmap.isRecycled()){
+////                            bitmap.recycle();
+////                            Log.d(TAG, "onAnimationEnd: 释放 bitmap:"+target.getDrawable());
+////                        }
+////                    }
+////                }else{
+////                    Log.d(TAG, "onAnimationEnd:target.getDrawable():"+target.getDrawable());
+////                }
+//
+//            }
 
         }
 
@@ -162,7 +184,6 @@ public final class LiveThumbView extends FrameLayout {
             super.onAnimationCancel(animation);
             // 当动画取消的时候移除target
             removeView(target);
-            target = null;
         }
     }
 
