@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.caldremch.democommom">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -20,44 +21,29 @@
         android:label="通用框架"
         android:roundIcon="@mipmap/common_app_icon"
         android:supportsRtl="true"
+        android:usesCleartextTraffic="true"
         android:theme="@style/AndroidCommonTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".ui.RoundLayoutActivity">
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
-
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
-        </activity>
         <activity
             android:name=".ui.LoginActivity"
             android:theme="@style/LoginAndroidTheme" />
         <activity android:name=".base.BaseTestListActivity" />
         <activity android:name=".ui.EmptyActivity" />
+        <activity android:name=".MainActivity" />
+        <activity android:name=".anim.AnimActivity" />
+        <activity android:name=".anim.WidgetActivity" />
+        <activity android:name=".ui.AnnotationActivity" />
+        <activity android:name=".DownLoadActivity" />
+        <activity android:name=".anim.LiveAnimActivity" />
+        <activity android:name=".NetStateActivity" />
         <activity
-            android:name=".MainActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:launchMode="singleTask">
-
+            android:name=".recycleview.SmoothRecyclerViewActivity"
+            android:configChanges="orientation">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
-        <activity android:name=".anim.AnimActivity">
-
-        </activity>
-        <activity android:name=".anim.WidgetActivity" />
-        <activity android:name=".ui.AnnotationActivity">
-
-        </activity>
-        <activity android:name=".DownLoadActivity" />
-        <activity android:name=".anim.LiveAnimActivity">
-
-        </activity>
-
 
     </application>
 
