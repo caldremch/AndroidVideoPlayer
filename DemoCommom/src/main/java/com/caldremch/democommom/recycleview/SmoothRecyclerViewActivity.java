@@ -37,6 +37,5 @@ public class SmoothRecyclerViewActivity extends BaseActivity {
     }
 
     private void initTestData() {
-
-       }
+ }
 }
