@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:rl="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.RoundLayoutActivity">
+
+    <com.caldremch.common.widget.round.RoundLinearLayout
+        android:id="@+id/line1"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:background="#ff0000"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        rl:rl_backgroundColor="#00ff00"
+        rl:rl_radius="10dp">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="中间" />
+    </com.caldremch.common.widget.round.RoundLinearLayout>
+
+
+    <com.caldremch.common.widget.round.RoundTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="你好啊"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/line1"
+        rl:rl_stroke_color="#000000"
+        rl:rl_startColor="#f43464"
+        rl:rl_endColor="#B734E2"
+        rl:rl_centerColor="#000000"
+        rl:rl_gradient_orientation="right_left"
+        rl:rl_gradient_type="linear"
+        rl:rl_stroke_width="2dp" />
+    <!--    rl:rl_radius="10dp"-->
+    <!--    rl:rl_backgroundColor="#ff0000"-->
+    <!--    rl:rl_startColor="#f43464"-->
+    <!--    rl:rl_endColor="#B734E2"-->
+    <!--    rl:rl_radius_left_top="10dp"-->
+    <!--    rl:rl_radius_right_top="10dp"-->
+</androidx.constraintlayout.widget.ConstraintLayout>
